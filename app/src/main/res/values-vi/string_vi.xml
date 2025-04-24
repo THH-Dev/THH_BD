@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScanImin</string>
+    <string name="count">tài khoản: </string>
+    <string name="time_consuming">time consuming: </string>
+    <string name="symbology">Symbology: </string>
+    <string name="capacity">capacity: </string>
+    <string name="content">content: </string>
+    <string name="confirm">Xác nhận</string>
+    <string name="information_user">INFORMATION</string>
+    <string name="retry">Thử lại</string>
+    <string name="textDescription">Cảm ơn sự có hiện diện của quý khách hàng hôm nay.</string>
+    <string name="textRequestCamera">Hãy thực hiện chụp ảnh cho phần quay thưởng cuối sự kiện. Hãy chỉnh trang lại để có được bức ảnh đẹp nhất.</string>
+    <string name="retake_the_photo">Chụp lại</string>
+    <string name="thank_you">Cảm ơn</string>
+    <string name="thank_you_message">Một lần nữa, xin cảm ơn bạn đã tham dự lễ kỷ niệm thành lập công ty của chúng tôi — thật sự là một vinh dự khi có bạn đồng hành cùng chúng tôi.</string>
+    <string name="name">Họ và tên: </string>
+    <string name="id">ID: </string>
+    <string name="text_a_photo">Chụp ảnh</string>
+    <string name="you_are_checked">Bạn đã đăng ký thành công. Mời bạn tham gian sự kiện</string>
+    <string name="start">Bắt đầu</string>
+    <string name="cancel">Hủy</string>
+    <string name="company">Công ty</string>
+    <string name="position">Vị trí</string>
+    <string name="select_language">Chọn ngôn ngữ</string>
+    <string name="set_time">Chọn thời gian</string>
+    <string name="title_set_time">Quý khách có thể cài đặt ngôn ngữ và thời gian chờ chụp ảnh</string>"
+    <string name="five_s">5s</string>
+    <string name="ten_s">10s</string>
+    <string name="fitten_s">15s</string>
+    <string name="thirty_s">30s</string>
+    <string name="one_s">1s</string>
+    <string name="loading">Đang tải</string>
+    <string name="setting_language">Ngôn ngữ</string>
+    <string name="time_delay">Thời gian chờ</string>
+    <string name="vi">Tiếng Việt</string>
+    <string name="en">Tiếng Anh</string>
+</resources>

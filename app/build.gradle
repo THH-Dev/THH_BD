@@ -1,0 +1,60 @@
+plugins {
+    alias(libs.plugins.android.application)
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.example.scanimin'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.example.scanimin"
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    implementation files('libs/IminLibs.jar')
+    implementation files('libs/scanlibrary-release.aar')
+    def camerax_version = "1.2.0-alpha02"
+    api libs.camera.camera2
+    api libs.camera.view
+    api libs.androidx.camera.extensions
+    api libs.androidx.camera.lifecycle
+    implementation libs.androidx.camera.core
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation libs.glide
+    annotationProcessor libs.compiler
+    implementation libs.minio.v856
+    implementation(libs.stax.api)
+    implementation libs.woodstox.core
+}

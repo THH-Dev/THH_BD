@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_item_0"
+        android:title="@string/one_s" />
+    <item
+        android:id="@+id/menu_item_1"
+        android:title="@string/five_s" />
+    <item
+        android:id="@+id/menu_item_2"
+        android:title="@string/ten_s" />
+    <item
+        android:id="@+id/menu_item_3"
+        android:title="@string/fitten_s" />
+    <item
+        android:id="@+id/menu_item_4"
+        android:title="@string/thirty_s" />
+</menu>

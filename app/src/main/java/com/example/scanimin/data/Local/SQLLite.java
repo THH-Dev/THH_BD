@@ -1,0 +1,125 @@
+package com.example.scanimin.data.Local;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class SQLLite extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "MyDatabase.db";
+    private static final int DATABASE_VERSION = 2;
+
+    public SQLLite(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        Log.d("SQLLite", "onCreate() called");
+        db.execSQL("CREATE TABLE customersBD (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, company TEXT, position TEXT, qrcode TEXT, image TEXT, status TEXT)");
+    }
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d("SQLLite", "onUpdate() called");
+        db.execSQL("DROP TABLE IF EXISTS customersBD");
+        onCreate(db);
+    }
+
+    public void insertUser(String name, int age, String company, String position, String qrcode, String image, Boolean status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("age", age);
+        values.put("company", company);
+        values.put("position", position);
+        values.put("qrcode", qrcode);
+        if (status){
+            values.put("status", "true");
+        }else {
+            values.put("status", "false");
+        }
+        values.put("image", image);
+        db.insert("customersBD", null, values);
+        db.close();
+    }
+
+    public void insertUser(Customer customer) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", customer.getData().getName());
+        values.put("age", customer.getData().getAge());
+        values.put("company", customer.getData().getCompany());
+        values.put("position", customer.getData().getPosition());
+        values.put("qrcode", customer.getQrcode());
+        if (customer.getStatus()){
+            values.put("status", "true");
+        }else {
+            values.put("status", "false");
+        }
+        values.put("image", customer.getImage());
+        db.insert("customersBD", null, values);
+        db.close();
+    }
+
+    public int updateUser(Customer customer) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", customer.getData().getName());
+        values.put("age", customer.getData().getAge());
+        values.put("company", customer.getData().getCompany());
+        values.put("position", customer.getData().getPosition());
+        values.put("qrcode", customer.getQrcode());
+        values.put("image", customer.getImage());
+        if (customer.getStatus()){
+            values.put("status", "true");
+        }else {
+            values.put("status", "false");
+        }
+        // Cập nhật dựa trên ID của khách hàng
+        int rowsAffected = db.update("customersBD", values, "qrcode" + " = ?", new String[]{customer.getQrcode()});
+        db.close();
+        return rowsAffected;
+    }
+
+    public List<Customer> getAllPersons() {
+        List<Customer> personList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM customersBD", null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Customer person = new Customer();
+                    person.setData(new Data(
+                            cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                            cursor.getInt(cursor.getColumnIndexOrThrow("age")),
+                            cursor.getString(cursor.getColumnIndexOrThrow("company")),
+                            cursor.getString(cursor.getColumnIndexOrThrow("position"))));
+                    person.setQrcode(cursor.getString(cursor.getColumnIndexOrThrow("qrcode")));
+                    if (Objects.equals(cursor.getString(cursor.getColumnIndexOrThrow("status")), "true")){
+                        person.setStatus(true);
+                    }else {
+                        person.setStatus(false);
+                    }
+                    person.setImage(cursor.getString(cursor.getColumnIndexOrThrow("image")));
+                    personList.add(person);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return personList;
+    }
+}

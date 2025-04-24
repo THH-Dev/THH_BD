@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/white</item> <!-- Màu nền trắng -->
+    </style>
+    <style name="MyProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateTintMode">src_atop</item>
+        <item name="android:indeterminateTint">@color/white</item> <!-- Màu sắc bạn muốn -->
+    </style>
+</resources>

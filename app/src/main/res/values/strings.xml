@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ScanImin</string>
+    <string name="count">count: </string>
+    <string name="time_consuming">time consuming: </string>
+    <string name="symbology">Symbology: </string>
+    <string name="capacity">capacity: </string>
+    <string name="content">content: </string>
+    <string name="confirm">Confirm</string>
+    <string name="information_user">INFORMATION</string>
+    <string name="retry">Retry</string>
+    <string name="textDescription">Thank you for attending today\'s ceremony.</string>
+    <string name="textRequestCamera">These photos will be used for our lucky draw at the end of the event. Your participation is greatly appreciated!</string>
+    <string name="retake_the_photo">Retake the photo</string>
+    <string name="thank_you">Thank you</string>
+    <string name="thank_you_message">Thank you once again for joining our company’s anniversary celebration — it’s truly an honor to have you with us.</string>
+    <string name="name">Name: </string>
+    <string name="id">ID: </string>
+    <string name="text_a_photo">Take a Photo</string>
+    <string name="you_are_checked">You have checked in to invite you to the event</string>
+    <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="company">Company</string>
+    <string name="position">Position</string>
+    <string name="select_language">Select Language</string>
+    <string name="set_time">Set time</string>
+    <string name="title_set_time">You can set the language and the photo capture timer</string>"
+    <string name="five_s">5s</string>
+    <string name="ten_s">10s</string>
+    <string name="fitten_s">15s</string>
+    <string name="thirty_s">30s</string>
+    <string name="one_s">1s</string>
+    <string name="loading">Loading</string>
+    <string name="setting_language">Set Language</string>
+    <string name="time_delay">Time delay</string>
+    <string name="vi">Vietnamese</string>
+    <string name="en">English</string>
+</resources>
