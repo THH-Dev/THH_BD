@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import com.example.scanimin.Qrcode.CustomCaptureActivity;
 import com.example.scanimin.Qrcode.ScanIminActivity;
 import com.example.scanimin.R;
+import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
 
@@ -32,10 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         callApi = new CallApi();
         sqlLite = new SQLLite(this);
-
         getData();
-
-
         if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
@@ -49,21 +47,13 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-			if (Build.VERSION.SDK_INT >= 30) {
-				startActivity(new Intent(this,CustomCaptureActivity.class));
-			} else {
-				startActivity(new Intent(this, ScanIminActivity.class));
-			}
+            startActivity(new Intent(this, Scanner.class));
         }
         this.finish();
     }
 
     private void intentActivity(){
-        if (Build.VERSION.SDK_INT >= 30) {
-            startActivity(new Intent(this, CustomCaptureActivity.class));
-        } else {
-            startActivity(new Intent(this, ScanIminActivity.class));
-        }
+        startActivity(new Intent(this, Scanner.class));
         this.finish();
     }
 

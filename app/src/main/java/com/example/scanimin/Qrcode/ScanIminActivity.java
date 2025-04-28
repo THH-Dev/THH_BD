@@ -130,30 +130,16 @@ public class ScanIminActivity extends AppCompatActivity implements SurfaceHolder
                                 sb.delete(0, sb.length());
                             }
                         }
-                        if (!checkIn) showPopupCheckin();
                     }else {
                         if (mCamera != null) {
                             mCamera.stopPreview();
                             sb.delete(0, sb.length());
-                            showPopupCheckin();
                         }
                     }
                 }
                 sb.delete(0,sb.length());
         }
     };
-    private void showPopupCheckin(){
-        popupCompare = new PopupCompare(ScanIminActivity.this, new PopupCompare.PopupCompareListener() {
-            @Override
-            public void onCompareUpdated() {
-                if (mCamera != null){
-                    popupCompare.dismiss1();
-                    mCamera.startPreview();
-                }
-            }
-        });
-        popupCompare.show();
-    }
 
     AutoFocusCallback autoFocusCallback = new AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {

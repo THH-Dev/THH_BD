@@ -9,7 +9,7 @@
     <string name="information_user">INFORMATION</string>
     <string name="retry">Retry</string>
     <string name="textDescription">Thank you for attending today\'s ceremony.</string>
-    <string name="textRequestCamera">These photos will be used for our lucky draw at the end of the event. Your participation is greatly appreciated!</string>
+    <string name="textRequestCamera">These photos will be used for our lucky draw at the end of the event. Your participation is greatly appreciated!. Camera will start in 3s countdown</string>
     <string name="retake_the_photo">Retake the photo</string>
     <string name="thank_you">Thank you</string>
     <string name="thank_you_message">Thank you once again for joining our company’s anniversary celebration — it’s truly an honor to have you with us.</string>
@@ -34,4 +34,14 @@
     <string name="time_delay">Time delay</string>
     <string name="vi">Vietnamese</string>
     <string name="en">English</string>
+    <string name="you_have_no_account">"You have no account. You can register now"</string>
+    <string name="you_choose_language">You can choose language</string>
+    <string name="register">REGISTER</string>
+    <string name="wellcome">Wellcome</string>
+    <string name="fill_name">Fill name</string>
+    <string name="fill_position">Fill position</string>
+    <string name="fill_company">Fill company</string>
+    <string name="fill_age">Fill age</string>
+    <string name="text_request_camera">Take a photo for the lucky draw section. Adjust and set up to get the best possible photo.\nThe camera will take the picture after a 3-second countdown.</string>
+    <string name="qrerror">This QRcode is error</string>
 </resources>

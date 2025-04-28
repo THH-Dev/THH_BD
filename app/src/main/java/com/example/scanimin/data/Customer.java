@@ -1,6 +1,8 @@
 package com.example.scanimin.data;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     private Data data;
     private String image;
     private String qrcode;

@@ -30,8 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Qrcode.ScanActivity"></activity>
-        <activity android:name=".Qrcode.ScanIminActivity"></activity>
         <activity android:name=".Qrcode.TakeAPhotoActivity"></activity>
+        <activity android:name=".ScanImin.Scanner"></activity>
+        <activity android:name=".Register.RegisterActivity"></activity>
     </application>
 </manifest>

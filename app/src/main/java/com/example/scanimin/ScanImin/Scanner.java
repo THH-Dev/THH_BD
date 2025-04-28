@@ -5,16 +5,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
+import com.example.scanimin.Register.RegisterActivity;
+import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.Local.SQLLite;
+import com.example.scanimin.databinding.ScanLayoutBinding;
+import com.example.scanimin.function.JsonUtils;
+import com.example.scanimin.function.LanguageManager;
+import com.example.scanimin.popup.PopupCompare;
 
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Objects;
 
 public class Scanner extends AppCompatActivity {
     public static final String DEVICE_CONNECTION = "com.imin.scanner.api.DEVICE_CONNECTION";
@@ -28,11 +40,22 @@ public class Scanner extends AppCompatActivity {
     public static final String CONNECTION_TYPE = "com.imin.scanner.api.status";
 
     private ScannerReceiver scannerReceiver;
+    private Customer customer;
+
+    private SQLLite dbHelper;
+
+    private PopupCompare popupCompare;
+
+    private ScanLayoutBinding binding;
+
+    private LanguageManager languageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ScanLayoutBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        init();
 
         registerScannerBroadcast();
         UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
@@ -46,6 +69,54 @@ public class Scanner extends AppCompatActivity {
             Log.d("USB Info", "Product ID (PID): " + pid);
         }
     }
+
+    private void init(){
+        dbHelper = new SQLLite(this);
+        languageManager = new LanguageManager(this);
+        startGif();
+        binding.lnRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
+            startActivity(intent);
+            finish();
+        });
+        binding.lnLanguage.setOnClickListener(v -> {
+            if (getLanguage().equals("vi")) {
+                languageManager.changeLanguage("en");
+                binding.imgLanguage.setImageResource(R.drawable.united_kingdom);
+            } else {
+                languageManager.changeLanguage("vi");
+                binding.imgLanguage.setImageResource(R.drawable.vietnam);
+            }
+        });
+    }
+
+    private String getLanguage(){
+        Resources resources = getResources();
+        Configuration configuration = resources.getConfiguration();
+        Locale currentLocale = configuration.locale;
+        return currentLocale.getLanguage();
+    }
+
+    private void startGif(){
+        String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.scan;
+        Uri uri = Uri.parse(uriPath);
+        binding.videoView.setVideoURI(uri);
+        binding.videoView.setOnCompletionListener(mediaPlayer -> {
+            binding.videoView.start();
+        });
+
+        binding.videoView.setOnErrorListener((mp, what, extra) -> {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            return true;
+        });
+        binding.videoView.start();
+    }
+    public void onScanSuccess() {
+        if (binding.videoView != null) {
+            binding.videoView.stopPlayback(); // Stop the GIF
+        }
+    }
+
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void registerScannerBroadcast() {
@@ -70,12 +141,46 @@ public class Scanner extends AppCompatActivity {
             } else if (RESULT_ACTION.equals(action)) {
                 String strData = intent.getStringExtra(EXTRA_DECODE_DATA_STR);
                 // xử lý khi nhận được dữ liệu
-
-            } else if (CONNECTION_BACK_ACTION.equals(action)) {
-                int type = intent.getIntExtra(CONNECTION_TYPE, 0);
-                Log.d("ScannerReceiver", "Scanner connection status: " + (type == 1));
+                Boolean checkIn = false;
+                for (Customer customerSave : dbHelper.getAllPersons()) {
+                    if (Objects.equals(customerSave.getQrcode(), strData)) {
+                        onScanSuccess();
+                        sendData(customerSave);
+                        checkIn = true;
+                        break;
+                    }
+                }
+                if (!checkIn) showPopupCheckin(getResources().getString(R.string.you_are_checked));
+            }else {
+                if (scannerReceiver != null) {
+                    unregisterReceiver(scannerReceiver);
+                    showPopupCheckin(getResources().getString(R.string.qrerror));
+                }
+                registerScannerBroadcast();
             }
         }
+    }
+    private void sendData(Customer customer){
+        Intent intent = new Intent(Scanner.this, TakeAPhotoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("name", customer.getData().getName());
+        bundle.putString("age", String.valueOf(customer.getData().getAge()));
+        bundle.putString("company", customer.getData().getCompany());
+        bundle.putString("position", customer.getData().getPosition());
+        bundle.putString("qrcode", customer.getQrcode());
+        intent.putExtra("customer_new", bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    private void showPopupCheckin(String string){
+        popupCompare = new PopupCompare(string, Scanner.this, new PopupCompare.PopupCompareListener() {
+            @Override
+            public void onCompareUpdated() {
+                //bat lại scan
+            }
+        });
+        popupCompare.show();
     }
 
     @Override

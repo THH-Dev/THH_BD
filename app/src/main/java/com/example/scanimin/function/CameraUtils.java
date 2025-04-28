@@ -44,7 +44,6 @@ public class CameraUtils {
 
     public void startCamera(PreviewView previewView, LifecycleOwner lifecycleOwner, int time) {
         if (isCameraActive) {
-            Log.w(TAG, "Camera is already active.");
             return;
         }
         isCameraActive = true;

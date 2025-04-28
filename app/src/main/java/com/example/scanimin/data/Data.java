@@ -1,6 +1,8 @@
 package com.example.scanimin.data;
 
-public class Data {
+import java.io.Serializable;
+
+public class Data implements Serializable {
     private int age;
     private String company;
     private String name;

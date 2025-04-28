@@ -10,7 +10,7 @@ public class MinioHelper {
     private static final String ENDPOINT = "http://192.168.3.69:9000";
     private static final String ACCESS_KEY = "CLR1bkuA5m9VT5DQtBms";
     private static final String SECRET_KEY = "yM1yfUIbTxeFcdXzx8gCf6xFHNhWbWpJ1lPVax8w";
-    private static final String BUCKET_NAME = "imagetest";
+    private static final String BUCKET_NAME = "image";
     private static MinioClient minioClient;
 
     public void uploadImageToMinIO(File fileImage) {
@@ -21,8 +21,6 @@ public class MinioHelper {
                     .credentials(ACCESS_KEY, SECRET_KEY)
                     .httpClient(new OkHttpClient())
                     .build();
-
-
             // 2. Tên bucket & tên object
             String bucketName = BUCKET_NAME;
             String objectName = fileImage.getName();

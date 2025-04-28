@@ -9,8 +9,8 @@
     <string name="confirm">Xác nhận</string>
     <string name="information_user">INFORMATION</string>
     <string name="retry">Thử lại</string>
-    <string name="textDescription">Cảm ơn sự có hiện diện của quý khách hàng hôm nay.</string>
-    <string name="textRequestCamera">Hãy thực hiện chụp ảnh cho phần quay thưởng cuối sự kiện. Hãy chỉnh trang lại để có được bức ảnh đẹp nhất.</string>
+    <string name="textDescription">Cảm ơn sự hiện diện của quý khách.</string>
+    <string name="textRequestCamera">Thực hiện chụp ảnh cho phần quay thưởng. Chỉnh trang lại để có được bức ảnh đẹp nhất. /nMáy ảnh sẽ chụp sau 3s đếm ngược</string>
     <string name="retake_the_photo">Chụp lại</string>
     <string name="thank_you">Cảm ơn</string>
     <string name="thank_you_message">Một lần nữa, xin cảm ơn bạn đã tham dự lễ kỷ niệm thành lập công ty của chúng tôi — thật sự là một vinh dự khi có bạn đồng hành cùng chúng tôi.</string>
@@ -35,4 +35,14 @@
     <string name="time_delay">Thời gian chờ</string>
     <string name="vi">Tiếng Việt</string>
     <string name="en">Tiếng Anh</string>
+    <string name="you_have_no_account">Nếu bạn chưa có mã QR, hãy thực hiện đăng ký tại đây.</string>
+    <string name="you_choose_language">Bạn có thể thay đổi ngôn ngữ</string>
+    <string name="register">Đăng ký</string>
+    <string name="wellcome">CHÀO MỪNG</string>
+    <string name="fill_name">Điền họ và tên</string>
+    <string name="fill_position">Điền tên vị trí</string>
+    <string name="fill_company">Điền tên công ty</string>
+    <string name="fill_age">Điền tuổi</string>
+    <string name="text_request_camera">Thực hiện chụp ảnh cho phần quay thưởng. Chỉnh trang lại để có được bức ảnh đẹp nhất. \nMáy ảnh sẽ chụp sau 3s đếm ngược</string>
+    <string name="qrerror">Mã Qrcode không hợp lệ</string>
 </resources>
