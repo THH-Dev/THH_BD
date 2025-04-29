@@ -44,4 +44,6 @@
     <string name="fill_age">Fill age</string>
     <string name="text_request_camera">Take a photo for the lucky draw section. Adjust and set up to get the best possible photo.\nThe camera will take the picture after a 3-second countdown.</string>
     <string name="qrerror">This QRcode is error</string>
+    <string name="list_customer">List Geusts</string>
+    <string name="manual">Please verify your information by scanning your card \non the left side of the machine.</string>
 </resources>

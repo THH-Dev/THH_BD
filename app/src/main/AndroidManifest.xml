@@ -33,5 +33,6 @@
         <activity android:name=".Qrcode.TakeAPhotoActivity"></activity>
         <activity android:name=".ScanImin.Scanner"></activity>
         <activity android:name=".Register.RegisterActivity"></activity>
+        <activity android:name=".ListCustomer.ListCustomerActivity"></activity>
     </application>
 </manifest>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">IminScan</string>
+    <string name="count">计数: </string>
+    <string name="time_consuming">耗时: </string>
+    <string name="symbology">码制: </string>
+    <string name="capacity">容量: </string>
+    <string name="content">内容: </string>
+</resources>

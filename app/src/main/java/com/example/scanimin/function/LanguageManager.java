@@ -21,8 +21,11 @@ public class LanguageManager {
         this.context = context;
     }
 
-    public void changeLanguage(String languageCode) {
+    public void changeLanguage(String languageCode, ImageView imageView) {
         setLocale(context, languageCode);
+        if (languageCode.equals("vi")){
+            imageView.setImageResource(R.drawable.vietnam);
+        }else imageView.setImageResource(R.drawable.united_kingdom);
     }
 
     public void setLocale(Context context, String languageCode) {

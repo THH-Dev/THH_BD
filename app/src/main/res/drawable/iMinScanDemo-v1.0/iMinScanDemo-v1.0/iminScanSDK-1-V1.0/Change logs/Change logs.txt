@@ -1,0 +1,2 @@
+scanlibrary-release-1-v1.0：
+1.Integrate the new QR code scanning algorithm.

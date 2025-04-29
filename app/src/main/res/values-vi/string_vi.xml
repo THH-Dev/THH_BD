@@ -45,4 +45,6 @@
     <string name="fill_age">Điền tuổi</string>
     <string name="text_request_camera">Thực hiện chụp ảnh cho phần quay thưởng. Chỉnh trang lại để có được bức ảnh đẹp nhất. \nMáy ảnh sẽ chụp sau 3s đếm ngược</string>
     <string name="qrerror">Mã Qrcode không hợp lệ</string>
+    <string name="list_customer">Danh Sách Khách Mời</string>
+    <string name="manual">Quý khách vui lòng thực hiện kiểm tra thông tin \nbằng cách quét thẻ vào bên cạnh trái của máy.</string>
 </resources>

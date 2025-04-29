@@ -1,21 +1,26 @@
 package com.example.scanimin.data;
 
+import android.net.Uri;
+
+import java.io.File;
 import java.io.Serializable;
+
+import javax.xml.transform.Source;
 
 public class Customer implements Serializable {
     private Data data;
-    private String image;
+    private Uri image;
     private String qrcode;
     private Boolean status;
 
     public Customer() {
         this.data = new Data();
-        this.image = "";
+        this.image = null;
         this.qrcode = "";
         this.status = false;
     }
 
-    public Customer(Data data, String image, String qrcode, Boolean status) {
+    public Customer(Data data, Uri image, String qrcode, Boolean status) {
         this.data = data;
         this.image = image;
         this.qrcode = qrcode;
@@ -27,7 +32,7 @@ public class Customer implements Serializable {
         return data;
     }
 
-    public String getImage() {
+    public Uri getImage() {
         return image;
     }
     public String getQrcode() {
@@ -39,7 +44,7 @@ public class Customer implements Serializable {
     public void setData(Data data) {
         this.data = data;
     }
-    public void setImage(String image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
     public void setQrcode(String qrcode) {

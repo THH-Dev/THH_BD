@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.scanimin.data.Customer;
 import com.example.scanimin.data.Data;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +68,11 @@ public class SQLLite extends SQLiteOpenHelper {
         }else {
             values.put("status", "false");
         }
-        values.put("image", customer.getImage());
+        if (customer.getImage() != null) {
+            values.put("image", customer.getImage().toString());
+        } else {
+            values.put("image", (String) null);
+        }
         db.insert("customersBD", null, values);
         db.close();
     }
@@ -79,7 +85,11 @@ public class SQLLite extends SQLiteOpenHelper {
         values.put("company", customer.getData().getCompany());
         values.put("position", customer.getData().getPosition());
         values.put("qrcode", customer.getQrcode());
-        values.put("image", customer.getImage());
+        if (customer.getImage() != null) {
+            values.put("image", customer.getImage().toString());
+        } else {
+            values.put("image", (String) null);
+        }
         if (customer.getStatus()){
             values.put("status", "true");
         }else {
@@ -111,7 +121,12 @@ public class SQLLite extends SQLiteOpenHelper {
                     }else {
                         person.setStatus(false);
                     }
-                    person.setImage(cursor.getString(cursor.getColumnIndexOrThrow("image")));
+                    String imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image"));
+                    if (imagePath != null){
+                        person.setImage(Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow("image"))));
+                    }else {
+                        person.setImage(null);
+                    }
                     personList.add(person);
                 } while (cursor.moveToNext());
             }

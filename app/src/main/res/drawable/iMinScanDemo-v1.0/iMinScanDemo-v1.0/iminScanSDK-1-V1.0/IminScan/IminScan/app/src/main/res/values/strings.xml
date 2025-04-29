@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">IminScan</string>
+    <string name="count">count: </string>
+    <string name="time_consuming">time consuming: </string>
+    <string name="symbology">Symbology: </string>
+    <string name="capacity">capacity: </string>
+    <string name="content">content: </string>
+</resources>

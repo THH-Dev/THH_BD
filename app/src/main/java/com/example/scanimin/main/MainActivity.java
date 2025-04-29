@@ -6,7 +6,6 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.scanimin.Qrcode.CustomCaptureActivity;
-import com.example.scanimin.Qrcode.ScanIminActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.DBRemote.CallApi;

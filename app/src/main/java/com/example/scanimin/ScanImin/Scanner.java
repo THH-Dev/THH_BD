@@ -14,6 +14,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.scanimin.ListCustomer.ListCustomerActivity;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.Register.RegisterActivity;
@@ -49,6 +53,7 @@ public class Scanner extends AppCompatActivity {
     private ScanLayoutBinding binding;
 
     private LanguageManager languageManager;
+    private long backPressedTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +74,17 @@ public class Scanner extends AppCompatActivity {
             Log.d("USB Info", "Product ID (PID): " + pid);
         }
     }
+    public void onBackPressed() {
+        if (backPressedTime  > System.currentTimeMillis()) {
+            super.onBackPressed();
+        }
+        backPressedTime = System.currentTimeMillis();
+    }
 
     private void init(){
         dbHelper = new SQLLite(this);
         languageManager = new LanguageManager(this);
+//        gif();
         startGif();
         binding.lnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(Scanner.this, RegisterActivity.class);
@@ -81,13 +93,17 @@ public class Scanner extends AppCompatActivity {
         });
         binding.lnLanguage.setOnClickListener(v -> {
             if (getLanguage().equals("vi")) {
-                languageManager.changeLanguage("en");
-                binding.imgLanguage.setImageResource(R.drawable.united_kingdom);
+                languageManager.changeLanguage("en", binding.imageView);
             } else {
-                languageManager.changeLanguage("vi");
-                binding.imgLanguage.setImageResource(R.drawable.vietnam);
+                languageManager.changeLanguage("vi", binding.imageView);
             }
         });
+        binding.imgLogo.setOnClickListener(v -> {
+            Intent intent = new Intent(Scanner.this, ListCustomerActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
     }
 
     private String getLanguage(){
@@ -97,8 +113,16 @@ public class Scanner extends AppCompatActivity {
         return currentLocale.getLanguage();
     }
 
+    private void gif(){
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.kiosk_card_scan) // Thay thế "loading" bằng tên file GIF của bạn
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .into(binding.imageView);
+    }
+
     private void startGif(){
-        String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.scan;
+        String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.kiosk_card_scan;
         Uri uri = Uri.parse(uriPath);
         binding.videoView.setVideoURI(uri);
         binding.videoView.setOnCompletionListener(mediaPlayer -> {

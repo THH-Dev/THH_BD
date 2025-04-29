@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +71,7 @@ public class TakeAPhotoActivity extends AppCompatActivity {
     private int count = 3;
 
     private int time = 3000;
+    private long backPressedTime = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,13 +112,6 @@ public class TakeAPhotoActivity extends AppCompatActivity {
             customer.setImage(null);
             customer.setStatus(false);
             requestCheckin();
-        } else{
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-            receivedData = bundle.getString("dataScan");
-            customer = JsonUtils.parseJson(receivedData);
-            requestCheckin();
-            }
         }
     }
 
@@ -275,5 +270,13 @@ public class TakeAPhotoActivity extends AppCompatActivity {
         binding.cdPreviewCardView.setVisibility(GONE);
         binding.timeCountDown.setVisibility(GONE);
         setUiAfterTakeAPhoto();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime  > System.currentTimeMillis()) {
+            super.onBackPressed();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 }

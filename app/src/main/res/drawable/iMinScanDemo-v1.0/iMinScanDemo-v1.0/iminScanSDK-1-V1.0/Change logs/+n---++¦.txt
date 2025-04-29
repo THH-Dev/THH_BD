@@ -1,0 +1,2 @@
+scanlibrary-release-1-v1.0：
+1.集成新的扫码算法
