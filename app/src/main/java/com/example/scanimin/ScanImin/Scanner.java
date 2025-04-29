@@ -55,11 +55,18 @@ public class Scanner extends AppCompatActivity {
     private LanguageManager languageManager;
     private long backPressedTime = 0;
 
+    private boolean isShowPopup = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ScanLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        if (getLanguage().equals("vi")){
+            binding.imgLanguage.setImageResource(R.drawable.vietnam);
+        }else {
+            binding.imgLanguage.setImageResource(R.drawable.united_kingdom);
+        }
         init();
 
         registerScannerBroadcast();
@@ -93,9 +100,9 @@ public class Scanner extends AppCompatActivity {
         });
         binding.lnLanguage.setOnClickListener(v -> {
             if (getLanguage().equals("vi")) {
-                languageManager.changeLanguage("en", binding.imageView);
+                languageManager.changeLanguage("en");
             } else {
-                languageManager.changeLanguage("vi", binding.imageView);
+                languageManager.changeLanguage("vi");
             }
         });
         binding.imgLogo.setOnClickListener(v -> {
@@ -168,19 +175,28 @@ public class Scanner extends AppCompatActivity {
                 Boolean checkIn = false;
                 for (Customer customerSave : dbHelper.getAllPersons()) {
                     if (Objects.equals(customerSave.getQrcode(), strData)) {
-                        onScanSuccess();
-                        sendData(customerSave);
-                        checkIn = true;
-                        break;
+                        if (!customerSave.getStatus()){
+                            onScanSuccess();
+                            sendData(customerSave);
+                            checkIn = true;
+                            break;
+                        }else{
+                            isShowPopup = true;
+                            showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you);
+                        }
                     }
                 }
-                if (!checkIn) showPopupCheckin(getResources().getString(R.string.you_are_checked));
+                if (!checkIn && !isShowPopup) {
+                    isShowPopup = true;
+                    showPopupCheckin(getResources().getString(R.string.qrerror), R.drawable.cancel);
+                }
             }else {
                 if (scannerReceiver != null) {
                     unregisterReceiver(scannerReceiver);
-                    showPopupCheckin(getResources().getString(R.string.qrerror));
                 }
-                registerScannerBroadcast();
+                if (!isShowPopup) {
+                    registerScannerBroadcast();
+                }
             }
         }
     }
@@ -197,10 +213,11 @@ public class Scanner extends AppCompatActivity {
         finish();
     }
 
-    private void showPopupCheckin(String string){
-        popupCompare = new PopupCompare(string, Scanner.this, new PopupCompare.PopupCompareListener() {
+    private void showPopupCheckin(String string, int url){
+        popupCompare = new PopupCompare(string, url, Scanner.this, new PopupCompare.PopupCompareListener() {
             @Override
             public void onCompareUpdated() {
+                isShowPopup = false;
                 //bat lại scan
             }
         });

@@ -1,9 +1,11 @@
 package com.example.scanimin.data.DBRemote;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.CustomerApi;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.UpdateCustomer;
 
@@ -29,13 +31,21 @@ public class CallApi{
         customerList = new ArrayList<>();
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
 
-        Call<List<Customer>> call = apiInterface.getCustomer();
-        call.enqueue(new Callback<List<Customer>>() {
+        Call<List<CustomerApi>> call = apiInterface.getCustomer();
+        call.enqueue(new Callback<List<CustomerApi>>() {
             @Override
-            public void onResponse(Call<List<Customer>> call, Response<List<Customer>> response) {
+            public void onResponse(Call<List<CustomerApi>> call, Response<List<CustomerApi>> response) {
                 if (response.isSuccessful()) {
-                    List<Customer> customers = response.body();
-                    for (Customer customer : customers) {
+                    List<Customer> customers = new ArrayList<>();
+                    List<CustomerApi> customerApis = response.body();
+                    for (CustomerApi customer : customerApis) {
+                        if (customer.getImage() != null) {
+                            Customer customerdata = new Customer(customer.getData(), Uri.parse(customer.getImage()), customer.getQrcode(), customer.getStatus());
+                            customers.add(customerdata);
+                        }else {
+                            Customer customerdata = new Customer(customer.getData(), null, customer.getQrcode(), customer.getStatus());
+                            customers.add(customerdata);
+                        }
                         Log.d("MainActivity", "Customer :" +
                                 ", Name: " + customer.getData().getName()
                                 + ", age: " + customer.getData().getAge()
@@ -43,18 +53,19 @@ public class CallApi{
                                 + ", Image: " + customer.getImage()
                                 +", qrcode: " + customer.getQrcode()
                                 + ", status: " + customer.getStatus());
+                    }
+                    for (Customer customer : customers) {
                         List<Customer> customerList = sqlLite.getAllPersons();
                         if (!isCustomerInList(customer, customerList)) {
                             sqlLite.insertUser(customer);
                         }
                     }
-                    customerList = response.body();
                 } else {
                     Log.e("MainActivity", "Request failed: " + response.code());
                 }
             }
             @Override
-            public void onFailure(Call<List<Customer>> call, Throwable t) {
+            public void onFailure(Call<List<CustomerApi>> call, Throwable t) {
                 Log.e("MainActivity", "Request failed: " + t.getMessage());
             }
         });

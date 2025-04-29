@@ -142,7 +142,7 @@ public class TakeAPhotoActivity extends AppCompatActivity {
         binding.imgTakeAPhotoA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePhoto(3000);
+//                takePhoto(3000);
                 binding.previewView.setVisibility(VISIBLE);
                 binding.cdPreviewCardView.setVisibility(VISIBLE);
                 binding.imgTakeAPhotoA.setVisibility(GONE);

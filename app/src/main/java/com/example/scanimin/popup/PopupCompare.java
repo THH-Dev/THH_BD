@@ -1,58 +1,68 @@
 package com.example.scanimin.popup;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.scanimin.R;
+import com.example.scanimin.databinding.PopupCompareBinding;
 
-public class PopupCompare extends DialogFragment {
+public class PopupCompare extends Dialog {
     private PopupCompareListener listener;
     private final Context context;
     private AlertDialog alertDialog;
     private TextView btnConfirm;
-
     private String text;
+    private int url;
+    private PopupCompareBinding binding;
     public interface PopupCompareListener {
         void onCompareUpdated();
     }
-    public PopupCompare(String text, Context context, PopupCompareListener listener) {
+    public PopupCompare(String text, int url, Context context, PopupCompareListener listener) {
+        super(context);
         this.context = context;
         this.listener = listener;
         this.text = text;
-        createPopup();
+        this.url = url;
     }
-
-    private void createPopup() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.popup_compare, null);
-        TextView title = dialogView.findViewById(R.id.title_thank_you);
-        title.setText(text);
-        btnConfirm = dialogView.findViewById(R.id.btn_confirm);
-        builder.setView(dialogView);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        binding = PopupCompareBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Thiết lập kích thước cho Dialog
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        getWindow().setAttributes(params);
+
+        // Bo tròn các góc
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Đặt màu nền trong suốt cho cửa sổ
+        getWindow().setBackgroundDrawableResource(R.drawable.rounded_corner_popup); // Sử dụng background đã tạo
+
+        binding.descriptionThankYou.setText(text);
+        binding.titleThankYou.setImageResource(url);
+        binding.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
+                dismiss();
                 listener.onCompareUpdated();
             }
         });
-        alertDialog = builder.create();
-    }
-
-    public void show() {
-        alertDialog.show();
-    }
-
-    public void dismiss1() {
-        alertDialog.dismiss();
     }
 }
 

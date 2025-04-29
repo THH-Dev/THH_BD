@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,12 +21,8 @@ public class LanguageManager {
     public LanguageManager(Context context) {
         this.context = context;
     }
-
-    public void changeLanguage(String languageCode, ImageView imageView) {
+    public void changeLanguage(String languageCode) {
         setLocale(context, languageCode);
-        if (languageCode.equals("vi")){
-            imageView.setImageResource(R.drawable.vietnam);
-        }else imageView.setImageResource(R.drawable.united_kingdom);
     }
 
     public void setLocale(Context context, String languageCode) {
