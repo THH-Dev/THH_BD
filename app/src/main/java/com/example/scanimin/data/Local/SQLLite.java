@@ -28,7 +28,7 @@ public class SQLLite extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("SQLLite", "onCreate() called");
-        db.execSQL("CREATE TABLE customersBD (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, company TEXT, position TEXT, qrcode TEXT, image TEXT, status TEXT)");
+        db.execSQL("CREATE TABLE customersBD (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, company TEXT, position TEXT, role TEXT, qrcode TEXT, image TEXT, status TEXT, timestamp TEXT, url TEXT)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -37,13 +37,14 @@ public class SQLLite extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertUser(String name, int age, String company, String position, String qrcode, String image, Boolean status) {
+    public void insertUser(String name, int age, String company, String position, String role, String qrcode, String image, Boolean status, String timestamp, String url) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("age", age);
         values.put("company", company);
         values.put("position", position);
+        values.put("role", role);
         values.put("qrcode", qrcode);
         if (status){
             values.put("status", "true");
@@ -51,6 +52,8 @@ public class SQLLite extends SQLiteOpenHelper {
             values.put("status", "false");
         }
         values.put("image", image);
+        values.put("timestamp", timestamp);
+        values.put("url", url);
         db.insert("customersBD", null, values);
         db.close();
     }
@@ -63,6 +66,7 @@ public class SQLLite extends SQLiteOpenHelper {
         values.put("company", customer.getData().getCompany());
         values.put("position", customer.getData().getPosition());
         values.put("qrcode", customer.getQrcode());
+        values.put("role", customer.getData().getRole());
         if (customer.getStatus()){
             values.put("status", "true");
         }else {
@@ -73,6 +77,8 @@ public class SQLLite extends SQLiteOpenHelper {
         } else {
             values.put("image", (String) null);
         }
+        values.put("timestamp", customer.getTimestamp());
+        values.put("url", customer.getUrl());
         db.insert("customersBD", null, values);
         db.close();
     }
@@ -85,6 +91,7 @@ public class SQLLite extends SQLiteOpenHelper {
         values.put("company", customer.getData().getCompany());
         values.put("position", customer.getData().getPosition());
         values.put("qrcode", customer.getQrcode());
+        values.put("role", customer.getData().getRole());
         if (customer.getImage() != null) {
             values.put("image", customer.getImage().toString());
         } else {
@@ -95,6 +102,8 @@ public class SQLLite extends SQLiteOpenHelper {
         }else {
             values.put("status", "false");
         }
+        values.put("timestamp", customer.getTimestamp());
+        values.put("url", customer.getUrl());
         // Cập nhật dựa trên ID của khách hàng
         int rowsAffected = db.update("customersBD", values, "qrcode" + " = ?", new String[]{customer.getQrcode()});
         db.close();
@@ -114,7 +123,8 @@ public class SQLLite extends SQLiteOpenHelper {
                             cursor.getString(cursor.getColumnIndexOrThrow("name")),
                             cursor.getInt(cursor.getColumnIndexOrThrow("age")),
                             cursor.getString(cursor.getColumnIndexOrThrow("company")),
-                            cursor.getString(cursor.getColumnIndexOrThrow("position"))));
+                            cursor.getString(cursor.getColumnIndexOrThrow("position")),
+                            cursor.getString(cursor.getColumnIndexOrThrow("role"))));
                     person.setQrcode(cursor.getString(cursor.getColumnIndexOrThrow("qrcode")));
                     if (Objects.equals(cursor.getString(cursor.getColumnIndexOrThrow("status")), "true")){
                         person.setStatus(true);
@@ -127,6 +137,8 @@ public class SQLLite extends SQLiteOpenHelper {
                     }else {
                         person.setImage(null);
                     }
+                    person.setTimestamp(cursor.getString(cursor.getColumnIndexOrThrow("timestamp")));
+                    person.setUrl(cursor.getString(cursor.getColumnIndexOrThrow("url")));
                     personList.add(person);
                 } while (cursor.moveToNext());
             }

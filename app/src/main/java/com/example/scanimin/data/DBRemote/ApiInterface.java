@@ -1,6 +1,7 @@
 package com.example.scanimin.data.DBRemote;
 import com.example.scanimin.data.Customer;
 import com.example.scanimin.data.CustomerApi;
+import com.example.scanimin.data.PostCustomer;
 import com.example.scanimin.data.UpdateCustomer;
 
 import java.util.List;
@@ -17,11 +18,11 @@ public interface ApiInterface {
     @GET("/api/get_guests")
     Call<List<CustomerApi>> getCustomer();
     @POST("/customers")
-    Call<Customer> postCustomer(@Body Customer customer);
+    Call<Customer> postCustomer(@Body PostCustomer postCustomer);
     @POST("/api/update_guest")
     Call<Customer> updateCustomerByQrcode(@Body UpdateCustomer updateCustomer);
     @POST("/api/insert_guest")
-    Call<Customer> insertCustomerByQrcode(@Body UpdateCustomer updateCustomer);
+    Call<PostCustomer> insertCustomerByQrcode(@Body PostCustomer postCustomer);
     @PUT("/customers/{id}")
     Call<Customer> updateCustomer(@Path("id") String id, @Body Customer customer);
     @DELETE("/customers/{id}")

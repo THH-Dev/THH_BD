@@ -51,8 +51,8 @@ public class PopupCompare extends Dialog {
         getWindow().setAttributes(params);
 
         // Bo tròn các góc
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Đặt màu nền trong suốt cho cửa sổ
-        getWindow().setBackgroundDrawableResource(R.drawable.rounded_corner_popup); // Sử dụng background đã tạo
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getWindow().setBackgroundDrawableResource(R.drawable.rounded_corner_popup);
 
         binding.descriptionThankYou.setText(text);
         binding.titleThankYou.setImageResource(url);

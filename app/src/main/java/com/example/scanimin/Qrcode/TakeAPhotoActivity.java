@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -120,6 +121,7 @@ public class TakeAPhotoActivity extends AppCompatActivity {
         binding.editTextId.setText(customer.getQrcode());
         binding.editTextCompany.setText(customer.getData().getCompany());
         binding.editTextPosition.setText(customer.getData().getPosition());
+        binding.editAge.setText(String.valueOf(customer.getData().getAge()));
         isPhoto = false;
         binding.titleScan.setVisibility(VISIBLE);
         binding.lnInformation.setVisibility(VISIBLE);
@@ -131,18 +133,12 @@ public class TakeAPhotoActivity extends AppCompatActivity {
         binding.imgConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (customer != null) {
-//                    isNewCheck = true;
-//                    Log.d(TAGScan, customer.getImage());
-//                    UpdateData();
-//                }
                 UpdateData();
             }
         });
         binding.imgTakeAPhotoA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                takePhoto(3000);
                 binding.previewView.setVisibility(VISIBLE);
                 binding.cdPreviewCardView.setVisibility(VISIBLE);
                 binding.imgTakeAPhotoA.setVisibility(GONE);
@@ -161,14 +157,20 @@ public class TakeAPhotoActivity extends AppCompatActivity {
             public void run() {
                 if (time > 0 && count >0) {
                     //count down
-                    binding.timeCountDown.setText(String.valueOf(count));
                     count--;
+                    binding.timeCountDown.setText(String.valueOf(count));
                     countDown(time);
                 }else{
-                    setUiAfterTakeAPhoto();
+                    takeAPhoto();
                 }
             }
         }, time);
+    }
+
+    private void takeAPhoto(){
+        // take a photo
+
+        //update ui after take a photo
         setUiAfterTakeAPhoto();
     }
 
@@ -179,10 +181,9 @@ public class TakeAPhotoActivity extends AppCompatActivity {
             @Override
             public void run() {
 //                updateCustomer = new UpdateCustomer();
-//                customer.setImage(imageFileCustomer.getName());
-//                updateCustomer.setImage(customer.getImage());
+//                customer.setImage(Uri.parse(imageFileCustomer.getName()));
+//                updateCustomer.setImage(customer.getImage().toString());
 //                customer.setStatus(true);
-//                updateCustomer.setStatus(customer.getStatus());
 //                updateCustomer.setQrcode(customer.getQrcode());
 //                crud.updateDB(customer, dbHelper, TakeAPhotoActivity.this);
 //                minIOHelper.uploadImageToMinIO(imageFileCustomer);
@@ -225,6 +226,7 @@ public class TakeAPhotoActivity extends AppCompatActivity {
             binding.imgConfirm.setVisibility(VISIBLE);
             binding.imgUser.setVisibility(VISIBLE);
             binding.cdImageCardView.setVisibility(VISIBLE);
+            binding.fmLayoutImage.setVisibility(VISIBLE);
             binding.imgTakeAPhotoA.setVisibility(GONE);
             binding.textDescription.setVisibility(GONE);
             binding.textRequestCamera.setVisibility(GONE);

@@ -9,7 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Data;
+import com.example.scanimin.data.Local.CRUD;
+import com.example.scanimin.data.Local.SQLLite;
+import com.example.scanimin.data.PostCustomer;
 import com.example.scanimin.databinding.RegisterLayoutBinding;
 
 import java.util.Random;
@@ -17,9 +21,13 @@ import java.util.Random;
 public class RegisterActivity extends AppCompatActivity {
     private RegisterLayoutBinding binding;
     private Customer customer;
-
+    private CallApi callApi;
+    private PostCustomer postCustomer;
+    private SQLLite dbHelper;
     private static final String alpha = "abcdefghijklmnopqrstuvwxyz";
     private static final String alphaUpperCase = alpha.toUpperCase();
+
+    private static final String UPPERCASE_AND_DIGITS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final String digits = "0123456789";
     private static final String specials = "~=+%^*/()[]{}/!@#$?|";
     private static final String ALPHA_NUMERIC = alpha + alphaUpperCase + digits;
@@ -29,10 +37,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = RegisterLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        customer = new Customer();
+        dbHelper = new SQLLite(this);
+        callApi = new CallApi();
+        postCustomer = new PostCustomer();
         init();
     }
     private void init() {
-        customer = new Customer();
         Random generator = new Random();
         binding.imgBack.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, Scanner.class);
@@ -50,10 +61,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
             data.setCompany(binding.editCompany.getText().toString());
             data.setPosition(binding.editPosition.getText().toString());
+            data.setRole("uninvited");
             customer.setData(data);
             customer.setStatus(false);
             customer.setImage(null);
-            customer.setQrcode(randomAlphaNumeric(4));
+            customer.setQrcode(randomUpperCaseAndDigits(5));
             Bundle bundle = new Bundle();
             bundle.putString("name", binding.editName.getText().toString());
             bundle.putString("age", binding.editAge.getText().toString());
@@ -62,15 +74,34 @@ public class RegisterActivity extends AppCompatActivity {
             bundle.putString("qrcode", customer.getQrcode());
             Intent intent = new Intent(RegisterActivity.this, TakeAPhotoActivity.class);
             intent.putExtra("customer_new", bundle);
+            postCustomer.setData(data);
+            postCustomer.setQrcode(customer.getQrcode());
+            insertData();
+            insertSQlite();
             startActivity(intent);
+            finish();
         });
     }
+    private void insertData(){
+        callApi.insertCustomer(postCustomer);
+    }
 
-    public String randomAlphaNumeric(int numberOfCharactor) {
+    private void insertSQlite(){
+        CRUD crud = new CRUD();
+        crud.inserDB(customer, dbHelper, this);
+        for (Customer customer : dbHelper.getAllPersons()){
+            Log.d("MainActivity", "Customer name :" + customer.getData().getName());
+            Log.d("MainActivity", "Customer age :" + customer.getData().getAge());
+            Log.d("MainActivity", "Customer company :" + customer.getData().getCompany());
+            Log.d("MainActivity", "Customer position :" + customer.getData().getPosition());
+        }
+    }
+
+    public String randomUpperCaseAndDigits(int numberOfCharacters) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberOfCharactor; i++) {
-            int number = randomNumber(0, ALPHA_NUMERIC.length() - 1);
-            char ch = ALPHA_NUMERIC.charAt(number);
+        for (int i = 0; i < numberOfCharacters; i++) {
+            int number = randomNumber(0, UPPERCASE_AND_DIGITS.length() - 1);
+            char ch = UPPERCASE_AND_DIGITS.charAt(number);
             sb.append(ch);
         }
         return sb.toString();

@@ -7,20 +7,25 @@ public class CustomerApi implements Serializable {
     private String image;
     private String qrcode;
     private Boolean status;
+    private String timestamp;
+    private String url;
 
     public CustomerApi() {
         this.data = new Data();
         this.image = null;
         this.qrcode = "";
         this.status = false;
+        this.timestamp = "";
+        this.url = "";
     }
 
-    public CustomerApi(Data data, String image, String qrcode, Boolean status) {
+    public CustomerApi(Data data, String image, String qrcode, Boolean status, String timestamp, String url) {
         this.data = data;
         this.image = image;
         this.qrcode = qrcode;
         this.status = status;
-
+        this.timestamp = timestamp;
+        this.url = url;
     }
 
     public Data getData() {
@@ -36,6 +41,12 @@ public class CustomerApi implements Serializable {
     public Boolean getStatus() {
         return status;
     }
+    public String getTimestamp() {
+        return timestamp;
+    }
+    public String getUrl() {
+        return url;
+    }
     public void setData(Data data) {
         this.data = data;
     }
@@ -47,5 +58,11 @@ public class CustomerApi implements Serializable {
     }
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -47,4 +47,9 @@
     <string name="qrerror">Mã Qrcode không hợp lệ</string>
     <string name="list_customer">Danh Sách Khách Mời</string>
     <string name="manual">Quý khách vui lòng thực hiện kiểm tra thông tin \nbằng cách quét thẻ vào bên cạnh trái của máy.</string>
+    <string name="title">REBOOT 10</string>
+    <string name="slogan">DẤU ẤN THẬP KỶ, MỞ LỐI TƯƠNG LAI</string>
+    <string name="qrcode">Mã Code</string>
+    <string name="name_title">Họ và tên</string>
+    <string name="age">Tuổi</string>
 </resources>

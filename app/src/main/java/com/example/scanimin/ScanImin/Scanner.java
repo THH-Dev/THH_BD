@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Scanner extends AppCompatActivity {
+public class Scanner extends AppCompatActivity{
     public static final String DEVICE_CONNECTION = "com.imin.scanner.api.DEVICE_CONNECTION";
     public static final String DEVICE_DISCONNECTION = "com.imin.scanner.api.DEVICE_DISCONNECTION";
     public static final String RESULT_ACTION = "com.imin.scanner.api.RESULT_ACTION";

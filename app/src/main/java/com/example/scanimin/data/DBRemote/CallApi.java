@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.scanimin.data.Customer;
 import com.example.scanimin.data.CustomerApi;
 import com.example.scanimin.data.Local.SQLLite;
+import com.example.scanimin.data.PostCustomer;
 import com.example.scanimin.data.UpdateCustomer;
 
 import java.util.ArrayList;
@@ -40,10 +41,10 @@ public class CallApi{
                     List<CustomerApi> customerApis = response.body();
                     for (CustomerApi customer : customerApis) {
                         if (customer.getImage() != null) {
-                            Customer customerdata = new Customer(customer.getData(), Uri.parse(customer.getImage()), customer.getQrcode(), customer.getStatus());
+                            Customer customerdata = new Customer(customer.getData(), Uri.parse(customer.getImage()), customer.getQrcode(), customer.getStatus(), customer.getTimestamp(), customer.getUrl());
                             customers.add(customerdata);
                         }else {
-                            Customer customerdata = new Customer(customer.getData(), null, customer.getQrcode(), customer.getStatus());
+                            Customer customerdata = new Customer(customer.getData(), null, customer.getQrcode(), customer.getStatus(), customer.getTimestamp(), customer.getUrl());
                             customers.add(customerdata);
                         }
                         Log.d("MainActivity", "Customer :" +
@@ -52,7 +53,9 @@ public class CallApi{
                                 + ", company: " + customer.getData().getCompany()
                                 + ", Image: " + customer.getImage()
                                 +", qrcode: " + customer.getQrcode()
-                                + ", status: " + customer.getStatus());
+                                + ", status: " + customer.getStatus()
+                                + ", timestamp: " + customer.getTimestamp()
+                                + ", url: " + customer.getUrl());
                     }
                     for (Customer customer : customers) {
                         List<Customer> customerList = sqlLite.getAllPersons();
@@ -71,15 +74,15 @@ public class CallApi{
         });
     }
 
-    public void postCustomer(Customer customer) {
+    public void insertCustomer(PostCustomer postCustomer) {
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
-        Call<Customer> call = apiInterface.postCustomer(customer);
-        call.enqueue(new Callback<Customer>() {
+        Call<PostCustomer> call = apiInterface.insertCustomerByQrcode(postCustomer);
+        call.enqueue(new Callback<PostCustomer>() {
             @Override
-            public void onResponse(Call<Customer> call, Response<Customer> response) {
+            public void onResponse(Call<PostCustomer> call, Response<PostCustomer> response) {
                 if (response.isSuccessful()) {
-                    Customer postedCustomer = response.body();
-                    Log.d("CallApi", "Customer posted successfully: " + postedCustomer.getData().getName());
+//                    Customer postedCustomer = response.body();
+                    Log.d("CallApi", "Customer posted successfully: ");
                     // Xử lý response ở đây nếu cần (ví dụ: cập nhật UI)
                 } else {
                     Log.e("CallApi", "Failed to post customer. Code: " + response.code());
@@ -87,7 +90,7 @@ public class CallApi{
             }
 
             @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
+            public void onFailure(Call<PostCustomer> call, Throwable t) {
                 Log.e("CallApi", "Failed to post customer. Error: " + t.getMessage());
             }
         });

@@ -8,18 +8,22 @@ public class Data implements Serializable {
     private String name;
     private String position;
 
+    private String role;
+
     public Data() {
         this.name = "";
         this.age = 0;
         this.company = "";
         this.position = "";
+        this.role = "";
     }
 
-    public Data(String name, int age, String company, String position) {
+    public Data(String name, int age, String company, String position, String role) {
         this.name = name;
         this.age = age;
         this.company = company;
         this.position = position;
+        this.role = role;
     }
     public String getName() {
         return name;
@@ -34,6 +38,9 @@ public class Data implements Serializable {
     public String getPosition() {
         return position;
     }
+    public String getRole() {
+        return role;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -45,5 +52,8 @@ public class Data implements Serializable {
     }
     public void setPosition(String position) {
         this.position = position;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }

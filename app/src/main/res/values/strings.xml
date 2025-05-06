@@ -46,4 +46,9 @@
     <string name="qrerror">This QRcode is error</string>
     <string name="list_customer">List Geusts</string>
     <string name="manual">Please verify your information by scanning your card \non the left side of the machine.</string>
+    <string name="title">REBOOT 10</string>
+    <string name="slogan">A Decade of Milestones, Forging the Future</string>
+    <string name="qrcode">Qrcode</string>
+    <string name="name_title">Name</string>
+    <string name="age">Age</string>
 </resources>
