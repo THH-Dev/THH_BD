@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.ScanImin.Scanner;
-import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.DBRemote.CallApi;
-import com.example.scanimin.data.Data;
+import com.example.scanimin.data.Object.Data;
 import com.example.scanimin.data.Local.CRUD;
 import com.example.scanimin.data.Local.SQLLite;
-import com.example.scanimin.data.PostCustomer;
+import com.example.scanimin.data.Object.PostCustomer;
 import com.example.scanimin.databinding.RegisterLayoutBinding;
 
 import java.util.Random;
@@ -54,9 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
             data.setName(binding.editName.getText().toString());
             try {
                 int number = Integer.parseInt(binding.editAge.getText().toString());
-                data.setAge(number);
+                data.setTable(number);
             } catch (NumberFormatException e) {
-                data.setAge(0);
+                data.setTable(0);
                 e.printStackTrace();
             }
             data.setCompany(binding.editCompany.getText().toString());
@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         crud.inserDB(customer, dbHelper, this);
         for (Customer customer : dbHelper.getAllPersons()){
             Log.d("MainActivity", "Customer name :" + customer.getData().getName());
-            Log.d("MainActivity", "Customer age :" + customer.getData().getAge());
+            Log.d("MainActivity", "Customer age :" + customer.getData().getTable());
             Log.d("MainActivity", "Customer company :" + customer.getData().getCompany());
             Log.d("MainActivity", "Customer position :" + customer.getData().getPosition());
         }

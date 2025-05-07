@@ -4,11 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.scanimin.data.Customer;
-import com.example.scanimin.data.CustomerApi;
+import com.example.scanimin.data.Object.Customer;
+import com.example.scanimin.data.Object.CustomerApi;
 import com.example.scanimin.data.Local.SQLLite;
-import com.example.scanimin.data.PostCustomer;
-import com.example.scanimin.data.UpdateCustomer;
+import com.example.scanimin.data.Object.PostCustomer;
+import com.example.scanimin.data.Object.UpdateCustomer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class CallApi{
                         }
                         Log.d("MainActivity", "Customer :" +
                                 ", Name: " + customer.getData().getName()
-                                + ", age: " + customer.getData().getAge()
+                                + ", table: " + customer.getData().getTable()
                                 + ", company: " + customer.getData().getCompany()
                                 + ", Image: " + customer.getImage()
                                 +", qrcode: " + customer.getQrcode()

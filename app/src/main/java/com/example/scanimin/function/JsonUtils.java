@@ -5,10 +5,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
-import com.example.scanimin.data.Customer;
-import com.example.scanimin.data.Data;
+import com.jiangdg.usbcamera.utils.FileUtils;
 
-import org.json.JSONObject;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 public class JsonUtils {
     public static String getFileExtension(Context context, Uri uri) {
@@ -27,4 +32,36 @@ public class JsonUtils {
         }
         return fileExtension;
     }
+    public static List<File> getImagesFromDirectory() {
+        String picPath = FileUtils.ROOT_PATH + MyApplication.DIRECTORY_NAME + "/images/";
+        File imageDir = new File(picPath);
+        List<File> imageFiles = new ArrayList<>();
+
+        if (imageDir.exists() && imageDir.isDirectory()) {
+            File[] files = imageDir.listFiles((dir, name) -> {
+                String nameLower = name.toLowerCase();
+                return nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".png");
+            });
+
+            if (files != null) {
+                imageFiles.addAll(Arrays.asList(files));
+            }
+        }
+
+        return imageFiles;
+    }
+
+    public static File createTempFile(Context context) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = context.getCacheDir();
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return image;
+    }
+
 }

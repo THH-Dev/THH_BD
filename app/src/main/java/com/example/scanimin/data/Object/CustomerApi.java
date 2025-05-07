@@ -1,33 +1,27 @@
-package com.example.scanimin.data;
+package com.example.scanimin.data.Object;
 
-import android.net.Uri;
-
-import java.io.File;
 import java.io.Serializable;
-
-import javax.xml.transform.Source;
-
-public class Customer implements Serializable {
+public class CustomerApi implements Serializable {
     private Data data;
-    private Uri image;
-    private String qrcode;
+    private String image;
+    private String code;
     private Boolean status;
     private String timestamp;
     private String url;
 
-    public Customer() {
+    public CustomerApi() {
         this.data = new Data();
         this.image = null;
-        this.qrcode = "";
+        this.code = "";
         this.status = false;
         this.timestamp = "";
         this.url = "";
     }
 
-    public Customer(Data data, Uri image, String qrcode, Boolean status, String timestamp, String url) {
+    public CustomerApi(Data data, String image, String qrcode, Boolean status, String timestamp, String url) {
         this.data = data;
         this.image = image;
-        this.qrcode = qrcode;
+        this.code = qrcode;
         this.status = status;
         this.timestamp = timestamp;
         this.url = url;
@@ -37,11 +31,11 @@ public class Customer implements Serializable {
         return data;
     }
 
-    public Uri getImage() {
+    public String getImage() {
         return image;
     }
     public String getQrcode() {
-        return qrcode;
+        return code;
     }
     public Boolean getStatus() {
         return status;
@@ -55,11 +49,11 @@ public class Customer implements Serializable {
     public void setData(Data data) {
         this.data = data;
     }
-    public void setImage(Uri image) {
+    public void setImage(String image) {
         this.image = image;
     }
     public void setQrcode(String qrcode) {
-        this.qrcode = qrcode;
+        this.code = qrcode;
     }
     public void setStatus(Boolean status) {
         this.status = status;

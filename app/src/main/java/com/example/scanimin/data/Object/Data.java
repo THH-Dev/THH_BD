@@ -1,35 +1,35 @@
-package com.example.scanimin.data;
+package com.example.scanimin.data.Object;
 
 import java.io.Serializable;
 
 public class Data implements Serializable {
-    private int age;
+
+    private int tableid;
     private String company;
     private String name;
     private String position;
-
     private String role;
 
     public Data() {
         this.name = "";
-        this.age = 0;
         this.company = "";
         this.position = "";
+        this.tableid = 0;
         this.role = "";
     }
 
-    public Data(String name, int age, String company, String position, String role) {
+    public Data(String name,  String company, String position, int tablePosition, String role) {
         this.name = name;
-        this.age = age;
         this.company = company;
         this.position = position;
+        this.tableid = tablePosition;
         this.role = role;
     }
     public String getName() {
         return name;
     }
-    public int getAge() {
-        return age;
+    public int getTable() {
+        return tableid;
     }
 
     public String getCompany() {
@@ -44,8 +44,8 @@ public class Data implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    public void setAge(int age) {
-        this.age = age;
+    public void setTable(int table) {
+        this.tableid = table;
     }
     public void setCompany(String company) {
         this.company = company;

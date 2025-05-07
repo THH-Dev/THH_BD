@@ -15,16 +15,13 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.scanimin.ListCustomer.ListCustomerActivity;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.Register.RegisterActivity;
-import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.databinding.ScanLayoutBinding;
-import com.example.scanimin.function.JsonUtils;
 import com.example.scanimin.function.LanguageManager;
 import com.example.scanimin.popup.PopupCompare;
 
@@ -120,14 +117,6 @@ public class Scanner extends AppCompatActivity{
         return currentLocale.getLanguage();
     }
 
-    private void gif(){
-        Glide.with(this)
-                .asGif()
-                .load(R.drawable.kiosk_card_scan) // Thay thế "loading" bằng tên file GIF của bạn
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(binding.imageView);
-    }
-
     private void startGif(){
         String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.kiosk_card_scan;
         Uri uri = Uri.parse(uriPath);
@@ -204,7 +193,7 @@ public class Scanner extends AppCompatActivity{
         Intent intent = new Intent(Scanner.this, TakeAPhotoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("name", customer.getData().getName());
-        bundle.putString("age", String.valueOf(customer.getData().getAge()));
+        bundle.putString("age", String.valueOf(customer.getData().getTable()));
         bundle.putString("company", customer.getData().getCompany());
         bundle.putString("position", customer.getData().getPosition());
         bundle.putString("qrcode", customer.getQrcode());
@@ -230,5 +219,17 @@ public class Scanner extends AppCompatActivity{
         if (scannerReceiver != null) {
             unregisterReceiver(scannerReceiver);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        binding.videoView.start();
     }
 }

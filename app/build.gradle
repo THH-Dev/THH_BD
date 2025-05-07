@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.example.scanimin"
         minSdk 26
-        targetSdk 35
+        targetSdk 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -42,7 +42,6 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation files('libs/IminLibs.jar')
     implementation files('libs/scanlibrary-release.aar')
-    def camerax_version = "1.2.0-alpha02"
     api libs.camera.camera2
     api libs.camera.view
     api libs.androidx.camera.extensions
@@ -57,4 +56,5 @@ dependencies {
     implementation libs.minio.v856
     implementation(libs.stax.api)
     implementation libs.woodstox.core
+    implementation 'com.github.jiangdongguo:AndroidUSBCamera:2.3.4'
 }

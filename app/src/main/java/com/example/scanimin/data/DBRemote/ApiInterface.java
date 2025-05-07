@@ -1,8 +1,8 @@
 package com.example.scanimin.data.DBRemote;
-import com.example.scanimin.data.Customer;
-import com.example.scanimin.data.CustomerApi;
-import com.example.scanimin.data.PostCustomer;
-import com.example.scanimin.data.UpdateCustomer;
+import com.example.scanimin.data.Object.Customer;
+import com.example.scanimin.data.Object.CustomerApi;
+import com.example.scanimin.data.Object.PostCustomer;
+import com.example.scanimin.data.Object.UpdateCustomer;
 
 import java.util.List;
 

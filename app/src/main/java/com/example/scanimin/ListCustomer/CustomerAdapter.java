@@ -11,8 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.scanimin.R;
-import com.example.scanimin.data.Customer;
-import com.example.scanimin.data.Data;
+import com.example.scanimin.data.Object.Customer;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     public void onBindViewHolder(@NonNull CustomerViewHolder holder, int position) {
         Customer customer = customerList.get(position);
         holder.textName.setText(customer.getData().getName());
-        holder.textAge.setText(String.valueOf(customer.getData().getAge()));
+        holder.textAge.setText(String.valueOf(customer.getData().getTable()));
         holder.textCompany.setText(customer.getData().getCompany());
         holder.textPosition.setText(customer.getData().getPosition());
         Uri imageUri = customer.getImage();

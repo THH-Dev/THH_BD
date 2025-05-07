@@ -1,4 +1,4 @@
-package com.example.scanimin.data;
+package com.example.scanimin.data.Object;
 
 public class PostCustomer {
     private Data data;

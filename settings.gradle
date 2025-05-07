@@ -16,6 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven {
+            url 'http://raw.github.com/saki4510t/libcommon/master/repository/'
+            allowInsecureProtocol = true
+        }
+        maven { url 'https://jitpack.io' }
     }
 }
 

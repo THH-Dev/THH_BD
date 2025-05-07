@@ -2,15 +2,13 @@ package com.example.scanimin.ListCustomer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
-import com.example.scanimin.data.Customer;
+import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.databinding.ListCustomerLayoutBinding;
 

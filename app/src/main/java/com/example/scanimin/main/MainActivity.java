@@ -13,15 +13,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.scanimin.File.MinioHelper;
+import com.example.scanimin.Qrcode.UsbPermission;
 import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
+import com.example.scanimin.function.JsonUtils;
+
+import java.io.File;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private CallApi callApi;
     private SQLLite sqlLite;
+
+    private UsbPermission usbPermission;
+
+    private MinioHelper minIOHelper;
+    private JsonUtils jsonUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         callApi = new CallApi();
         sqlLite = new SQLLite(this);
+        minIOHelper = new MinioHelper();
         getData();
         if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -44,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startActivity(new Intent(this, Scanner.class));
+            requestPermissionsUsb();
         }
         this.finish();
     }
@@ -55,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData(){
+//        List<File> imageFiles =  JsonUtils.getImagesFromDirectory();
+//        File imageFileCustomer = imageFiles.get(0);
+//        minIOHelper.uploadImageToMinIO(imageFileCustomer);
         callApi.getCustomer(this);
+    }
+
+    private void requestPermissionsUsb(){
+        usbPermission = new UsbPermission(this);
+        usbPermission.initAndStart();
+        startActivity(new Intent(this, Scanner.class));
     }
 }

@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ln_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -351,17 +352,6 @@
                             android:paddingHorizontal="30dp">
                         </TextView>
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/time_count_down"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="65sp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        android:textColor="#FF0000"
-                        android:text="3">
-                    </TextView>
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cd_preview_cardView"
                         android:layout_width="325dp"
@@ -374,17 +364,24 @@
                         android:visibility="gone"
                         android:layout_marginTop="10dp"
                         android:layout_gravity="center">
-                        <androidx.camera.view.PreviewView
-                            android:id="@+id/previewView"
-                            android:layout_width="350dp"
-                            android:layout_height="350dp"
-                            app:scaleType="fillCenter"
-                            app:layout_constraintTop_toBottomOf="@id/ctr_data"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
+                        <TextView
+                            android:id="@+id/time_count_down"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="65sp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
                             android:visibility="gone"
-                            android:layout_marginTop="10dp"
-                            android:layout_gravity="center" />
+                            android:textColor="#FF0000"
+                            android:text="3">
+                        </TextView>
+                        <LinearLayout
+                            android:id="@+id/ln_camera"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone">
+                        </LinearLayout>
                     </androidx.cardview.widget.CardView>
                     <FrameLayout
                         android:id="@+id/fm_layout_image"

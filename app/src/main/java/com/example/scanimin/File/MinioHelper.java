@@ -21,6 +21,8 @@ public class MinioHelper {
                     .credentials(ACCESS_KEY, SECRET_KEY)
                     .httpClient(new OkHttpClient())
                     .build();
+
+
             // 2. Tên bucket & tên object
             String bucketName = BUCKET_NAME;
             String objectName = fileImage.getName();

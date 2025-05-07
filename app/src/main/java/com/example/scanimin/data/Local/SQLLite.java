@@ -8,10 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.scanimin.data.Customer;
-import com.example.scanimin.data.Data;
+import com.example.scanimin.data.Object.Customer;
+import com.example.scanimin.data.Object.Data;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +27,7 @@ public class SQLLite extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("SQLLite", "onCreate() called");
-        db.execSQL("CREATE TABLE customersBD (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, company TEXT, position TEXT, role TEXT, qrcode TEXT, image TEXT, status TEXT, timestamp TEXT, url TEXT)");
+        db.execSQL("CREATE TABLE customersBD (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tablePosition INTEGER, company TEXT, position TEXT, role TEXT, qrcode TEXT, image TEXT, status TEXT, timestamp TEXT, url TEXT)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -37,14 +36,14 @@ public class SQLLite extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertUser(String name, int age, String company, String position, String role, String qrcode, String image, Boolean status, String timestamp, String url) {
+    public void insertUser(String name, int tablePosition, String company, String position, String role, String qrcode, String image, Boolean status, String timestamp, String url) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
-        values.put("age", age);
         values.put("company", company);
         values.put("position", position);
         values.put("role", role);
+        values.put("table", tablePosition);
         values.put("qrcode", qrcode);
         if (status){
             values.put("status", "true");
@@ -62,10 +61,10 @@ public class SQLLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", customer.getData().getName());
-        values.put("age", customer.getData().getAge());
         values.put("company", customer.getData().getCompany());
         values.put("position", customer.getData().getPosition());
         values.put("qrcode", customer.getQrcode());
+        values.put("table", customer.getData().getTable());
         values.put("role", customer.getData().getRole());
         if (customer.getStatus()){
             values.put("status", "true");
@@ -87,7 +86,7 @@ public class SQLLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", customer.getData().getName());
-        values.put("age", customer.getData().getAge());
+        values.put("tablePosition", customer.getData().getTable());
         values.put("company", customer.getData().getCompany());
         values.put("position", customer.getData().getPosition());
         values.put("qrcode", customer.getQrcode());
@@ -104,7 +103,7 @@ public class SQLLite extends SQLiteOpenHelper {
         }
         values.put("timestamp", customer.getTimestamp());
         values.put("url", customer.getUrl());
-        // Cập nhật dựa trên ID của khách hàng
+        // Cập nhật dựa trên qrcode của khách hàng
         int rowsAffected = db.update("customersBD", values, "qrcode" + " = ?", new String[]{customer.getQrcode()});
         db.close();
         return rowsAffected;
@@ -121,9 +120,9 @@ public class SQLLite extends SQLiteOpenHelper {
                     Customer person = new Customer();
                     person.setData(new Data(
                             cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                            cursor.getInt(cursor.getColumnIndexOrThrow("age")),
                             cursor.getString(cursor.getColumnIndexOrThrow("company")),
                             cursor.getString(cursor.getColumnIndexOrThrow("position")),
+                            cursor.getInt(cursor.getColumnIndexOrThrow("tablePosition")),
                             cursor.getString(cursor.getColumnIndexOrThrow("role"))));
                     person.setQrcode(cursor.getString(cursor.getColumnIndexOrThrow("qrcode")));
                     if (Objects.equals(cursor.getString(cursor.getColumnIndexOrThrow("status")), "true")){
