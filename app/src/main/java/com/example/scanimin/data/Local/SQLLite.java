@@ -43,7 +43,7 @@ public class SQLLite extends SQLiteOpenHelper {
         values.put("company", company);
         values.put("position", position);
         values.put("role", role);
-        values.put("table", tablePosition);
+        values.put("tablePosition", tablePosition);
         values.put("qrcode", qrcode);
         if (status){
             values.put("status", "true");
@@ -64,7 +64,7 @@ public class SQLLite extends SQLiteOpenHelper {
         values.put("company", customer.getData().getCompany());
         values.put("position", customer.getData().getPosition());
         values.put("qrcode", customer.getQrcode());
-        values.put("table", customer.getData().getTable());
+        values.put("tablePosition", customer.getData().getTable());
         values.put("role", customer.getData().getRole());
         if (customer.getStatus()){
             values.put("status", "true");
