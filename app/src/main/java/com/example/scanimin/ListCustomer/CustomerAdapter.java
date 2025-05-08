@@ -1,5 +1,6 @@
 package com.example.scanimin.ListCustomer;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.data.Object.Customer;
 
 import java.util.List;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder> {
-
+    public interface OnItemClickListener {
+        void onItemClick(Customer customer, View view);
+    }
     private List<Customer> customerList;
-    public CustomerAdapter(List<Customer> customerList) {
+    private Context context;
+    private OnItemClickListener listener;
+    public CustomerAdapter(List<Customer> customerList, Context context, OnItemClickListener listener) {
         this.customerList = customerList;
+        this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,10 +46,15 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.textAge.setText(String.valueOf(customer.getData().getTable()));
         holder.textCompany.setText(customer.getData().getCompany());
         holder.textPosition.setText(customer.getData().getPosition());
-        Uri imageUri = customer.getImage();
-        if (customer.getImage() != null){
-            holder.imgUser.setImageURI(customer.getImage());
-        }else holder.imgUser.setImageResource(R.drawable.teamwork);
+        String imageUri = customer.getUrl();
+        Glide.with(context)
+                .load(imageUri)
+                .into(holder.imgUser);
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(customer,v);
+            }
+        });
     }
 
     @Override

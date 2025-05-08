@@ -8,7 +8,9 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +34,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.scanimin.File.ConverFile;
 import com.example.scanimin.R;
 import com.example.scanimin.function.JsonUtils;
 import com.example.scanimin.function.MyApplication;
@@ -68,10 +72,9 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
 
     private UVCCameraHelper mCameraHelper;
     private CameraViewInterface mUVCCameraView;
-
     private boolean isRequest = false;
     private boolean isPreview = false;
-
+    private VideoView videoView;
     //View
     private View mView;
     private Activity mActivity;
@@ -138,7 +141,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(2500);
+                            Thread.sleep(3000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                             Log.d(TAG, "InterruptedException: " + e.getMessage());
@@ -171,6 +174,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
 
         //cam
         mTextureView = mView.findViewById(R.id.camera_view);
+        videoView = mView.findViewById(R.id.video_countdown);
 
         //cam
         // step.1 initialize UVCCameraHelper
@@ -193,6 +197,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
 //            Log.d(TAG, dir.getAbsolutePath() + "==================");
 //            dir.mkdirs();
 //        }
+//        startCountdownVideo();
 
         File imageFile = JsonUtils.createTempFile(requireActivity());
         String picPath = imageFile.getAbsolutePath();
@@ -203,6 +208,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                 if(TextUtils.isEmpty(path)) {
                     return;
                 }
+                File file = new File(path);
                 new Handler(getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -219,12 +225,11 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
 //                    });
 //                }
 
-                File file = new File(path);
-                Uri uri = FileProvider.getUriForFile(
-                        mView.getContext(),
-                        mView.getContext().getPackageName() + ".fileprovider",
-                        file
-                );
+//                Uri uri = FileProvider.getUriForFile(
+//                        mView.getContext(),
+//                        mView.getContext().getPackageName() + ".fileprovider",
+//                        file
+//                );
 
                 if (callback != null) {
                     new Handler(getMainLooper()).post(() -> callback.onUriCaptured(file));
@@ -329,4 +334,8 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
             Log.i(TAG, "onSurfaceDestroy can not stop preview ==========");
         }
     }
+    private Bitmap resizeBitmap(Bitmap bitmap, int newWidth, int newHeight) {
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+    }
+
 }

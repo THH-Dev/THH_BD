@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.scanimin.ListCustomer.ListCustomerActivity;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
@@ -118,18 +119,22 @@ public class Scanner extends AppCompatActivity{
     }
 
     private void startGif(){
-        String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.kiosk_card_scan;
-        Uri uri = Uri.parse(uriPath);
-        binding.videoView.setVideoURI(uri);
-        binding.videoView.setOnCompletionListener(mediaPlayer -> {
-            binding.videoView.start();
-        });
-
-        binding.videoView.setOnErrorListener((mp, what, extra) -> {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-            return true;
-        });
-        binding.videoView.start();
+        Glide.with(Scanner.this)
+                .asGif()
+                .load(R.raw.quetthe) // có thể là URL, asset, hoặc file
+                .into(binding.imageView);
+//        String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.kiosk_card_scan;
+//        Uri uri = Uri.parse(uriPath);
+//        binding.videoView.setVideoURI(uri);
+//        binding.videoView.setOnCompletionListener(mediaPlayer -> {
+//            binding.videoView.start();
+//        });
+//
+//        binding.videoView.setOnErrorListener((mp, what, extra) -> {
+//            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+//            return true;
+//        });
+//        binding.videoView.start();
     }
     public void onScanSuccess() {
         if (binding.videoView != null) {
@@ -171,13 +176,13 @@ public class Scanner extends AppCompatActivity{
                             break;
                         }else{
                             isShowPopup = true;
-                            showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you);
+                            showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you, customerSave);
                         }
                     }
                 }
                 if (!checkIn && !isShowPopup) {
                     isShowPopup = true;
-                    showPopupCheckin(getResources().getString(R.string.qrerror), R.drawable.cancel);
+                    showPopupCheckin(getResources().getString(R.string.qrerror), R.drawable.cancel, null);
                 }
             }else {
                 if (scannerReceiver != null) {
@@ -202,8 +207,8 @@ public class Scanner extends AppCompatActivity{
         finish();
     }
 
-    private void showPopupCheckin(String string, int url){
-        popupCompare = new PopupCompare(string, url, Scanner.this, new PopupCompare.PopupCompareListener() {
+    private void showPopupCheckin(String string, int url, Customer customer){
+        popupCompare = new PopupCompare(string, url, Scanner.this, customer, new PopupCompare.PopupCompareListener() {
             @Override
             public void onCompareUpdated() {
                 isShowPopup = false;
@@ -232,4 +237,6 @@ public class Scanner extends AppCompatActivity{
         super.onRestart();
         binding.videoView.start();
     }
+
+
 }

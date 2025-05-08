@@ -2,9 +2,13 @@ package com.example.scanimin.function;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.VideoView;
 
+import com.example.scanimin.R;
 import com.jiangdg.usbcamera.utils.FileUtils;
 
 import java.io.File;
@@ -62,6 +66,29 @@ public class JsonUtils {
             throw new RuntimeException(e);
         }
         return image;
+    }
+
+    public static void startCountdownVideo(Context context, VideoView videoView) {
+
+        // Prepare the video URI
+        Uri videoUri = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.countdown3); // Replace with your video file name
+
+        // Set up the VideoView
+        videoView.setVideoURI(videoUri);
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(false); // If you want the video to loop
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                    }
+                });
+                //start the video
+                videoView.start();
+            }
+        });
     }
 
 }

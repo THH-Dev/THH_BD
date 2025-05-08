@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,7 +69,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     private boolean  isStopCamera = false, isReTakePhoto = false, isNewCheck = true;
     private Handler handler = new Handler();
     private Runnable dismissRunnable;
-    private VideoView videoView;
+    private ImageView videoView;
     private int count = 3;
     private Uri contentUri;
 
@@ -149,12 +150,14 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             public void onClick(View v) {
                 binding.imgTakeAPhotoA.setVisibility(GONE);
                 binding.textRequestCamera.setVisibility(GONE);
-                binding.textDescription.setVisibility(GONE);
+                binding.textDescription.setVisibility(VISIBLE);
+                binding.textDescription.setText(R.string.id);
                 binding.viewLine.setVisibility(GONE);
-                binding.timeCountDown.setVisibility(VISIBLE);
+                binding.timeCountDown.setVisibility(GONE);
                 binding.lnCamera.setVisibility(VISIBLE);
                 binding.cdPreviewCardView.setVisibility(VISIBLE);
-                countDown(3000);
+                binding.videoCountdown.setVisibility(VISIBLE);
+                countDown(1700);
             }
         });
     }
@@ -163,6 +166,11 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+//                JsonUtils.startCountdownVideo(TakeAPhotoActivity.this, binding.videoCountdown);
+                Glide.with(TakeAPhotoActivity.this)
+                        .asGif()
+                        .load(R.raw.countdown) // có thể là URL, asset, hoặc file
+                        .into(binding.videoCountdown);
                 if (time > 0 && count >0) {
                     //count down
                     count--;
@@ -174,24 +182,11 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             }
         }, time);
     }
-
-
     private void takeAPhoto(){
         // take a photo
         binding.lnCamera.setVisibility(GONE);
         binding.cdPreviewCardView.setVisibility(GONE);
-//        getScreenshotImages(this);
-//        List<File> imageFiles =  JsonUtils.getImagesFromDirectory();
-//        Uri uri = Uri.fromFile(imageFiles.get(0));
-////        }
-//        //update ui after take a photo
-//        imageFileCustomer = imageFiles.get(0);
-//        Glide.with(this)
-//                .load(Uri.fromFile(imageFileCustomer))
-//                .placeholder(R.drawable.user)
-//                .error(R.drawable.teamwork)
-//                .into(binding.imgUser);
-
+        binding.videoCountdown.setVisibility(GONE);
         setUiAfterTakeAPhoto();
         //image from library
     }
