@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         callApi = new CallApi();
         sqlLite = new SQLLite(this);
         minIOHelper = new MinioHelper();
-        getData();
+//        getData();
         if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
@@ -67,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData(){
-//        List<File> imageFiles =  JsonUtils.getImagesFromDirectory();
-//        File imageFileCustomer = imageFiles.get(0);
-//        minIOHelper.uploadImageToMinIO(imageFileCustomer);
         callApi.getCustomer(this);
     }
 

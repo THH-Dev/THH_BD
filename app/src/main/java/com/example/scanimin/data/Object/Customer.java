@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Customer implements Serializable {
     private Data data;
     private Uri image;
-    private String qrcode;
+    private String code;
     private Boolean status;
     private String timestamp;
     private String url;
@@ -15,7 +15,7 @@ public class Customer implements Serializable {
     public Customer() {
         this.data = new Data();
         this.image = null;
-        this.qrcode = "";
+        this.code = "";
         this.status = false;
         this.timestamp = "";
         this.url = "";
@@ -24,7 +24,7 @@ public class Customer implements Serializable {
     public Customer(Data data, Uri image, String qrcode, Boolean status, String timestamp, String url) {
         this.data = data;
         this.image = image;
-        this.qrcode = qrcode;
+        this.code = qrcode;
         this.status = status;
         this.timestamp = timestamp;
         this.url = url;
@@ -38,7 +38,7 @@ public class Customer implements Serializable {
         return image;
     }
     public String getQrcode() {
-        return qrcode;
+        return code;
     }
     public Boolean getStatus() {
         return status;
@@ -56,7 +56,7 @@ public class Customer implements Serializable {
         this.image = image;
     }
     public void setQrcode(String qrcode) {
-        this.qrcode = qrcode;
+        this.code = qrcode;
     }
     public void setStatus(Boolean status) {
         this.status = status;

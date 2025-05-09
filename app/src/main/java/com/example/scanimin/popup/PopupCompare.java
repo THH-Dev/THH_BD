@@ -53,8 +53,8 @@ public class PopupCompare extends Dialog {
 
         // Thiết lập kích thước cho Dialog
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
         getWindow().setAttributes(params);
 
         // Bo tròn các góc
@@ -89,6 +89,8 @@ public class PopupCompare extends Dialog {
             String imageUri = customer.getUrl();
             Glide.with(context)
                     .load(imageUri)
+                    .error(R.drawable.user)
+                    .placeholder(R.drawable.user)
                     .into(binding.imgUser);
             binding.editTextId.setText(customer.getQrcode());
         }

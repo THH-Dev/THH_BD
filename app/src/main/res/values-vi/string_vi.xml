@@ -52,4 +52,9 @@
     <string name="qrcode">Mã Code</string>
     <string name="name_title">Họ và tên</string>
     <string name="age">Tuổi</string>
+    <string name="yes">Đã Đăng ký</string>
+    <string name="no">Chưa đăng ký</string>
+    <string name="status">Trạng thái</string>
+    <string name="sucess">Thành công</string>
+    <string name="search_name">Tìm theo tên...</string>
 </resources>

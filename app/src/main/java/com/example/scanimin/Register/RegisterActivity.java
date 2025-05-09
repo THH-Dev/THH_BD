@@ -6,7 +6,9 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
+import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.DBRemote.CallApi;
@@ -44,6 +46,10 @@ public class RegisterActivity extends AppCompatActivity {
         init();
     }
     private void init() {
+        Glide.with(RegisterActivity.this)
+                .asGif()
+                .load(R.raw.background2) // có thể là URL, asset, hoặc file
+                .into(binding.imageBackground);
         Random generator = new Random();
         binding.imgBack.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, Scanner.class);

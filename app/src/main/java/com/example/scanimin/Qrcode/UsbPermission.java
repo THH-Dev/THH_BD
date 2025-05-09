@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
@@ -36,15 +37,32 @@ public class UsbPermission {
         for (UsbDevice device : usbManager.getDeviceList().values()) {
             for (int i = 0; i < device.getInterfaceCount(); i++) {
                 UsbInterface iface = device.getInterface(i);
-                if (usbManager.hasPermission(device)) {
-                    Log.d("USB", "Permission granted");
-                } else {
-                    PendingIntent permissionIntent = PendingIntent.getBroadcast(
-                            context, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
-                    usbManager.requestPermission(device, permissionIntent);
+                if (iface.getInterfaceClass() == UsbConstants.USB_CLASS_VIDEO) {
+                    Log.d("USB", "Found camera interface on device: " + device.getDeviceName());
+
+                    if (usbManager.hasPermission(device)) {
+                        Log.d("USB", "Permission already granted for device: " + device.getDeviceName());
+                    } else {
+                        PendingIntent permissionIntent = PendingIntent.getBroadcast(
+                                context,
+                                0,
+                                new Intent(ACTION_USB_PERMISSION),
+                                PendingIntent.FLAG_IMMUTABLE
+                        );
+                        usbManager.requestPermission(device, permissionIntent);
+                        Log.d("USB", "Requesting permission for device: " + device.getDeviceName());
+                    }
                 }
             }
         }
+    }
+    public boolean hasPermission() {
+        for (UsbDevice device : usbManager.getDeviceList().values()) {
+            if (usbManager.hasPermission(device)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {

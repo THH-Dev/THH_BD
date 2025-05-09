@@ -56,7 +56,6 @@
                 app:layout_constraintTop_toBottomOf="@id/ctr_data"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
                 android:visibility="visible"
                 android:src="@drawable/user">
@@ -100,7 +99,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="6"
                         android:orientation="vertical"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -115,7 +114,7 @@
                             android:text="THH"
                             android:paddingStart="25dp"
                             android:background="@drawable/bg_text"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:textStyle="bold">
                         </TextView>
                     </LinearLayout>
@@ -144,26 +143,18 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="6"
                         android:orientation="vertical"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:paddingEnd="15dp">
-                        <!--                                <TextView-->
-                        <!--                                    android:layout_width="match_parent"-->
-                        <!--                                    android:layout_height="wrap_content"-->
-                        <!--                                    android:text="@string/company"-->
-                        <!--                                    android:textSize="24sp"-->
-                        <!--                                    android:paddingStart="15dp"-->
-                        <!--                                    android:layout_marginBottom="5dp">-->
-                        <!--                                </TextView>-->
                         <TextView
                             android:id="@+id/edit_text_company"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="3"
                             android:textStyle="bold"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:paddingStart="25dp"
                             android:background="@drawable/bg_text"
                             android:gravity="center_vertical"
@@ -198,19 +189,11 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="6"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingEnd="15dp">
-                        <!--                                <TextView-->
-                        <!--                                    android:layout_width="match_parent"-->
-                        <!--                                    android:layout_height="wrap_content"-->
-                        <!--                                    android:text="@string/position"-->
-                        <!--                                    android:textSize="20sp"-->
-                        <!--                                    android:paddingStart="15dp"-->
-                        <!--                                    android:layout_marginBottom="5dp">-->
-                        <!--                                </TextView>-->
                         <TextView
                             android:id="@+id/edit_text_position"
                             android:layout_width="match_parent"
@@ -219,7 +202,7 @@
                             android:gravity="center_vertical"
                             android:layout_weight="3"
                             android:textStyle="bold"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:paddingStart="25dp"
                             android:text="Dev">
                         </TextView>
@@ -246,7 +229,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="6"
                         android:orientation="vertical"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -261,7 +244,7 @@
                             android:text="24"
                             android:paddingStart="25dp"
                             android:background="@drawable/bg_text"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:textStyle="bold">
                         </TextView>
                     </LinearLayout>
@@ -293,7 +276,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="6"
                         android:orientation="vertical"
                         android:layout_gravity="center"
                         android:paddingEnd="15dp"
@@ -304,7 +287,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="3"
                             android:textStyle="bold"
-                            android:textSize="30sp"
+                            android:textSize="28sp"
                             android:background="@drawable/bg_text"
                             android:gravity="center_vertical"
                             android:paddingHorizontal="25dp"

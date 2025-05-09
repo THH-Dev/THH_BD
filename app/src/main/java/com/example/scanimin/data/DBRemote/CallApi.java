@@ -8,6 +8,7 @@ import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.Object.CustomerApi;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.PostCustomer;
+import com.example.scanimin.data.Object.StatusUpdate;
 import com.example.scanimin.data.Object.UpdateCustomer;
 
 import java.util.ArrayList;
@@ -21,15 +22,14 @@ public class CallApi{
 
     private SQLLite sqlLite;
 
-    private List<Customer> customerList;
+    private static List<Customer> Listcustomer;
     public interface UpdateCustomerListener{
         void onUpdateCustomerSuccess();
         void onUpdateCustomerFailure(String error);
     }
     public void getCustomer(Context context) {
-
+        Listcustomer = new ArrayList<>();
         sqlLite = new SQLLite(context);
-        customerList = new ArrayList<>();
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
 
         Call<List<CustomerApi>> call = apiInterface.getCustomer();
@@ -58,9 +58,12 @@ public class CallApi{
                                 + ", url: " + customer.getUrl());
                     }
                     for (Customer customer : customers) {
+                        Listcustomer.add(customer);
                         List<Customer> customerList = sqlLite.getAllPersons();
                         if (!isCustomerInList(customer, customerList)) {
                             sqlLite.insertUser(customer);
+                        }else{
+                            sqlLite.updateUser(customer);
                         }
                     }
                 } else {
@@ -72,6 +75,10 @@ public class CallApi{
                 Log.e("MainActivity", "Request failed: " + t.getMessage());
             }
         });
+    }
+
+    public List<Customer> getListCustomer(){
+        return Listcustomer;
     }
 
     public void insertCustomer(PostCustomer postCustomer) {
@@ -98,12 +105,11 @@ public class CallApi{
 
     public void updateCustomer(UpdateCustomer updateCustomer, UpdateCustomerListener listener) {
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
-        Call<Customer> call = apiInterface.updateCustomerByQrcode(updateCustomer);
-        call.enqueue(new Callback<Customer>() {
+        Call<StatusUpdate> call = apiInterface.updateCustomerByQrcode(updateCustomer);
+        call.enqueue(new Callback<StatusUpdate>() {
             @Override
-            public void onResponse(Call<Customer> call, Response<Customer> response) {
+            public void onResponse(Call<StatusUpdate> call, Response<StatusUpdate> response) {
                 if (response.isSuccessful()) {
-                    Customer updatedCustomer = response.body();
                     listener.onUpdateCustomerSuccess();
                 } else {
                     listener.onUpdateCustomerFailure("Failed to update customer");
@@ -111,7 +117,7 @@ public class CallApi{
             }
 
             @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
+            public void onFailure(Call<StatusUpdate> call, Throwable t) {
                 listener.onUpdateCustomerFailure(t.getMessage());
             }
         });

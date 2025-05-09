@@ -20,6 +20,7 @@ import com.example.scanimin.ListCustomer.ListCustomerActivity;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.Register.RegisterActivity;
+import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.databinding.ScanLayoutBinding;
@@ -54,6 +55,7 @@ public class Scanner extends AppCompatActivity{
     private long backPressedTime = 0;
 
     private boolean isShowPopup = false;
+    private CallApi callApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class Scanner extends AppCompatActivity{
         }else {
             binding.imgLanguage.setImageResource(R.drawable.united_kingdom);
         }
+        getdata();
         init();
 
         registerScannerBroadcast();
@@ -86,10 +89,18 @@ public class Scanner extends AppCompatActivity{
         backPressedTime = System.currentTimeMillis();
     }
 
+    private void getdata(){
+        callApi = new CallApi();
+        callApi.getCustomer(this);
+    }
+
     private void init(){
+        Glide.with(Scanner.this)
+                .asGif()
+                .load(R.raw.background2) // có thể là URL, asset, hoặc file
+                .into(binding.imageBackground);
         dbHelper = new SQLLite(this);
         languageManager = new LanguageManager(this);
-//        gif();
         startGif();
         binding.lnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(Scanner.this, RegisterActivity.class);
@@ -123,18 +134,6 @@ public class Scanner extends AppCompatActivity{
                 .asGif()
                 .load(R.raw.quetthe) // có thể là URL, asset, hoặc file
                 .into(binding.imageView);
-//        String uriPath = "android.resource://" + getPackageName() + "/" + R.raw.kiosk_card_scan;
-//        Uri uri = Uri.parse(uriPath);
-//        binding.videoView.setVideoURI(uri);
-//        binding.videoView.setOnCompletionListener(mediaPlayer -> {
-//            binding.videoView.start();
-//        });
-//
-//        binding.videoView.setOnErrorListener((mp, what, extra) -> {
-//            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-//            return true;
-//        });
-//        binding.videoView.start();
     }
     public void onScanSuccess() {
         if (binding.videoView != null) {
@@ -169,7 +168,7 @@ public class Scanner extends AppCompatActivity{
                 Boolean checkIn = false;
                 for (Customer customerSave : dbHelper.getAllPersons()) {
                     if (Objects.equals(customerSave.getQrcode(), strData)) {
-                        if (!customerSave.getStatus()){
+                        if (customerSave.getImage() == null){
                             onScanSuccess();
                             sendData(customerSave);
                             checkIn = true;

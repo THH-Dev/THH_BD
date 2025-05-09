@@ -37,7 +37,7 @@
     <string name="you_have_no_account">"You have no account. You can register now"</string>
     <string name="you_choose_language">You can choose language</string>
     <string name="register">REGISTER</string>
-    <string name="wellcome">Wellcome</string>
+    <string name="wellcome">Welcome</string>
     <string name="fill_name">Fill name</string>
     <string name="fill_position">Fill position</string>
     <string name="fill_company">Fill company</string>
@@ -51,4 +51,9 @@
     <string name="qrcode">Qrcode</string>
     <string name="name_title">Name</string>
     <string name="age">Age</string>
+    <string name="status">Status</string>
+    <string name="sucess">Sucess</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="search_name">Search name...</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.scanimin.data.DBRemote;
 import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.Object.CustomerApi;
 import com.example.scanimin.data.Object.PostCustomer;
+import com.example.scanimin.data.Object.StatusUpdate;
 import com.example.scanimin.data.Object.UpdateCustomer;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface ApiInterface {
     @POST("/customers")
     Call<Customer> postCustomer(@Body PostCustomer postCustomer);
     @POST("/api/update_guest")
-    Call<Customer> updateCustomerByQrcode(@Body UpdateCustomer updateCustomer);
+    Call<StatusUpdate> updateCustomerByQrcode(@Body UpdateCustomer updateCustomer);
     @POST("/api/insert_guest")
     Call<PostCustomer> insertCustomerByQrcode(@Body PostCustomer postCustomer);
     @PUT("/customers/{id}")

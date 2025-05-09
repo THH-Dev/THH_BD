@@ -141,7 +141,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                             Log.d(TAG, "InterruptedException: " + e.getMessage());
@@ -151,7 +151,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                             mCameraHelper.getModelValue(UVCCameraHelper.MODE_BRIGHTNESS);
                             mCameraHelper.getModelValue(UVCCameraHelper.MODE_CONTRAST);
                             new Handler(Looper.getMainLooper()).postDelayed(
-                                    CameraFragment.this::CaptureImageAndSendUri, 3000
+                                    CameraFragment.this::CaptureImageAndSendUri, 5000
                             );
                         }
                         Looper.loop();
@@ -178,27 +178,20 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
 
         //cam
         // step.1 initialize UVCCameraHelper
-        mUVCCameraView = (CameraViewInterface) mTextureView;
-        mUVCCameraView.setCallback(this);
         mCameraHelper = UVCCameraHelper.getInstance();
         mCameraHelper.setDefaultPreviewSize(1280,720);
         mCameraHelper.setDefaultFrameFormat(UVCCameraHelper.FRAME_FORMAT_MJPEG);
-        mCameraHelper.initUSBMonitor(mActivity, mUVCCameraView, listener);
+        try {
+            mUVCCameraView = (CameraViewInterface) mTextureView;
+            mUVCCameraView.setCallback(this);
+            mCameraHelper.initUSBMonitor(mActivity, mUVCCameraView, listener);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
         return mView;
     }
 
     private void CaptureImageAndSendUri() {
-//        String picPath = FileUtils.ROOT_PATH + MyApplication.DIRECTORY_NAME +"/images/"
-//                + System.currentTimeMillis() + UVCCameraHelper.SUFFIX_JPEG;
-//
-//        Log.d(TAG, picPath + "==================");
-//        File dir = new File(Environment.getExternalStorageDirectory(), "USBCamera");
-//        if (!dir.exists()) {
-//            Log.d(TAG, dir.getAbsolutePath() + "==================");
-//            dir.mkdirs();
-//        }
-//        startCountdownVideo();
-
         File imageFile = JsonUtils.createTempFile(requireActivity());
         String picPath = imageFile.getAbsolutePath();
 
@@ -209,28 +202,6 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                     return;
                 }
                 File file = new File(path);
-                new Handler(getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mView.getContext(), "save path:"+path, Toast.LENGTH_SHORT).show();
-                    }
-                });
-//                File file = new File(path);
-//                if (callback != null) {
-//                    new Handler(getMainLooper()).post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            callback.onUriCaptured(file);
-//                        }
-//                    });
-//                }
-
-//                Uri uri = FileProvider.getUriForFile(
-//                        mView.getContext(),
-//                        mView.getContext().getPackageName() + ".fileprovider",
-//                        file
-//                );
-
                 if (callback != null) {
                     new Handler(getMainLooper()).post(() -> callback.onUriCaptured(file));
                 }
@@ -306,26 +277,47 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
     @Override
     public void onSurfaceCreated(CameraViewInterface view, Surface surface) {
         Log.i(TAG, "onSurfaceCreated==========");
+        try {
+            if (!isPreview && mCameraHelper.isCameraOpened()) {
+//                mCameraHelper.startPreview(mUVCCameraView);
+                isPreview = true;
+                Log.i(TAG, "onSurfaceCreated start preview ==========");
+            }
+            else
+            {
+                Log.i(TAG, "onSurfaceCreated can not start preview ==========");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void startPreview() {
         if (!isPreview && mCameraHelper.isCameraOpened()) {
             mCameraHelper.startPreview(mUVCCameraView);
-            isPreview = true;
-            Log.i(TAG, "onSurfaceCreated start preview ==========");
         }
-        else
-        {
-            Log.i(TAG, "onSurfaceCreated can not start preview ==========");
+    }
+
+    public void stopPreview() {
+        if (isPreview && mCameraHelper.isCameraOpened()) {
+            mCameraHelper.stopPreview();
         }
     }
 
     @Override
     public void onSurfaceChanged(CameraViewInterface view, Surface surface, int width, int height) {
         Log.i(TAG, "onSurfaceChanged=============");
+        if (mUVCCameraView == null){
+            mCameraHelper.stopPreview();
+        }else{
+            mCameraHelper.startPreview(mUVCCameraView);
+        }
     }
 
     @Override
     public void onSurfaceDestroy(CameraViewInterface view, Surface surface) {
         Log.i(TAG, "onSurfaceDestroy=============");
-        if (isPreview && mCameraHelper.isCameraOpened()) {
+        if (isPreview && mCameraHelper.isCameraOpened()&& mUVCCameraView == null) {
             mCameraHelper.stopPreview();
             isPreview = false;
             Log.i(TAG, "onSurfaceDestroy stop preview ==========");

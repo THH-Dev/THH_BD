@@ -1,13 +1,20 @@
 package com.example.scanimin.data.Object;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Data implements Serializable {
 
+    @SerializedName("tableid")
     private int tableid;
+    @SerializedName("company")
     private String company;
+    @SerializedName("name")
     private String name;
+    @SerializedName("position")
     private String position;
+    @SerializedName("role")
     private String role;
 
     public Data() {

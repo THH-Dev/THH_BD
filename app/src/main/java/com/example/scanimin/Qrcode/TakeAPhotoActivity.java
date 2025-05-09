@@ -12,9 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -25,6 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.scanimin.File.MinioHelper;
+import com.example.scanimin.File.MinioUploader;
 import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.Object.Customer;
@@ -79,15 +82,21 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     private long backPressedTime = 0;
     private File imageFiles;
     private JsonUtils jsonUtils;
+    private CameraFragment cameraFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = TakeAPhotoActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getData();
+        setView(1,1);
         init();
     }
     private void init(){
+//        Glide.with(TakeAPhotoActivity.this)
+//                .asGif()
+//                .load(R.raw.background2) // có thể là URL, asset, hoặc file
+//                .into(binding.imageBackground);
         binding.imgConfirm.setVisibility(GONE);
         popupThankYou = new PopupThankYou(this);
         dbHelper = new SQLLite(this);
@@ -126,6 +135,17 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         }
     }
 
+    private void setView(int widthInPd, int heightInPd){
+        binding.cdPreviewCardView.setVisibility(VISIBLE);
+        float density = binding.cdPreviewCardView.getResources().getDisplayMetrics().density;
+        int widthIn = (int) (widthInPd * density + 0.5f);
+        int heightIn = (int) (heightInPd * density + 0.5f);
+        ViewGroup.LayoutParams layoutParams = binding.cdPreviewCardView.getLayoutParams();
+        layoutParams.width = widthIn;
+        layoutParams.height = heightIn;
+        binding.cdPreviewCardView.setLayoutParams(layoutParams);
+    }
+
     private void requestCheckin(){
         binding.editName.setText(customer.getData().getName());
         binding.editTextId.setText(customer.getQrcode());
@@ -138,7 +158,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.textDescription.setVisibility(VISIBLE);
         binding.textRequestCamera.setVisibility(VISIBLE);
         binding.imgTakeAPhotoA.setVisibility(VISIBLE);
-        binding.cdPreviewCardView.setVisibility(GONE);
         binding.imgConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,51 +167,36 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.imgTakeAPhotoA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setView(320,320);
                 binding.imgTakeAPhotoA.setVisibility(GONE);
                 binding.textRequestCamera.setVisibility(GONE);
                 binding.textDescription.setVisibility(VISIBLE);
                 binding.textDescription.setText(R.string.id);
                 binding.viewLine.setVisibility(GONE);
                 binding.timeCountDown.setVisibility(GONE);
-                binding.lnCamera.setVisibility(VISIBLE);
                 binding.cdPreviewCardView.setVisibility(VISIBLE);
                 binding.videoCountdown.setVisibility(VISIBLE);
-                countDown(1700);
+                countDown(4000);
             }
         });
     }
 
     private void countDown(int time){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                JsonUtils.startCountdownVideo(TakeAPhotoActivity.this, binding.videoCountdown);
-                Glide.with(TakeAPhotoActivity.this)
-                        .asGif()
-                        .load(R.raw.countdown) // có thể là URL, asset, hoặc file
-                        .into(binding.videoCountdown);
-                if (time > 0 && count >0) {
-                    //count down
-                    count--;
-                    binding.timeCountDown.setText(String.valueOf(count));
-                    countDown(time);
-                }else{
-                    takeAPhoto();
-                }
-            }
-        }, time);
+        Glide.with(TakeAPhotoActivity.this)
+                .asGif()
+                .load(R.raw.countdown) // có thể là URL, asset, hoặc file
+                .into(binding.videoCountdown);
+        new Handler(Looper.getMainLooper()).postDelayed(
+                TakeAPhotoActivity.this::takeAPhoto, time
+        );
     }
     private void takeAPhoto(){
         // take a photo
-        binding.lnCamera.setVisibility(GONE);
         binding.cdPreviewCardView.setVisibility(GONE);
         binding.videoCountdown.setVisibility(GONE);
         setUiAfterTakeAPhoto();
         //image from library
     }
-
-
-
 
     private void UpdateData(){
         overlayDialogFragment = OverlayDialogFragment.newInstance();
@@ -200,13 +204,8 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                updateCustomer = new UpdateCustomer();
                 customer.setImage(Uri.parse(imageFileCustomer.getName()));
-                updateCustomer.setImage(customer.getImage().toString());
-                customer.setStatus(true);
-                updateCustomer.setQrcode(customer.getQrcode());
-                crud.updateDB(customer, dbHelper, TakeAPhotoActivity.this);
-                minIOHelper.uploadImageToMinIO(imageFileCustomer);
+                updateCustomer = new UpdateCustomer(String.valueOf(customer.getImage()),customer.getQrcode());
                 callApi.updateCustomer(updateCustomer, new CallApi.UpdateCustomerListener() {
                     @Override
                     public void onUpdateCustomerSuccess() {
@@ -230,6 +229,8 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                         });
                     }
                 });
+                callApi.getCustomer(TakeAPhotoActivity.this);
+                crud.updateDB(customer, dbHelper, TakeAPhotoActivity.this);
             }
         });
     }
@@ -244,7 +245,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             binding.textDescription.setVisibility(GONE);
             binding.textRequestCamera.setVisibility(GONE);
             binding.timeCountDown.setVisibility(GONE);
-            binding.lnCamera.setVisibility(GONE);
 //        }
     }
 
@@ -262,7 +262,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                 finish();
             }
         };
-        handler.postDelayed(dismissRunnable, 5000);
+        handler.postDelayed(dismissRunnable, 2000);
     }
 
     @Override
@@ -316,6 +316,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         getScreenshotImages(this);
         Uri uri = Uri.fromFile(file);
         imageFileCustomer = file;
+        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName());
         Log.d("Screenshot", "Uri: " + uri.toString());
         if (uri != null) {
             Glide.with(this)
@@ -330,7 +331,5 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                     .error(R.drawable.teamwork)
                     .into(binding.imgUser);
         }
-        //update ui after take a photo
-//        imageFileCustomer = new File(contentUri.getPath());
     }
 }

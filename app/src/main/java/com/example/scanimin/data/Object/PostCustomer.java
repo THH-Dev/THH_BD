@@ -1,7 +1,11 @@
 package com.example.scanimin.data.Object;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PostCustomer {
+    @SerializedName("data")
     private Data data;
+    @SerializedName("code")
     private String qrcode;
 
     public PostCustomer() {
