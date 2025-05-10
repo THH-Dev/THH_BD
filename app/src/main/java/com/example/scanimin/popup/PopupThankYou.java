@@ -28,21 +28,6 @@ public class PopupThankYou extends Dialog {
         this.context = context;
     }
 
-    private void createPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.popup_thankyou, null);
-        ImageView gifImageView = dialogView.findViewById(R.id.icon_imageGif);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.icons_success_1)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(gifImageView);
-        builder.setView(dialogView);
-        alertDialog = builder.create();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +46,10 @@ public class PopupThankYou extends Dialog {
         getWindow().setBackgroundDrawableResource(R.drawable.rounded_corner_popup);
 
         binding.descriptionThankYou.setText(R.string.thank_you_message);
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.icons_success_1)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(binding.iconImageGif);
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.icons_success_1)
+//                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+//                .into(binding.iconImageGif);
     }
 }

@@ -69,7 +69,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 //        holder.textAge.setText(String.valueOf(customer.getData().getTable()));
         holder.textCompany.setText(customer.getData().getCompany());
         holder.textPosition.setText(customer.getData().getPosition());
-        if (customer.getStatus()){
+        if (customer.getImage() != null){
             holder.status.setText(R.string.yes);
         }else {
             holder.status.setText(R.string.no);

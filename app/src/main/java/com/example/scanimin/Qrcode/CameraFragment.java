@@ -191,8 +191,8 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
         return mView;
     }
 
-    private void CaptureImageAndSendUri() {
-        File imageFile = JsonUtils.createTempFile(requireActivity());
+    public void CaptureImageAndSendUri() {
+        File imageFile = JsonUtils.createTempFile(requireContext());
         String picPath = imageFile.getAbsolutePath();
 
         mCameraHelper.capturePicture(picPath, new AbstractUVCCameraHandler.OnCaptureListener() {

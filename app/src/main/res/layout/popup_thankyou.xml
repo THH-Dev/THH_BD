@@ -23,7 +23,7 @@
             android:gravity="center"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:src="@drawable/gif_success">
+            android:src="@drawable/success">
         </ImageView>
         <View
             android:id="@+id/viewLine"
@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/viewLine"
             android:layout_marginTop="25dp"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/thank_you_message"

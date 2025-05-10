@@ -57,6 +57,8 @@ public class Scanner extends AppCompatActivity{
     private boolean isShowPopup = false;
     private CallApi callApi;
 
+    private static boolean checkScan = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,22 +168,24 @@ public class Scanner extends AppCompatActivity{
                 String strData = intent.getStringExtra(EXTRA_DECODE_DATA_STR);
                 // xử lý khi nhận được dữ liệu
                 Boolean checkIn = false;
-                for (Customer customerSave : dbHelper.getAllPersons()) {
-                    if (Objects.equals(customerSave.getQrcode(), strData)) {
-                        if (customerSave.getImage() == null){
-                            onScanSuccess();
-                            sendData(customerSave);
-                            checkIn = true;
-                            break;
-                        }else{
-                            isShowPopup = true;
-                            showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you, customerSave);
+                if (!isShowPopup){
+                    for (Customer customerSave : dbHelper.getAllPersons()) {
+                        if (Objects.equals(customerSave.getQrcode(), strData)) {
+                            if (customerSave.getImage() == null){
+                                onScanSuccess();
+                                sendData(customerSave);
+                                checkIn = true;
+                                break;
+                            }else{
+                                isShowPopup = true;
+                                showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you, customerSave);
+                            }
                         }
                     }
-                }
-                if (!checkIn && !isShowPopup) {
-                    isShowPopup = true;
-                    showPopupCheckin(getResources().getString(R.string.qrerror), R.drawable.cancel, null);
+                    if (!checkIn && !isShowPopup) {
+                        isShowPopup = true;
+                        showPopupCheckin(getResources().getString(R.string.qrerror), R.drawable.cancel, null);
+                    }
                 }
             }else {
                 if (scannerReceiver != null) {
@@ -211,6 +215,7 @@ public class Scanner extends AppCompatActivity{
             @Override
             public void onCompareUpdated() {
                 isShowPopup = false;
+                checkScan = true;
                 //bat lại scan
             }
         });
@@ -228,7 +233,6 @@ public class Scanner extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 
     @Override

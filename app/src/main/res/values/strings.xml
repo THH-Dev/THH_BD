@@ -56,4 +56,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="search_name">Search name...</string>
+    <string name="manualcamera">Manual</string>
+    <string name="auto">Auto</string>
+    <string name="three_s">3s</string>
 </resources>

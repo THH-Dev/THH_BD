@@ -47,15 +47,6 @@ public class CallApi{
                             Customer customerdata = new Customer(customer.getData(), null, customer.getQrcode(), customer.getStatus(), customer.getTimestamp(), customer.getUrl());
                             customers.add(customerdata);
                         }
-                        Log.d("MainActivity", "Customer :" +
-                                ", Name: " + customer.getData().getName()
-                                + ", table: " + customer.getData().getTable()
-                                + ", company: " + customer.getData().getCompany()
-                                + ", Image: " + customer.getImage()
-                                +", qrcode: " + customer.getQrcode()
-                                + ", status: " + customer.getStatus()
-                                + ", timestamp: " + customer.getTimestamp()
-                                + ", url: " + customer.getUrl());
                     }
                     for (Customer customer : customers) {
                         Listcustomer.add(customer);

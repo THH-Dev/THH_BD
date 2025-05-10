@@ -54,7 +54,7 @@ public class PopupCompare extends Dialog {
         // Thiết lập kích thước cho Dialog
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(params);
 
         // Bo tròn các góc
@@ -70,7 +70,10 @@ public class PopupCompare extends Dialog {
             binding.titleThankYou.setVisibility(VISIBLE);
             binding.viewLine.setVisibility(VISIBLE);
             binding.descriptionThankYou.setVisibility(VISIBLE);
+            binding.content.setBackground(null);
+
         }else {
+            binding.content.setBackgroundResource(R.drawable.background);
             if (text == null || url == 0){
                 binding.titleThankYou.setVisibility(GONE);
                 binding.viewLine.setVisibility(GONE);

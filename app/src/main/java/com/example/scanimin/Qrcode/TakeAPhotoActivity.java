@@ -15,12 +15,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -98,6 +101,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
 //                .load(R.raw.background2) // có thể là URL, asset, hoặc file
 //                .into(binding.imageBackground);
         binding.imgConfirm.setVisibility(GONE);
+        binding.description.setVisibility(VISIBLE);
         popupThankYou = new PopupThankYou(this);
         dbHelper = new SQLLite(this);
         minIOHelper = new MinioHelper();
@@ -146,6 +150,75 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.cdPreviewCardView.setLayoutParams(layoutParams);
     }
 
+    private void setting(View v){
+        PopupMenu popupMenu = new PopupMenu(new ContextThemeWrapper(TakeAPhotoActivity.this, R.style.PopupMenuStyle), v);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_setting, popupMenu.getMenu());
+        for (int i = 0; i < popupMenu.getMenu().size(); i++) {
+            MenuItem menuItem = popupMenu.getMenu().getItem(i);
+            View itemView = getLayoutInflater().inflate(R.layout.menu_item_layout, null);
+            TextView title = itemView.findViewById(R.id.menu_item_text);
+            title.setText(menuItem.getTitle());
+            menuItem.setActionView(itemView);
+            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    int id = menuItem.getItemId();
+                    if (id == R.id.menu_item_0) {
+                        binding.imgTakeAPhotoA.setImageResource(R.drawable.camera_blue);
+                        binding.imgTakeAPhotoA.setVisibility(VISIBLE);
+                        settingUiCamera(0);
+                        return true;
+                    }
+                    if (id == R.id.menu_item_1) {
+//                        binding.imgTakeAPhotoA.setImageResource(R.drawable.icon_setting);
+//                        settingUiCamera(time);
+//                        return true;
+//                    }
+//                    if (id == R.id.menu_item_2) {
+                        binding.imgTakeAPhotoA.setImageResource(R.drawable.icon_setting);
+                        PopupMenu popupMenu = new PopupMenu(new ContextThemeWrapper(TakeAPhotoActivity.this, R.style.PopupMenuStyle), v);
+                        popupMenu.getMenuInflater().inflate(R.menu.menu_set_time, popupMenu.getMenu());
+                        for (int i = 0; i < popupMenu.getMenu().size(); i++) {
+                            MenuItem menuItemTime = popupMenu.getMenu().getItem(i);
+                            View itemView = getLayoutInflater().inflate(R.layout.menu_item_layout, null);
+                            TextView title = itemView.findViewById(R.id.menu_item_text);
+                            title.setText(menuItemTime.getTitle());
+
+                            menuItemTime.setActionView(itemView);
+                            menuItemTime.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                        }
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItemTime) {
+                                int id = menuItemTime.getItemId();
+                                if (id ==R.id.menu_item_0) {
+                                    time = 3000;
+                                    settingUiCamera(time);
+                                    return true;
+                                }
+                                if (id ==R.id.menu_item_1) {
+                                    time = 5000;
+                                    settingUiCamera(time);
+                                    return true;
+                                }
+                                if (id ==R.id.menu_item_2) {
+                                    time = 10000;
+                                    settingUiCamera(time);
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
+                        popupMenu.show();
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
+        }
+    }
+
     private void requestCheckin(){
         binding.editName.setText(customer.getData().getName());
         binding.editTextId.setText(customer.getQrcode());
@@ -153,7 +226,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.editTextPosition.setText(customer.getData().getPosition());
         binding.editAge.setText(String.valueOf(customer.getData().getTable()));
         isPhoto = false;
-        binding.titleScan.setVisibility(VISIBLE);
         binding.lnInformation.setVisibility(VISIBLE);
         binding.textDescription.setVisibility(VISIBLE);
         binding.textRequestCamera.setVisibility(VISIBLE);
@@ -167,18 +239,40 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.imgTakeAPhotoA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setView(320,320);
-                binding.imgTakeAPhotoA.setVisibility(GONE);
-                binding.textRequestCamera.setVisibility(GONE);
-                binding.textDescription.setVisibility(VISIBLE);
-                binding.textDescription.setText(R.string.id);
-                binding.viewLine.setVisibility(GONE);
-                binding.timeCountDown.setVisibility(GONE);
-                binding.cdPreviewCardView.setVisibility(VISIBLE);
-                binding.videoCountdown.setVisibility(VISIBLE);
-                countDown(4000);
+                setting(v);
             }
         });
+    }
+
+    private void settingUiCamera(int time){
+        binding.description.setVisibility(VISIBLE);
+        binding.imgTakeAPhotoA.setVisibility(VISIBLE);
+        binding.textRequestCamera.setVisibility(GONE);
+        binding.textDescription.setVisibility(GONE);
+        binding.viewLine.setVisibility(GONE);
+        binding.timeCountDown.setVisibility(GONE);
+        binding.cdPreviewCardView.setVisibility(VISIBLE);
+        binding.videoCountdown.setVisibility(VISIBLE);
+        binding.lnImage.setVisibility(VISIBLE);
+        setView(320,320);
+        if (time !=0){
+            countDown(time);
+        }else{
+            binding.imgTakeAPhotoA.setOnClickListener(v -> countDown(0));
+        }
+    }
+
+    private void setTime(){
+
+    }
+
+    private void chupanh(){
+        CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.ln_camera);
+
+        if (fragment != null) {
+            fragment.CaptureImageAndSendUri();
+        }
     }
 
     private void countDown(int time){
@@ -192,6 +286,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     }
     private void takeAPhoto(){
         // take a photo
+        chupanh();
         binding.cdPreviewCardView.setVisibility(GONE);
         binding.videoCountdown.setVisibility(GONE);
         setUiAfterTakeAPhoto();
@@ -199,8 +294,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     }
 
     private void UpdateData(){
-        overlayDialogFragment = OverlayDialogFragment.newInstance();
-        overlayDialogFragment.show(getSupportFragmentManager(), "OverlayDialog");
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -212,7 +305,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                overlayDialogFragment.dismiss();
                                 popUpThankyou();
                             }
                         });
@@ -223,7 +315,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                overlayDialogFragment.dismiss();
                                 popUpThankyou();
                             }
                         });
@@ -240,11 +331,13 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             binding.imgConfirm.setVisibility(VISIBLE);
             binding.imgUser.setVisibility(VISIBLE);
             binding.cdImageCardView.setVisibility(VISIBLE);
-            binding.fmLayoutImage.setVisibility(VISIBLE);
             binding.imgTakeAPhotoA.setVisibility(GONE);
             binding.textDescription.setVisibility(GONE);
             binding.textRequestCamera.setVisibility(GONE);
             binding.timeCountDown.setVisibility(GONE);
+            binding.description.setVisibility(GONE);
+            binding.cdPreviewCardView.setVisibility(GONE);
+            binding.lnImage.setVisibility(VISIBLE);
 //        }
     }
 
@@ -265,6 +358,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         handler.postDelayed(dismissRunnable, 2000);
     }
 
+    // No back
     @Override
     public void onBackPressed() {
         if (backPressedTime  > System.currentTimeMillis()) {
@@ -272,6 +366,16 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         }
         backPressedTime = System.currentTimeMillis();
     }
+
+    // back to previous activity
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(this, Scanner.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//        finish();
+//    }
 
     public void getScreenshotImages(Context context) {
         Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -321,7 +425,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         if (uri != null) {
             Glide.with(this)
                     .load(uri)
-                    .placeholder(R.drawable.user)
                     .error(R.drawable.teamwork)
                     .into(binding.imgUser);
         }else {
@@ -332,4 +435,5 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                     .into(binding.imgUser);
         }
     }
+
 }
