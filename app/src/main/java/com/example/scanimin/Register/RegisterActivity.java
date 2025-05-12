@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
+import com.example.scanimin.data.Newdata.NewCustomer;
 import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Object.Data;
@@ -43,7 +44,29 @@ public class RegisterActivity extends AppCompatActivity {
         dbHelper = new SQLLite(this);
         callApi = new CallApi();
         postCustomer = new PostCustomer();
+        getData();
         init();
+    }
+
+    private void getData(){
+        Intent intent = getIntent();
+        if (intent.hasExtra("customer_new")) {
+            Bundle bundle = intent.getBundleExtra("customer_new");
+            String name = bundle.getString("name");
+            String table = bundle.getString("table");
+            String company = bundle.getString("company");
+            String position = bundle.getString("position");
+            String qrcode = bundle.getString("qrcode");
+            Data data = new Data();
+            data.setName(name);
+            data.setTable(Integer.parseInt(table));
+            data.setCompany(company);
+            data.setPosition(position);
+            customer.setData(data);
+            customer.setQrcode(qrcode);
+            customer.setImage(null);
+            customer.setStatus(false);
+        }
     }
     private void init() {
 //        Glide.with(RegisterActivity.this)
@@ -71,10 +94,10 @@ public class RegisterActivity extends AppCompatActivity {
             customer.setData(data);
             customer.setStatus(false);
             customer.setImage(null);
-            customer.setQrcode(randomUpperCaseAndDigits(5));
+//            customer.setQrcode(randomUpperCaseAndDigits(5));
             Bundle bundle = new Bundle();
             bundle.putString("name", binding.editName.getText().toString());
-            bundle.putString("age", binding.editAge.getText().toString());
+            bundle.putString("table", String.valueOf(customer.getData().getTable()));
             bundle.putString("company", binding.editCompany.getText().toString());
             bundle.putString("position", binding.editPosition.getText().toString());
             bundle.putString("qrcode", customer.getQrcode());
@@ -95,12 +118,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void insertSQlite(){
         CRUD crud = new CRUD();
         crud.inserDB(customer, dbHelper, this);
-        for (Customer customer : dbHelper.getAllPersons()){
-            Log.d("MainActivity", "Customer name :" + customer.getData().getName());
-            Log.d("MainActivity", "Customer age :" + customer.getData().getTable());
-            Log.d("MainActivity", "Customer company :" + customer.getData().getCompany());
-            Log.d("MainActivity", "Customer position :" + customer.getData().getPosition());
-        }
     }
 
     public String randomUpperCaseAndDigits(int numberOfCharacters) {

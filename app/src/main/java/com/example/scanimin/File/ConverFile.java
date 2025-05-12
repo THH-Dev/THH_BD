@@ -1,6 +1,8 @@
 package com.example.scanimin.File;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.File;
@@ -44,4 +46,29 @@ public class ConverFile {
             }
         }
     }
+    public static File cropImageFileToSquare720(File inputFile, Context context) throws IOException {
+        // 1. Decode ảnh từ file
+        Bitmap original = BitmapFactory.decodeFile(inputFile.getAbsolutePath());
+
+        // 2. Cắt ảnh thành 720x720 (center crop)
+        int width = original.getWidth();
+        int height = original.getHeight();
+        int size = 720;
+        int xOffset = (width - size) / 2;
+        int yOffset = (height - size) / 2;
+
+        Bitmap cropped = Bitmap.createBitmap(original, xOffset, yOffset, size, size);
+
+        // 3. Ghi bitmap ra file mới
+        File outputDir = context.getCacheDir(); // thư mục tạm
+        File outputFile = new File(outputDir, inputFile.getName());
+
+        FileOutputStream out = new FileOutputStream(outputFile);
+        cropped.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        out.flush();
+        out.close();
+
+        return outputFile;
+    }
+
 }

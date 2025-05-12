@@ -53,7 +53,7 @@ public class PopupCompare extends Dialog {
 
         // Thiết lập kích thước cho Dialog
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(params);
 

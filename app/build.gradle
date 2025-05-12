@@ -57,4 +57,5 @@ dependencies {
     implementation(libs.stax.api)
     implementation libs.woodstox.core
     implementation 'com.github.jiangdongguo:AndroidUSBCamera:2.3.4'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.27'
 }

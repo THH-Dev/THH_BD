@@ -198,16 +198,23 @@ public class Scanner extends AppCompatActivity{
         }
     }
     private void sendData(Customer customer){
-        Intent intent = new Intent(Scanner.this, TakeAPhotoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("name", customer.getData().getName());
-        bundle.putString("age", String.valueOf(customer.getData().getTable()));
+        bundle.putString("table", String.valueOf(customer.getData().getTable()));
         bundle.putString("company", customer.getData().getCompany());
         bundle.putString("position", customer.getData().getPosition());
         bundle.putString("qrcode", customer.getQrcode());
-        intent.putExtra("customer_new", bundle);
-        startActivity(intent);
-        finish();
+        if (customer.getData().getName() == null){
+            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
+            intent.putExtra("customer_new", bundle);
+            startActivity(intent);
+            finish();
+        }else {
+            Intent intent = new Intent(Scanner.this, TakeAPhotoActivity.class);
+            intent.putExtra("customer_new", bundle);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void showPopupCheckin(String string, int url, Customer customer){
@@ -219,6 +226,7 @@ public class Scanner extends AppCompatActivity{
                 //bat lại scan
             }
         });
+        popupCompare.setCanceledOnTouchOutside(false);
         popupCompare.show();
     }
 

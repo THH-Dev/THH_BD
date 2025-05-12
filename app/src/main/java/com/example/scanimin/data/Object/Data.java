@@ -20,7 +20,7 @@ public class Data implements Serializable {
     public Data() {
         this.name = "";
         this.company = "";
-        this.position = "";
+        this.position = null;
         this.tableid = 0;
         this.role = "";
     }

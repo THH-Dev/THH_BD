@@ -19,6 +19,7 @@ import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
+import com.example.scanimin.data.Newdata.NewCustomer;
 import com.example.scanimin.function.JsonUtils;
 
 import java.io.File;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         callApi = new CallApi();
         sqlLite = new SQLLite(this);
         minIOHelper = new MinioHelper();
-//        getData();
         if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,

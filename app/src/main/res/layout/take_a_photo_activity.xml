@@ -59,7 +59,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="0.5"
                             android:layout_marginHorizontal="30dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:orientation="vertical">
                             <TextView
                                 android:layout_width="match_parent"
@@ -89,6 +89,7 @@
                                 android:textColor="@color/text_title"
                                 android:textSize="24sp"
                                 android:layout_marginTop="25dp"
+                                android:visibility="gone"
                                 app:layout_constraintTop_toBottomOf="@+id/text_description"
                                 android:paddingHorizontal="30dp">
                             </TextView>
@@ -96,6 +97,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="2"
+                                android:visibility="gone"
                                 android:layout_gravity="center"
                                 android:gravity="center">
                                 <ImageView
@@ -113,8 +115,8 @@
                         </LinearLayout>
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cd_preview_cardView"
-                            android:layout_width="320dp"
-                            android:layout_height="320dp"
+                            android:layout_width="350dp"
+                            android:layout_height="350dp"
                             app:cardCornerRadius="200dp"
                             android:scaleType="centerCrop"
                             app:cardBackgroundColor="@android:color/transparent"
@@ -122,7 +124,7 @@
                             app:layout_constraintTop_toBottomOf="@id/ctr_data"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:layout_marginTop="10dp"
                             android:background="@drawable/circle_background"
                             android:layout_gravity="center">
@@ -148,6 +150,10 @@
                                     android:textColor="#E5FFFFFF"
                                     android:text="3">
                                 </TextView>
+                                <pl.droidsonroids.gif.GifImageView
+                                    android:id="@+id/gifImageView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
                                 <ImageView
                                     android:id="@+id/video_countdown"
                                     android:layout_width="match_parent"
@@ -162,7 +168,8 @@
                         <LinearLayout
                             android:id="@+id/ln_image"
                             android:layout_width="match_parent"
-                            android:layout_height="500dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             app:cardCornerRadius="200dp"
                             android:layout_gravity="center"
                             android:orientation="horizontal"
@@ -173,7 +180,7 @@
                             <View
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1">
+                                android:layout_weight="0.5">
                             </View>
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -183,11 +190,11 @@
                                 android:layout_weight="2">
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/cd_image_cardView"
-                                    android:layout_width="320dp"
-                                    android:layout_height="320dp"
+                                    android:layout_width="400dp"
+                                    android:layout_height="400dp"
                                     app:cardCornerRadius="200dp"
                                     app:cardBackgroundColor="@android:color/transparent"
-                                    android:visibility="gone"
+                                    android:visibility="visible"
                                     app:layout_constraintTop_toBottomOf="@id/ctr_data"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -195,8 +202,8 @@
                                     android:layout_gravity="center">
                                     <ImageView
                                         android:id="@+id/img_user"
-                                        android:layout_width="320dp"
-                                        android:layout_height="320dp"
+                                        android:layout_width="400dp"
+                                        android:layout_height="400dp"
                                         android:scaleType="centerCrop"
                                         app:layout_constraintTop_toBottomOf="@id/ctr_data"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -210,34 +217,56 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1">
+                                android:layout_weight="0.5">
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
                                     android:layout_gravity="bottom"
                                     android:gravity="end">
-                                    <ImageView
-                                        android:id="@+id/img_confirm"
-                                        android:layout_width="95dp"
-                                        android:layout_height="95dp"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/img_user"
-                                        app:layout_constraintStart_toEndOf="@id/btn_retry"
-                                        android:layout_marginVertical="15dp"
-                                        android:layout_marginHorizontal="40dp"
-                                        android:text="@string/confirm"
-                                        android:background="@drawable/circle_background"
-                                        android:layout_gravity="center"
-                                        android:visibility="gone"
-                                        android:src="@drawable/save">
-                                    </ImageView>
                                 </LinearLayout>
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
                                 </LinearLayout>
                             </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/icon_camera"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:visibility="gone"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:layout_weight="0.2">
+                            <ImageView
+                                android:id="@+id/img_take_a_photo"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_marginHorizontal="50dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/text_request_camera"
+                                android:layout_marginTop="15dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/camera_blue">
+                            </ImageView>
+                            <ImageView
+                                android:id="@+id/img_confirm"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/img_user"
+                                app:layout_constraintStart_toEndOf="@id/btn_retry"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginHorizontal="40dp"
+                                android:text="@string/confirm"
+                                android:background="@drawable/circle_background"
+                                android:layout_gravity="center"
+                                android:visibility="visible"
+                                android:src="@drawable/save">
+                            </ImageView>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout

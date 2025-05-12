@@ -65,26 +65,28 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull CustomerViewHolder holder, int position) {
         Customer customer = filteredList.get(position);
-        holder.textName.setText(customer.getData().getName());
+        if (customer.getData().getName() != null) {
+            holder.textName.setText(customer.getData().getName());
 //        holder.textAge.setText(String.valueOf(customer.getData().getTable()));
-        holder.textCompany.setText(customer.getData().getCompany());
-        holder.textPosition.setText(customer.getData().getPosition());
-        if (customer.getImage() != null){
-            holder.status.setText(R.string.yes);
-        }else {
-            holder.status.setText(R.string.no);
-        }
-        String imageUri = customer.getUrl();
-        Glide.with(context)
-                .load(imageUri)
-                .error(R.drawable.user)
-                .placeholder(R.drawable.user)
-                .into(holder.imgUser);
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(customer,v);
+            holder.textCompany.setText(customer.getData().getCompany());
+            holder.textPosition.setText(customer.getData().getPosition());
+            if (customer.getImage() != null) {
+                holder.status.setText(R.string.yes);
+            } else {
+                holder.status.setText(R.string.no);
             }
-        });
+            String imageUri = customer.getUrl();
+            Glide.with(context)
+                    .load(imageUri)
+                    .error(R.drawable.user)
+                    .placeholder(R.drawable.user)
+                    .into(holder.imgUser);
+            holder.itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onItemClick(customer, v);
+                }
+            });
+        }
     }
 
     @Override

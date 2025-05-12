@@ -82,7 +82,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
     private JsonUtils jsonUtils;
 
     public interface OnUriCapturedListener {
-        void onUriCaptured(File file);
+        void onUriCaptured(File file) throws IOException;
     }
 
     private OnUriCapturedListener callback;
@@ -203,7 +203,13 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                 }
                 File file = new File(path);
                 if (callback != null) {
-                    new Handler(getMainLooper()).post(() -> callback.onUriCaptured(file));
+                    new Handler(getMainLooper()).post(() -> {
+                        try {
+                            callback.onUriCaptured(file);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }
             }
         });
@@ -279,7 +285,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
         Log.i(TAG, "onSurfaceCreated==========");
         try {
             if (!isPreview && mCameraHelper.isCameraOpened()) {
-//                mCameraHelper.startPreview(mUVCCameraView);
+                mCameraHelper.startPreview(mUVCCameraView);
                 isPreview = true;
                 Log.i(TAG, "onSurfaceCreated start preview ==========");
             }
