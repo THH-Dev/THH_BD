@@ -47,15 +47,23 @@ dependencies {
     api libs.androidx.camera.extensions
     api libs.androidx.camera.lifecycle
     implementation libs.androidx.camera.core
+
+    //api
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
+
+
     implementation(libs.logging.interceptor)
     implementation libs.glide
     annotationProcessor libs.compiler
+
+    //minio
     implementation libs.minio.v856
     implementation(libs.stax.api)
     implementation libs.woodstox.core
+
+    //cam
     implementation 'com.github.jiangdongguo:AndroidUSBCamera:2.3.4'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.27'
 }

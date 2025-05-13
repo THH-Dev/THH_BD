@@ -73,6 +73,12 @@ public class ListCustomerActivity extends AppCompatActivity {
                 @Override
                 public void onRefresh() {
                     getData();
+                    customerAdapter = new CustomerAdapter(customerList, ListCustomerActivity.this, new CustomerAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Customer customer, View view) {
+
+                        }
+                    });
                     reloadData();
                 }
             });
@@ -97,11 +103,8 @@ public class ListCustomerActivity extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void run() {
-                // Sau khi tải dữ liệu xong, tắt hiệu ứng refresh
                 binding.swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(ListCustomerActivity.this, "Dữ liệu đã được tải lại", Toast.LENGTH_SHORT).show();
-
-                // Cập nhật dữ liệu cho adapter nếu có
                 customerAdapter.notifyDataSetChanged();
             }
         }, 1000);

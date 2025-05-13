@@ -104,12 +104,12 @@ public class Scanner extends AppCompatActivity{
         dbHelper = new SQLLite(this);
         languageManager = new LanguageManager(this);
         startGif();
-        binding.lnRegister.setOnClickListener(v -> {
-            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
-            startActivity(intent);
-            finish();
-        });
-        binding.lnLanguage.setOnClickListener(v -> {
+//        binding.lnRegister.setOnClickListener(v -> {
+//            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
+//            startActivity(intent);
+//            finish();
+//        });
+        binding.imgLanguage.setOnClickListener(v -> {
             if (getLanguage().equals("vi")) {
                 languageManager.changeLanguage("en");
             } else {
@@ -175,6 +175,7 @@ public class Scanner extends AppCompatActivity{
                                 onScanSuccess();
                                 sendData(customerSave);
                                 checkIn = true;
+                                isShowPopup = true;
                                 break;
                             }else{
                                 isShowPopup = true;

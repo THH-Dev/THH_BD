@@ -42,6 +42,7 @@ import com.google.android.material.button.MaterialButton;
 import com.jiangdg.usbcamera.UVCCameraHelper;
 import com.jiangdg.usbcamera.utils.FileUtils;
 import com.serenegiant.usb.CameraDialog;
+import com.serenegiant.usb.Size;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.common.AbstractUVCCameraHandler;
 import com.serenegiant.usb.widget.CameraViewInterface;
@@ -51,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 
 public class CameraFragment extends Fragment implements CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
@@ -137,26 +139,26 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                 isPreview = false;
             } else {
                 isPreview = true;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            Log.d(TAG, "InterruptedException: " + e.getMessage());
-                        }
-                        Looper.prepare();
-                        if(mCameraHelper != null && mCameraHelper.isCameraOpened()) {
-                            mCameraHelper.getModelValue(UVCCameraHelper.MODE_BRIGHTNESS);
-                            mCameraHelper.getModelValue(UVCCameraHelper.MODE_CONTRAST);
-                            new Handler(Looper.getMainLooper()).postDelayed(
-                                    CameraFragment.this::CaptureImageAndSendUri, 5000
-                            );
-                        }
-                        Looper.loop();
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        try {
+////                            Thread.sleep(100);
+////                        } catch (InterruptedException e) {
+////                            e.printStackTrace();
+////                            Log.d(TAG, "InterruptedException: " + e.getMessage());
+////                        }
+////                        Looper.prepare();
+////                        if(mCameraHelper != null && mCameraHelper.isCameraOpened()) {
+////                            mCameraHelper.getModelValue(UVCCameraHelper.MODE_BRIGHTNESS);
+////                            mCameraHelper.getModelValue(UVCCameraHelper.MODE_CONTRAST);
+////                            new Handler(Looper.getMainLooper()).postDelayed(
+////                                    CameraFragment.this::CaptureImageAndSendUri, 5000
+////                            );
+////                        }
+////                        Looper.loop();
+//                    }
+//                }).start();
             }
         }
         @Override

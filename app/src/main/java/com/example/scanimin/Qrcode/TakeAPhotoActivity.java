@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,6 +92,9 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     private File imageFiles;
     private JsonUtils jsonUtils;
     private CameraFragment cameraFragment;
+    private Handler idleHandler = new Handler();
+    private Runnable idleRunnable;
+    private static final int IDLE_TIMEOUT = 30000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -510,6 +514,38 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                     .error(R.drawable.teamwork)
                     .into(binding.imgUser);
         }
+    }
+
+    private void startIdleTimer() {
+        idleRunnable = () -> {
+            startActivity(new Intent(this, Scanner.class));
+            finish();
+        };
+        idleHandler.postDelayed(idleRunnable, IDLE_TIMEOUT);
+    }
+
+    private void resetIdleTimer() {
+        idleHandler.removeCallbacks(idleRunnable);
+        idleHandler.postDelayed(idleRunnable, IDLE_TIMEOUT);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        startIdleTimer();
+
+//        View rootView = findViewById(android.R.id.content);
+//        rootView.setOnTouchListener((v, event) -> {
+//            resetIdleTimer();
+//            return false;
+//        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        idleHandler.removeCallbacks(idleRunnable);
     }
 
 }

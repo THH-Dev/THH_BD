@@ -42,10 +42,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         filteredList.clear();
 
         if (keyword.isEmpty()) {
-            filteredList.addAll(customerList);
+            for (Customer item : customerList) {
+                if (item.getData().getName() != null) {
+                    filteredList.add(item);
+                }
+            }
         } else {
             for (Customer item : customerList) {
-                if (item.getData().getName().toLowerCase(Locale.ROOT).contains(keyword)) {
+                if (item.getData().getName() != null && item.getData().getName().toLowerCase(Locale.ROOT).contains(keyword)) {
                     filteredList.add(item);
                 }
             }

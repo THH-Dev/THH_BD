@@ -82,7 +82,6 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:layout_margin="15dp"
                             android:src="@drawable/icon_ns">
                         </ImageView>
                         <View
@@ -110,46 +109,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:layout_marginVertical="20dp"
-                        android:visibility="visible">
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:layout_margin="15dp"
-                            android:src="@drawable/age">
-                        </ImageView>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.25">
-                        </View>
-                        <EditText
-                            android:id="@+id/edit_age"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="10"
-                            android:padding="10dp"
-                            android:maxLength="2"
-                            android:hint="@string/fill_age"
-                            android:textColorHint="@color/white_text"
-                            android:textColor="@color/white_text"
-                            android:textSize="28sp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/custom_bg_edit"
-                            android:inputType="number">
-                        </EditText>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginVertical="20dp">
                         <ImageView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:layout_margin="15dp"
                             android:src="@drawable/icon_co_quan">
                         </ImageView>
                         <View
@@ -170,6 +134,40 @@
                             android:layout_margin="5dp"
                             android:background="@drawable/custom_bg_edit"
                             android:textSize="28sp">
+                        </EditText>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginVertical="20dp"
+                        android:visibility="visible">
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:padding="10dp"
+                            android:src="@drawable/icon_person_level">
+                        </ImageView>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.25">
+                        </View>
+                        <EditText
+                            android:id="@+id/edit_age"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="10"
+                            android:padding="10dp"
+                            android:maxLength="2"
+                            android:hint="@string/fill_position"
+                            android:textColorHint="@color/white_text"
+                            android:textColor="@color/white_text"
+                            android:textSize="28sp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/custom_bg_edit"
+                            android:inputType="number">
                         </EditText>
                     </LinearLayout>
                     <LinearLayout
