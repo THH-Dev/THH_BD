@@ -68,21 +68,27 @@ public class PopupCompare extends Dialog {
             binding.cdInformation.setVisibility(GONE);
             binding.cdImageCardView.setVisibility(GONE);
             binding.titleThankYou.setVisibility(VISIBLE);
-            binding.viewLine.setVisibility(VISIBLE);
+            binding.viewLine.setVisibility(GONE);
             binding.descriptionThankYou.setVisibility(VISIBLE);
             binding.content.setBackground(null);
+            binding.lnHeader.setVisibility(GONE);
 
         }else {
-            binding.content.setBackgroundResource(R.drawable.background);
             if (text == null || url == 0){
                 binding.titleThankYou.setVisibility(GONE);
                 binding.viewLine.setVisibility(GONE);
                 binding.descriptionThankYou.setVisibility(GONE);
+                binding.back.setVisibility(VISIBLE);
+                binding.btnConfirm.setVisibility(GONE);
             }else {
-                binding.titleThankYou.setVisibility(VISIBLE);
-                binding.viewLine.setVisibility(VISIBLE);
+                binding.viewLine.setVisibility(GONE);
+                binding.titleThankYou.setVisibility(GONE);
                 binding.descriptionThankYou.setVisibility(VISIBLE);
+                binding.descriptionThankYou.setText(R.string.camon);
+                binding.back.setVisibility(VISIBLE);
+                binding.btnConfirm.setVisibility(GONE);
             }
+            binding.lnHeader.setVisibility(VISIBLE);
             binding.cdInformation.setVisibility(VISIBLE);
             binding.cdImageCardView.setVisibility(VISIBLE);
             binding.editName.setText(customer.getData().getName());
@@ -99,6 +105,13 @@ public class PopupCompare extends Dialog {
         }
 
         binding.btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                listener.onCompareUpdated();
+            }
+        });
+        binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

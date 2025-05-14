@@ -113,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                 customer.setData(data);
                 customer.setStatus(false);
                 customer.setImage(null);
-//            customer.setQrcode(randomUpperCaseAndDigits(5));
+                customer.setQrcode(randomUpperCaseAndDigits(5));
                 Bundle bundle = new Bundle();
                 bundle.putString("name", binding.editName.getText().toString());
                 bundle.putString("table", String.valueOf(customer.getData().getTable()));

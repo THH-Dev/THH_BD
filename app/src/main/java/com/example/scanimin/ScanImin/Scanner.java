@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,18 +101,31 @@ public class Scanner extends AppCompatActivity{
     }
 
     private void init(){
-        Glide.with(Scanner.this)
-                .asGif()
-                .load(R.raw.background2) // có thể là URL, asset, hoặc file
-                .into(binding.imageBackground);
         dbHelper = new SQLLite(this);
         languageManager = new LanguageManager(this);
+        String title = binding.hd.getText().toString();
+        SpannableString spannable = new SpannableString(binding.hd.getText().toString());
+        int start = title.indexOf("quẹt");
+        int end = title.lastIndexOf("đ");
+        if (end != -1) {
+            end = end;
+        } else {
+            end = title.length();
+        }
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.RED),
+                start,
+                end,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        binding.hd.setText(spannable);
         startGif();
-//        binding.lnRegister.setOnClickListener(v -> {
-//            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
+        binding.lnRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
+            startActivity(intent);
+            finish();
+        });
         binding.imgLanguage.setOnClickListener(v -> {
             if (getLanguage().equals("vi")) {
                 languageManager.changeLanguage("en");
@@ -142,7 +159,6 @@ public class Scanner extends AppCompatActivity{
             binding.videoView.stopPlayback(); // Stop the GIF
         }
     }
-
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void registerScannerBroadcast() {
@@ -250,5 +266,9 @@ public class Scanner extends AppCompatActivity{
         binding.videoView.start();
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getdata();
+    }
 }

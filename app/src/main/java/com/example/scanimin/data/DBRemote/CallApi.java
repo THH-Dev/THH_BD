@@ -113,27 +113,6 @@ public class CallApi{
             }
         });
     }
-
-    public void deleteCustomer(String customerId) {
-        ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
-        Call<Void> call = apiInterface.deleteCustomer(customerId);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Log.d("CallApi", "Customer deleted successfully: " );
-                    // Xử lý response ở đây nếu cần
-                } else {
-                    Log.e("CallApi", "Failed to delete customer. Code: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("CallApi", "Failed to delete customer. Error: " + t.getMessage());
-            }
-        });
-    }
     public static boolean isCustomerInList(Customer customer, List<Customer> customerList) {
         for (Customer item : customerList) {
             if (customer.getQrcode().equals(item.getQrcode())) {

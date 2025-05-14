@@ -139,26 +139,6 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
                 isPreview = false;
             } else {
                 isPreview = true;
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        try {
-////                            Thread.sleep(100);
-////                        } catch (InterruptedException e) {
-////                            e.printStackTrace();
-////                            Log.d(TAG, "InterruptedException: " + e.getMessage());
-////                        }
-////                        Looper.prepare();
-////                        if(mCameraHelper != null && mCameraHelper.isCameraOpened()) {
-////                            mCameraHelper.getModelValue(UVCCameraHelper.MODE_BRIGHTNESS);
-////                            mCameraHelper.getModelValue(UVCCameraHelper.MODE_CONTRAST);
-////                            new Handler(Looper.getMainLooper()).postDelayed(
-////                                    CameraFragment.this::CaptureImageAndSendUri, 5000
-////                            );
-////                        }
-////                        Looper.loop();
-//                    }
-//                }).start();
             }
         }
         @Override
@@ -177,6 +157,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
         //cam
         mTextureView = mView.findViewById(R.id.camera_view);
         videoView = mView.findViewById(R.id.video_countdown);
+        mTextureView.updateFps();
 
         //cam
         // step.1 initialize UVCCameraHelper

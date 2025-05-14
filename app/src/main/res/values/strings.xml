@@ -59,4 +59,20 @@
     <string name="manualcamera">Manual</string>
     <string name="auto">Auto</string>
     <string name="three_s">3s</string>
+    <string name="title_scan">WELCOME</string>
+    <string name="description_scan">Quý khách vui lòng quẹt thẻ \ntheo hướng dẫn để kiểm tra thông tin</string>
+    <string name="camera_auto">Camera auto</string>
+    <string name="camera_manual">Camera Manual</string>
+    <string name="eight_s">8s</string>
+    <string name="title_popup">Information</string>
+    <string name="code">Code</string>
+    <string name="bantiecso">Table number</string>
+    <string name="camon">Chân thành cảm ơn Quý khách hàng - Quý đối tác đã \ntham gia sự kiện Kỷ niệm 10 năm thành lập Tân \nHưng Hà và Công bố thành lập THH Holdings!</string>
+    <string name="detail">Detail</string>
+    <string name="refresh1">Set Image</string>
+    <string name="title_list">REBOOT 10</string>
+    <string name="slogan_list">Dấu Ấn Thập Kỷ - Mở Lối Tương Lai</string>
+    <string name="all_customer">All</string>
+    <string name="registed">Registed</string>
+    <string name="unregisted">UnRegisted</string>
 </resources>

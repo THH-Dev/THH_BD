@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.scanimin.Qrcode.TakeAPhotoActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.data.Object.Customer;
@@ -25,14 +26,20 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     public interface OnItemClickListener {
         void onItemClick(Customer customer, View view);
     }
+    public interface OnItemCameraListener {
+        void onItemClick(Customer customer, View view);
+    }
     private List<Customer> filteredList;
     private List<Customer> customerList;
     private Context context;
     private OnItemClickListener listener;
-    public CustomerAdapter(List<Customer> customerList, Context context, OnItemClickListener listener) {
+    private OnItemCameraListener listener1;
+
+    public CustomerAdapter(List<Customer> customerList, Context context, OnItemClickListener listener, OnItemCameraListener listener1) {
         this.customerList = new ArrayList<>(customerList);
         this.context = context;
         this.listener = listener;
+        this.listener1 = listener1;
         this.filteredList = new ArrayList<>(customerList);
     }
 
@@ -71,7 +78,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         Customer customer = filteredList.get(position);
         if (customer.getData().getName() != null) {
             holder.textName.setText(customer.getData().getName());
-//        holder.textAge.setText(String.valueOf(customer.getData().getTable()));
             holder.textCompany.setText(customer.getData().getCompany());
             holder.textPosition.setText(customer.getData().getPosition());
             if (customer.getImage() != null) {
@@ -82,15 +88,31 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             String imageUri = customer.getUrl();
             Glide.with(context)
                     .load(imageUri)
+                    .transform(new RoundedCorners(30))
                     .error(R.drawable.user)
                     .placeholder(R.drawable.user)
                     .into(holder.imgUser);
-            holder.itemView.setOnClickListener(v -> {
+            holder.refresh.setOnClickListener(v -> {
+                if (listener1 != null) {
+                    listener1.onItemClick(customer, v);
+                }
+            });
+            holder.detail.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onItemClick(customer, v);
                 }
             });
         }
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateData(List<Customer> newList) {
+        this.customerList.clear();
+        this.customerList.addAll(newList);
+
+        this.filteredList.clear();
+        this.filteredList.addAll(newList);
+
+        notifyDataSetChanged();
     }
 
     @Override
@@ -99,7 +121,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     }
 
     public static class CustomerViewHolder extends RecyclerView.ViewHolder {
-        public TextView textName, textAge, textCompany, textPosition, status;
+        public TextView textName, textAge, textCompany, textPosition, status, refresh, detail;
         public ImageView imgUser;
 
         public CustomerViewHolder(View itemView) {
@@ -110,6 +132,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             textPosition = itemView.findViewById(R.id.text_position);
             imgUser = itemView.findViewById(R.id.img_user);
             status = itemView.findViewById(R.id.status);
+            refresh = itemView.findViewById(R.id.refresh);
+            detail = itemView.findViewById(R.id.detail);
         }
     }
 }

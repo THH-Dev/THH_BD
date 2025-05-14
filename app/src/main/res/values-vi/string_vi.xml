@@ -9,7 +9,7 @@
     <string name="confirm">Xác nhận</string>
     <string name="information_user">INFORMATION</string>
     <string name="retry">Thử lại</string>
-    <string name="textDescription">Cảm ơn sự hiện diện của quý khách.</string>
+    <string name="textDescription">Quý khách vui lòng thực hiện chụp ảnh chân dung để tham gia sự kiện Quay Số Trúng Thưởng</string>
     <string name="textRequestCamera">Thực hiện chụp ảnh cho phần quay thưởng. Chỉnh trang lại để có được bức ảnh đẹp nhất. /nMáy ảnh sẽ chụp sau 3s đếm ngược</string>
     <string name="retake_the_photo">Chụp lại</string>
     <string name="thank_you">Cảm ơn</string>
@@ -57,4 +57,23 @@
     <string name="status">Trạng thái</string>
     <string name="sucess">Thành công</string>
     <string name="search_name">Tìm theo tên...</string>
+    <string name="manualcamera">Chụp ảnh</string>
+    <string name="auto">Tự động chụp</string>
+    <string name="three_s">3s</string>
+    <string name="title_scan">KÍNH CHÀO QUÝ KHÁCH</string>
+    <string name="description_scan">Quý khách vui lòng quẹt thẻ \ntheo hướng dẫn để kiểm tra thông tin</string>
+    <string name="camera_auto">Chụp ảnh tự động</string>
+    <string name="camera_manual">Chụp ảnh thủ công</string>
+    <string name="eight_s">8s</string>
+    <string name="title_popup">Thông tin khách hàng</string>
+    <string name="code">Mã khách hàng</string>
+    <string name="bantiecso">Bàn tiệc số</string>
+    <string name="camon">Chân thành cảm ơn Quý khách hàng - Quý đối tác đã \ntham gia sự kiện Kỷ niệm 10 năm thành lập Tân \nHưng Hà và Công bố thành lập THH Holdings!</string>
+    <string name="detail">Xem chi tiết</string>
+    <string name="refresh1">Chỉnh ảnh</string>
+    <string name="title_list">REBOOT 10</string>
+    <string name="slogan_list">Dấu Ấn Thập Kỷ - Mở Lối Tương Lai</string>
+    <string name="all_customer">Tất cả</string>
+    <string name="registed">Đã đăng ký</string>
+    <string name="unregisted">Chưa đăng ký</string>
 </resources>

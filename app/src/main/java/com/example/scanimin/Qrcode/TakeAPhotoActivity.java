@@ -87,13 +87,15 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
 
     private UsbCameraManger cameraManager;
 
-    private int time = 3000;
+    private static int time = 3000, time1;
     private long backPressedTime = 0;
     private File imageFiles;
     private JsonUtils jsonUtils;
     private CameraFragment cameraFragment;
     private Handler idleHandler = new Handler();
     private Runnable idleRunnable;
+    private boolean isCamera = false;
+    private Uri uri;
     private static final int IDLE_TIMEOUT = 30000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,13 +107,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         init();
     }
     private void init(){
-//        Glide.with(TakeAPhotoActivity.this)
-//                .asGif()
-//                .load(R.raw.background2) // có thể là URL, asset, hoặc file
-//                .into(binding.imageBackground);
-        binding.imgConfirm.setVisibility(GONE);
-        binding.description.setVisibility(VISIBLE);
-        popupThankYou = new PopupThankYou(this);
         dbHelper = new SQLLite(this);
         minIOHelper = new MinioHelper();
         callApi = new CallApi();
@@ -119,29 +114,31 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         executorService = Executors.newSingleThreadExecutor();
         isPhoto = true;
         isTakePhoto = false;
+        time =0;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.ln_camera, new CameraFragment());
         transaction.addToBackStack(null);
         transaction.commit();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (!isTakePhoto){
-                }else{
-
-                }
-                try {
-                    settingUiCamera(3000);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
-        handler.postDelayed(runnable, 5000);
+//        runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                if (!isTakePhoto){
+//                }else{
+//
+//                }
+//                try {
+//                    settingUiCamera(3000);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        };
+//        handler.postDelayed(runnable, 5000);
     }
 
     private void getData(){
+        binding.cdPreviewCardView.setVisibility(VISIBLE);
         customer = new Customer();
         Intent intent = getIntent();
         if (intent.hasExtra("customer_new")) {
@@ -172,90 +169,86 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         ViewGroup.LayoutParams layoutParams = binding.cdPreviewCardView.getLayoutParams();
         layoutParams.width = widthIn;
         layoutParams.height = heightIn;
-
         binding.cdPreviewCardView.setLayoutParams(layoutParams);
-        float radiusInPx = radius * density;
-        binding.cdPreviewCardView.setRadius(radiusInPx);
+//        float radiusInPx = radius * density;
+//        binding.cdPreviewCardView.setRadius(radiusInPx);
     }
 
-    private void setting(View v){
-        PopupMenu popupMenu = new PopupMenu(new ContextThemeWrapper(TakeAPhotoActivity.this, R.style.PopupMenuStyle), v);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_setting, popupMenu.getMenu());
-        for (int i = 0; i < popupMenu.getMenu().size(); i++) {
-            MenuItem menuItem = popupMenu.getMenu().getItem(i);
-            View itemView = getLayoutInflater().inflate(R.layout.menu_item_layout, null);
-            TextView title = itemView.findViewById(R.id.menu_item_text);
-            title.setText(menuItem.getTitle());
-            menuItem.setActionView(itemView);
-            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    int id = menuItem.getItemId();
-                    if (id == R.id.menu_item_0) {
-                        binding.imgTakeAPhotoA.setImageResource(R.drawable.camera_blue);
-                        binding.imgTakeAPhoto.setVisibility(VISIBLE);
-                        try {
-                            settingUiCamera(0);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        return true;
-                    }
-                    if (id == R.id.menu_item_1) {
-                        binding.imgTakeAPhoto.setImageResource(R.drawable.icon_setting);
-                        PopupMenu popupMenu = new PopupMenu(new ContextThemeWrapper(TakeAPhotoActivity.this, R.style.PopupMenuStyle), v);
-                        popupMenu.getMenuInflater().inflate(R.menu.menu_set_time, popupMenu.getMenu());
-                        for (int i = 0; i < popupMenu.getMenu().size(); i++) {
-                            MenuItem menuItemTime = popupMenu.getMenu().getItem(i);
-                            View itemView = getLayoutInflater().inflate(R.layout.menu_item_layout, null);
-                            TextView title = itemView.findViewById(R.id.menu_item_text);
-                            title.setText(menuItemTime.getTitle());
-
-                            menuItemTime.setActionView(itemView);
-                            menuItemTime.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-                        }
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItemTime) {
-                                int id = menuItemTime.getItemId();
-                                if (id ==R.id.menu_item_0) {
-                                    time = 3000;
-                                    try {
-                                        settingUiCamera(time);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    return true;
-                                }
-                                if (id ==R.id.menu_item_1) {
-                                    time = 5000;
-                                    try {
-                                        settingUiCamera(time);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    return true;
-                                }
-                                if (id ==R.id.menu_item_2) {
-                                    time = 10000;
-                                    try {
-                                        settingUiCamera(time);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    return true;
-                                }
-                                return false;
-                            }
-                        });
-                        popupMenu.show();
-                    }
-                    return false;
+    private void settingCamera(){
+        binding.lnManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    settingUiCamera(0);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            });
-            popupMenu.show();
-        }
+            }
+        });
+        binding.lnAuto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(new ContextThemeWrapper(TakeAPhotoActivity.this, R.style.PopupMenuStyle), v);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_set_time, popupMenu.getMenu());
+                for (int i = 0; i < popupMenu.getMenu().size(); i++) {
+                    MenuItem menuItemTime = popupMenu.getMenu().getItem(i);
+                    View itemView = getLayoutInflater().inflate(R.layout.menu_item_layout, null);
+                    TextView title = itemView.findViewById(R.id.menu_item_text);
+                    title.setText(menuItemTime.getTitle());
+
+                    menuItemTime.setActionView(itemView);
+                    menuItemTime.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                }
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItemTime) {
+                        int id = menuItemTime.getItemId();
+                        if (id == R.id.menu_item_0) {
+                            time = 3000;
+                            time1 = 3000;
+                            try {
+                                settingUiCamera(time);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            return true;
+                        }
+                        if (id == R.id.menu_item_1) {
+                            time = 5000;
+                            time1 = 5000;
+                            try {
+                                settingUiCamera(time);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            return true;
+                        }
+                        if (id == R.id.menu_item_2) {
+                            time = 8000;
+                            time1 = 8000;
+                            try {
+                                settingUiCamera(time);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+        binding.chup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    countDown(time);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     private void requestCheckin(){
@@ -266,54 +259,41 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.editAge.setText(String.valueOf(customer.getData().getTable()));
         isPhoto = false;
         binding.lnInformation.setVisibility(VISIBLE);
-        binding.textDescription.setVisibility(GONE);
-        binding.textRequestCamera.setVisibility(GONE);
-        binding.imgTakeAPhotoA.setVisibility(VISIBLE);
-        binding.description.setVisibility(GONE);
+        binding.description.setVisibility(VISIBLE);
+        binding.iconSetcamera.setVisibility(GONE);
         binding.imgConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UpdateData();
             }
         });
-        binding.imgTakeAPhotoA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setting(v);
-            }
-        });
+        settingCamera();
     }
 
     private void settingUiCamera(int time) throws IOException {
-        binding.description.setVisibility(GONE);
-        binding.imgTakeAPhotoA.setVisibility(VISIBLE);
-        binding.textRequestCamera.setVisibility(GONE);
         binding.textDescription.setVisibility(GONE);
-        binding.viewLine.setVisibility(GONE);
+        binding.description.setVisibility(VISIBLE);
         binding.timeCountDown.setVisibility(GONE);
+        binding.lnSetCamera.setVisibility(GONE);
         binding.cdPreviewCardView.setVisibility(VISIBLE);
-        binding.videoCountdown.setVisibility(VISIBLE);
         binding.lnImage.setVisibility(VISIBLE);
-        setView(700,500,12);
-        if (time !=0){
-            binding.iconCamera.setVisibility(GONE);
-            binding.lnImage.setVisibility(GONE);
-            binding.videoCountdown.setVisibility(VISIBLE);
-            countDown(time);
-        }else{
-            binding.iconCamera.setVisibility(VISIBLE);
-            binding.imgTakeAPhoto.setVisibility(VISIBLE);
-            binding.imgConfirm.setVisibility(GONE);
-            binding.lnImage.setVisibility(GONE);
-        }
+        binding.iconSetcamera.setVisibility(VISIBLE);
+        binding.videoCountdown.setVisibility(GONE);
+        setView(340,340,200);
         binding.imgTakeAPhoto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                {
+                if (!isCamera) {
                     binding.cdPreviewCardView.setVisibility(VISIBLE);
-                    binding.videoCountdown.setVisibility(VISIBLE);
+                    binding.lnPreviewCamera.setVisibility(VISIBLE);
+                    binding.videoCountdown.setVisibility(GONE);
                     binding.iconCamera.setVisibility(GONE);
-                    binding.lnImage.setVisibility(GONE);
+                    binding.iconSetcamera.setVisibility(VISIBLE);
+                    binding.lnImage.setVisibility(VISIBLE);
+                    binding.lnShowImage.setVisibility(GONE);
+                }else {
+                    isCamera = false;
+                    binding.videoCountdown.setVisibility(GONE);
                     try {
                         countDown(time);
                     } catch (IOException e) {
@@ -330,7 +310,10 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
 
         if (fragment != null) {
             fragment.CaptureImageAndSendUri();
+            binding.lnShowImage.setVisibility(VISIBLE);
             binding.iconCamera.setVisibility(VISIBLE);
+            binding.iconSetcamera.setVisibility(GONE);
+            binding.lnPreviewCamera.setVisibility(GONE);
             binding.imgTakeAPhoto.setVisibility(VISIBLE);
             binding.imgConfirm.setVisibility(VISIBLE);
         }
@@ -345,24 +328,27 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             video = R.raw.down5;
         }
         if (time == 8000){
-            video = R.raw.down8;
+            video = R.raw.download8s;
         }
-        GifImageView gifImageView = findViewById(R.id.gifImageView);
+        if (time ==0){
+            isCamera = false;
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    TakeAPhotoActivity.this::takeAPhoto, time
+            );
+        }else {
+            binding.videoCountdown.setVisibility(VISIBLE);
+            GifImageView gifImageView = findViewById(R.id.gifImageView);
 
-        GifDrawable gifDrawable = new GifDrawable(getResources(), video);
-        gifDrawable.setLoopCount(1);
-        gifImageView.setImageDrawable(gifDrawable);
-        gifDrawable.start();
-        binding.videoCountdown.setVisibility(GONE);
+            GifDrawable gifDrawable = new GifDrawable(getResources(), video);
+            gifDrawable.setLoopCount(1);
+            gifImageView.setImageDrawable(gifDrawable);
+            gifDrawable.start();
+            binding.videoCountdown.setVisibility(GONE);
 
-//        Glide.with(this).clear(binding.videoCountdown);
-//        Glide.with(TakeAPhotoActivity.this)
-//                .asGif()
-//                .load(video)
-//                .into(binding.videoCountdown);
-        new Handler(Looper.getMainLooper()).postDelayed(
-                TakeAPhotoActivity.this::takeAPhoto, time
-        );
+            new Handler(Looper.getMainLooper()).postDelayed(
+                    TakeAPhotoActivity.this::takeAPhoto, time
+            );
+        }
     }
     private void takeAPhoto(){
         // take a photo
@@ -410,11 +396,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             binding.imgConfirm.setVisibility(VISIBLE);
             binding.imgUser.setVisibility(VISIBLE);
             binding.cdImageCardView.setVisibility(VISIBLE);
-            binding.imgTakeAPhotoA.setVisibility(GONE);
-            binding.textDescription.setVisibility(GONE);
-            binding.textRequestCamera.setVisibility(GONE);
-            binding.timeCountDown.setVisibility(GONE);
-            binding.description.setVisibility(GONE);
             binding.cdPreviewCardView.setVisibility(GONE);
             binding.lnImage.setVisibility(VISIBLE);
     }
@@ -422,6 +403,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     @SuppressLint("ResourceType")
 
     private void popUpThankyou(){
+        PopupThankYou popupThankYou = new PopupThankYou(this, customer, uri);
         popupThankYou.setCanceledOnTouchOutside(false);
         popupThankYou.show();
         dismissRunnable = new Runnable() {
@@ -434,27 +416,27 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                 finish();
             }
         };
-        handler.postDelayed(dismissRunnable, 2000);
+        handler.postDelayed(dismissRunnable, 5000);
     }
 
     // No back
-    @Override
-    public void onBackPressed() {
-        if (backPressedTime  > System.currentTimeMillis()) {
-            super.onBackPressed();
-        }
-        backPressedTime = System.currentTimeMillis();
-    }
-
-    // back to previous activity
 //    @Override
 //    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(this, Scanner.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//        finish();
+//        if (backPressedTime  > System.currentTimeMillis()) {
+//            super.onBackPressed();
+//        }
+//        backPressedTime = System.currentTimeMillis();
 //    }
+
+//     back to previous activity
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, Scanner.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
 
     public void getScreenshotImages(Context context) {
         Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -497,7 +479,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
     @Override
     public void onUriCaptured(File file) throws IOException {
         getScreenshotImages(this);
-        Uri uri = Uri.fromFile(file);
+        uri = Uri.fromFile(file);
 //        imageFileCustomer = file;
         imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
         MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName());
@@ -510,7 +492,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         }else {
             Glide.with(this)
                     .load(contentUri)
-                    .placeholder(R.drawable.user)
                     .error(R.drawable.teamwork)
                     .into(binding.imgUser);
         }

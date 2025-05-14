@@ -8,5 +8,5 @@
         android:title="@string/five_s" />
     <item
         android:id="@+id/menu_item_2"
-        android:title="@string/ten_s" />
+        android:title="@string/eight_s" />
 </menu>

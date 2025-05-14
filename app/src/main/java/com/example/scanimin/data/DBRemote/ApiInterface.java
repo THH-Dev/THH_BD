@@ -18,14 +18,8 @@ import retrofit2.http.Path;
 public interface ApiInterface {
     @GET("/api/get_guests")
     Call<List<CustomerApi>> getCustomer();
-    @POST("/customers")
-    Call<Customer> postCustomer(@Body PostCustomer postCustomer);
     @POST("/api/update_guest")
     Call<StatusUpdate> updateCustomerByQrcode(@Body UpdateCustomer updateCustomer);
     @POST("/api/insert_guest")
     Call<PostCustomer> insertCustomerByQrcode(@Body PostCustomer postCustomer);
-    @PUT("/customers/{id}")
-    Call<Customer> updateCustomer(@Path("id") String id, @Body Customer customer);
-    @DELETE("/customers/{id}")
-    Call<Void> deleteCustomer(@Path("id") String id);
 }
