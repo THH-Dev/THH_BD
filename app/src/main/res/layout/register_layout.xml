@@ -159,14 +159,12 @@
                             android:layout_height="match_parent"
                             android:layout_weight="10"
                             android:padding="10dp"
-                            android:maxLength="2"
                             android:hint="@string/fill_position"
                             android:textColorHint="@color/blue"
                             android:textColor="@color/blue"
                             android:textSize="28sp"
                             android:layout_margin="5dp"
-                            android:background="@drawable/custom_bg_edit"
-                            android:inputType="number">
+                            android:background="@drawable/custom_bg_edit">
                         </EditText>
                     </LinearLayout>
                     <LinearLayout

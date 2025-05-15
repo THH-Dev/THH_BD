@@ -815,8 +815,8 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         binding.camera.setBackgroundResource(R.drawable.kioskcheckinwithtitle);
         binding.listView.setVisibility(GONE);
         binding.titleList.setVisibility(GONE);
-        CameraFragment fragment = (CameraFragment) getSupportFragmentManager().findFragmentById(R.id.ln_camera);
-        UVCCameraTextureView newView = findViewById(R.id.ln_camera);
+        CameraFragment fragment = (CameraFragment) getSupportFragmentManager().findFragmentById(R.id.view_camera);
+        @SuppressLint("WrongViewCast") UVCCameraTextureView newView = findViewById(R.id.ln_camera);
 
         if (fragment != null && newView != null) {
             fragment.moveCameraToNewView(newView);
