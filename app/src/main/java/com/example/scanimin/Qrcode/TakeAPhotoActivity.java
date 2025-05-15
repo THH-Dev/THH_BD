@@ -242,6 +242,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         binding.chup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                binding.gifImageView.setVisibility(VISIBLE);
                 try {
                     countDown(time);
                 } catch (IOException e) {
@@ -284,6 +285,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
             @Override
             public void onClick(View v) {
                 if (!isCamera) {
+                    binding.gifImageView.setVisibility(GONE);
                     binding.cdPreviewCardView.setVisibility(VISIBLE);
                     binding.lnPreviewCamera.setVisibility(VISIBLE);
                     binding.videoCountdown.setVisibility(GONE);
@@ -336,14 +338,13 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
                     TakeAPhotoActivity.this::takeAPhoto, time
             );
         }else {
-            binding.videoCountdown.setVisibility(VISIBLE);
             GifImageView gifImageView = findViewById(R.id.gifImageView);
 
             GifDrawable gifDrawable = new GifDrawable(getResources(), video);
             gifDrawable.setLoopCount(1);
             gifImageView.setImageDrawable(gifDrawable);
             gifDrawable.start();
-            binding.videoCountdown.setVisibility(GONE);
+            binding.gifImageView.setVisibility(GONE);
 
             new Handler(Looper.getMainLooper()).postDelayed(
                     TakeAPhotoActivity.this::takeAPhoto, time
