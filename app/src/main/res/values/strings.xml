@@ -75,4 +75,5 @@
     <string name="all_customer">All</string>
     <string name="registed">Registed</string>
     <string name="unregisted">UnRegisted</string>
+    <string name="shutdown">Shutdown</string>
 </resources>

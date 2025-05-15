@@ -120,21 +120,6 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         transaction.replace(R.id.ln_camera, new CameraFragment());
         transaction.addToBackStack(null);
         transaction.commit();
-//        runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                if (!isTakePhoto){
-//                }else{
-//
-//                }
-//                try {
-//                    settingUiCamera(3000);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        };
-//        handler.postDelayed(runnable, 5000);
     }
 
     private void getData(){
@@ -167,11 +152,15 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         int widthIn = (int) (widthInPd * density + 0.5f);
         int heightIn = (int) (heightInPd * density + 0.5f);
         ViewGroup.LayoutParams layoutParams = binding.cdPreviewCardView.getLayoutParams();
-        layoutParams.width = widthIn;
-        layoutParams.height = heightIn;
+        if (widthInPd != 0 && heightInPd != 0){
+            layoutParams.width = widthIn;
+            layoutParams.height = heightIn;
+        }else{
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
+
         binding.cdPreviewCardView.setLayoutParams(layoutParams);
-//        float radiusInPx = radius * density;
-//        binding.cdPreviewCardView.setRadius(radiusInPx);
     }
 
     private void settingCamera(){

@@ -2,11 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_item_0"
-        android:title="@string/three_s" />
+        android:title="@string/shutdown" />
     <item
         android:id="@+id/menu_item_1"
-        android:title="@string/five_s" />
+        android:title="@string/three_s" />
     <item
         android:id="@+id/menu_item_2"
+        android:title="@string/five_s" />
+    <item
+        android:id="@+id/menu_item_3"
         android:title="@string/eight_s" />
 </menu>

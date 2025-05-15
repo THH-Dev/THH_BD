@@ -76,10 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
     private void init() {
-//        Glide.with(RegisterActivity.this)
-//                .asGif()
-//                .load(R.raw.background2) // có thể là URL, asset, hoặc file
-//                .into(binding.imageBackground);
         Random generator = new Random();
         binding.imgBack.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, Scanner.class);

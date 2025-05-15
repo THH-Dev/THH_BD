@@ -146,6 +146,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
             Log.d(TAG, "device disconnect");
         }
     };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -197,6 +198,21 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
             }
         });
     }
+
+    public void moveCameraToNewView(UVCCameraTextureView newView) {
+        if (mCameraHelper != null && mCameraHelper.isCameraOpened()) {
+            // 1. Stop preview ở view cũ
+            mCameraHelper.stopPreview();
+
+            // 2. Gán view mới làm camera surface
+            mUVCCameraView = newView;
+            mUVCCameraView.setCallback(this);
+
+            // 3. Bắt đầu lại preview
+            mCameraHelper.startPreview(mUVCCameraView);
+        }
+    }
+
 
 
     @Override
@@ -250,6 +266,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
 
     @Override
     public USBMonitor getUSBMonitor() {
+        mCameraHelper.setDefaultPreviewSize(1280,720);
         Log.i(TAG, "getUSBMonitor===========");
         return mCameraHelper.getUSBMonitor();
     }
