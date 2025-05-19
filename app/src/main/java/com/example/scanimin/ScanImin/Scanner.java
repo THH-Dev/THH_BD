@@ -761,51 +761,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 onBackPressed();
             }
         });
-        binding.imgBack2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        binding.cameraList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.lnCameraList.setVisibility(GONE);
-                binding.lnShowImage.setVisibility(VISIBLE);
-                chupanh();
-            }
-        });
-        binding.confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setView(1,1,300,binding.viewCameraList);
-                binding.camera.setBackground(null);
-                binding.listView.setVisibility(VISIBLE);
-                binding.titleList.setVisibility(VISIBLE);
-                binding.lnShowImage.setVisibility(GONE);
-                binding.lnCameraList.setVisibility(VISIBLE);
-                UpdateData();
-                getDataList();
-
-                int currentPosition = binding.viewPager.getCurrentItem();
-                Fragment currentFragment = adapter.getFragment(currentPosition);
-
-                if (currentFragment instanceof AllCustomer) {
-                    ((AllCustomer) currentFragment).refreshData();
-                } else if (currentFragment instanceof CustomerChecked) {
-                    ((CustomerChecked) currentFragment).refreshData();
-                } else if (currentFragment instanceof CustomerNotChecked) {
-                    ((CustomerNotChecked) currentFragment).refreshData();
-                }
-            }
-        });
-        binding.cameraAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.lnShowImage.setVisibility(GONE);
-                binding.lnCameraList.setVisibility(VISIBLE);
-            }
-        });
     }
     private void sendQueryToCurrentFragment(String query) {
         Fragment currentFragment = adapter.getFragment(binding.viewPager.getCurrentItem());

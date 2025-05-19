@@ -275,8 +275,13 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
         FileUtils.releaseFile();
         // step.4 release uvc camera resources
         if (mCameraHelper != null) {
-            Log.d(TAG, "mCameraHelper.release=============");
-            mCameraHelper.release();
+            try {
+                mCameraHelper.unregisterUSB();
+                mCameraHelper.release();
+            } catch (Exception e) {
+                Log.e(TAG, "Error during camera release", e);
+            }
+            mCameraHelper = null;
         }
         isCameraInitialized = false;
     }
