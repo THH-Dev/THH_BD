@@ -1,6 +1,7 @@
 package com.example.scanimin.ScanImin;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
@@ -59,6 +60,7 @@ import com.example.scanimin.data.Local.CRUD;
 import com.example.scanimin.data.Object.Customer;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.Data;
+import com.example.scanimin.data.Object.PostCustomer;
 import com.example.scanimin.data.Object.UpdateCustomer;
 import com.example.scanimin.databinding.ListCustomerLayoutBinding;
 import com.example.scanimin.databinding.ScanLayoutBinding;
@@ -66,6 +68,7 @@ import com.example.scanimin.function.JsonUtils;
 import com.example.scanimin.function.LanguageManager;
 import com.example.scanimin.popup.OverlayDialogFragment;
 import com.example.scanimin.popup.PopupCompare;
+import com.example.scanimin.popup.PopupEnounce;
 import com.example.scanimin.popup.PopupThankYou;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.imin.scan.Result;
@@ -77,6 +80,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -156,6 +160,18 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
 
     private String isViewpage = "scan";
 
+    //register
+
+    private PostCustomer postCustomer;
+    private static final String alpha = "abcdefghijklmnopqrstuvwxyz";
+    private static final String alphaUpperCase = alpha.toUpperCase();
+
+    private static final String UPPERCASE_AND_DIGITS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String digits = "0123456789";
+    private static final String specials = "~=+%^*/()[]{}/!@#$?|";
+    private static final String ALPHA_NUMERIC = alpha + alphaUpperCase + digits;
+    private static final String ALL = alpha + alphaUpperCase + digits + specials;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,11 +232,11 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             finish();
         });
         binding.lnLanguage.setOnClickListener(v -> {
-//            if (getLanguage().equals("vi")) {
-//                languageManager.changeLanguage("en");
-//            } else {
-//                languageManager.changeLanguage("vi");
-//            }
+            if (getLanguage().equals("vi")) {
+                languageManager.changeLanguage("en");
+            } else {
+                languageManager.changeLanguage("vi");
+            }
         });
         binding.imgLogo.setOnClickListener(v -> {
             if (isViewpage == "scan") {
@@ -231,6 +247,9 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 initList();
                 getDataList();
             }
+        });
+        binding.lnRegister.setOnClickListener(v -> {
+            initRegister();
         });
 
 
@@ -447,6 +466,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             }
         });
         popupCompare.setCanceledOnTouchOutside(false);
+        popupCompare.setCancelable(false);
         popupCompare.show();
     }
 
@@ -542,10 +562,12 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             binding.lnPreviewCamera.setVisibility(GONE);
             binding.imgTakeAPhoto.setVisibility(VISIBLE);
             binding.imgConfirm.setVisibility(VISIBLE);
+            binding.chup.setVisibility(VISIBLE);
         }
     }
     private void countDown(int time) throws IOException {
         binding.gifImageView.setVisibility(VISIBLE);
+        binding.chup.setVisibility(INVISIBLE);
         int video = R.raw.countdown;
         if (time == 3000){
             video = R.raw.countdown;
@@ -775,71 +797,35 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             ((Searchable) currentFragment).onSearchQuery(query);
         }
     }
-    private void UpdateDataList(){
-        executorService.execute(new Runnable() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void run() {
-                UpdateCustomer updateCustomer;
-                customer.setImage(Uri.parse(imageFileCustomer.getName()));
-                updateCustomer = new UpdateCustomer(String.valueOf(customer.getImage()),customer.getQrcode());
-                callApi.updateCustomer(updateCustomer, new CallApi.UpdateCustomerListener() {
-                    @Override
-                    public void onUpdateCustomerSuccess() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onUpdateCustomerFailure(String error) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            }
-                        });
-                    }
-                });
-                callApi.getCustomer(Scanner.this);
-                crud.updateDB(customer, dbHelper, Scanner.this);
-            }
-        });
-    }
 
     @Override
     public void onItemClickedAll(Customer customer) {
-        setView(600,600,300,binding.viewCameraList);
-        binding.camera.setBackgroundResource(R.drawable.kioskcheckinwithtitle);
-        binding.listView.setVisibility(GONE);
-        binding.titleList.setVisibility(GONE);
-        CameraFragment fragment = (CameraFragment) getSupportFragmentManager().findFragmentById(R.id.view_camera);
-        @SuppressLint("WrongViewCast") UVCCameraTextureView newView = findViewById(R.id.ln_camera);
-
-        if (fragment != null && newView != null) {
-            fragment.moveCameraToNewView(newView);
-        }
         this.customer = customer;
+        binding.layoutRegister.setVisibility(GONE);
+        binding.layoutScan.setVisibility(VISIBLE);
+        binding.searchView.setQuery("", false);
+        getDataScan(customer);
+        reset();
     }
 
     @Override
     public void onItemClickedNotChecked(Customer customer) {
-        binding.camera.setBackgroundResource(R.drawable.kioskcheckinwithtitle);
-        setView(600,600,300,binding.viewCameraList);
-        binding.listView.setVisibility(GONE);
-        binding.titleList.setVisibility(GONE);
         this.customer = customer;
+        binding.layoutRegister.setVisibility(GONE);
+        binding.layoutScan.setVisibility(VISIBLE);
+        binding.searchView.setQuery("", false);
+        getDataScan(customer);
+        reset();
     }
 
     @Override
     public void onItemClickedChecked(Customer customer) {
-        binding.camera.setBackgroundResource(R.drawable.kioskcheckinwithtitle);
-        setView(600,600,300,binding.viewCameraList);
-        binding.listView.setVisibility(GONE);
-        binding.titleList.setVisibility(GONE);
         this.customer = customer;
+        binding.layoutRegister.setVisibility(GONE);
+        binding.layoutScan.setVisibility(VISIBLE);
+        binding.searchView.setQuery("", false);
+        getDataScan(customer);
+        reset();
     }
 
     public void onBackPressed() {
@@ -865,5 +851,108 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             isLayoutScan = false;
             isViewpage = "scan";
         }
+        if (isViewpage == "register"){
+            binding.overlayView.setVisibility(VISIBLE);
+            binding.layoutScan.setVisibility(VISIBLE);
+            binding.layoutRegister.setVisibility(GONE);
+            isShowPopup = false;
+            isLayoutScan = false;
+            isViewpage = "scan";
+            reset();
+        }
     }
+
+    // register
+    private void initRegister() {
+        isViewpage = "register";
+        postCustomer = new PostCustomer();
+        binding.layoutRegister.setVisibility(VISIBLE);
+        binding.layoutScan.setVisibility(GONE);
+        binding.overlayView.setVisibility(VISIBLE);
+        Random generator = new Random();
+        binding.imgBackRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(Scanner.this, Scanner.class);
+            startActivity(intent);
+        });
+        binding.btnRegister.setOnClickListener(v -> {
+            if (binding.editNameRegister.getText().toString().isEmpty()
+                    || binding.editAgeRegister.getText().toString().isEmpty()
+                    || binding.editCompany.getText().toString().isEmpty()){
+                PopupEnounce popupEnounce = new PopupEnounce(Scanner.this, new PopupEnounce.PopupCompareListener() {
+                    @Override
+                    public void onCompareUpdated() {
+                        Log.d("check", "onCompareUpdated: ");
+                    }
+                });
+                popupEnounce.setCanceledOnTouchOutside(false);
+                popupEnounce.show();
+            }else {
+                Data data = new Data();
+                try {
+                    data.setName(binding.editNameRegister.getText().toString());
+                } catch (RuntimeException e) {
+                    data.setName("");
+                    throw new RuntimeException(e);
+                }
+                try {
+                    int number = Integer.parseInt(binding.editAgeRegister.getText().toString());
+                    data.setTable(number);
+                } catch (NumberFormatException e) {
+                    data.setTable(0);
+                    e.printStackTrace();
+                }
+                try {
+                    data.setCompany(binding.editCompany.getText().toString());
+                    data.setPosition(binding.editPosition.getText().toString());
+                } catch (RuntimeException e) {
+                    data.setCompany("");
+                    data.setPosition("");
+                    throw new RuntimeException(e);
+                }
+                data.setRole("uninvited");
+                customer.setData(data);
+                customer.setStatus(false);
+                customer.setImage(null);
+                customer.setQrcode(randomUpperCaseAndDigits(5));
+                postCustomer.setData(data);
+                postCustomer.setQrcode(customer.getQrcode());
+                insertData();
+                insertSQlite();
+                binding.layoutRegister.setVisibility(GONE);
+                binding.layoutScan.setVisibility(VISIBLE);
+                getDataScan(customer);
+                reset();
+            }
+        });
+    }
+    private void reset(){
+        binding.editNameRegister.setText(null);
+        binding.editAgeRegister.setText(null);
+        binding.editCompany.setText(null);
+        binding.editPosition.setText(null);
+    }
+    private void insertData(){
+        callApi.insertCustomer(postCustomer);
+    }
+
+    private void insertSQlite(){
+        CRUD crud = new CRUD();
+        crud.inserDB(customer, dbHelper, this);
+    }
+
+    public String randomUpperCaseAndDigits(int numberOfCharacters) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numberOfCharacters; i++) {
+            int number = randomNumber(0, UPPERCASE_AND_DIGITS.length() - 1);
+            char ch = UPPERCASE_AND_DIGITS.charAt(number);
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
+
+    public static int randomNumber(int min, int max) {
+        return generator.nextInt((max - min) + 1) + min;
+    }
+
+    private static Random generator = new Random();
 }

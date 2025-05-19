@@ -82,6 +82,8 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
     private Activity mActivity;
 
     private JsonUtils jsonUtils;
+    private boolean isCameraInitialized = false;
+
 
     public interface OnUriCapturedListener {
         void onUriCaptured(File file) throws IOException;
@@ -161,18 +163,32 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
         mTextureView.updateFps();
 
         //cam
+        return mView;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (!isCameraInitialized) {
+            initCamera();
+            isCameraInitialized = true;
+        }
+    }
+
+    private void initCamera(){
         // step.1 initialize UVCCameraHelper
         mCameraHelper = UVCCameraHelper.getInstance();
-        mCameraHelper.setDefaultPreviewSize(1280,720);
-        mCameraHelper.setDefaultFrameFormat(UVCCameraHelper.FRAME_FORMAT_MJPEG);
         try {
+            mCameraHelper.release();
+            mCameraHelper.unregisterUSB();
+            mCameraHelper.setDefaultPreviewSize(1280,720);
+            mCameraHelper.setDefaultFrameFormat(UVCCameraHelper.FRAME_FORMAT_MJPEG);
             mUVCCameraView = (CameraViewInterface) mTextureView;
             mUVCCameraView.setCallback(this);
             mCameraHelper.initUSBMonitor(mActivity, mUVCCameraView, listener);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
-        return mView;
     }
 
     public void CaptureImageAndSendUri() {
@@ -262,6 +278,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
             Log.d(TAG, "mCameraHelper.release=============");
             mCameraHelper.release();
         }
+        isCameraInitialized = false;
     }
 
     @Override
