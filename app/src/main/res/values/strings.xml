@@ -60,7 +60,7 @@
     <string name="auto">Auto</string>
     <string name="three_s">3s</string>
     <string name="title_scan">WELCOME</string>
-    <string name="description_scan">Quý khách vui lòng quẹt thẻ \ntheo hướng dẫn để kiểm tra thông tin</string>
+    <string name="description_scan">Please swipe your card according \nto the instructions below to check your information</string>
     <string name="camera_auto">Camera auto</string>
     <string name="camera_manual">Camera Manual</string>
     <string name="eight_s">8s</string>

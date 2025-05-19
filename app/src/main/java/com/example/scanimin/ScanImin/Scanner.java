@@ -210,21 +210,37 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         String title = binding.hd.getText().toString();
         setView(1,1,200);
         SpannableString spannable = new SpannableString(binding.hd.getText().toString());
-        int start = title.indexOf("quẹt");
-        int end = title.lastIndexOf("đ");
-        if (end != -1) {
-            end = end;
-        } else {
-            end = title.length();
+        if (getLanguage().equals("vi")) {
+            int start = title.indexOf("quẹt");
+            int end = title.lastIndexOf("đ");
+            if (end != -1) {
+                end = end;
+            } else {
+                end = title.length();
+            }
+            spannable.setSpan(
+                    new ForegroundColorSpan(Color.RED),
+                    start,
+                    end,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+            binding.hd.setText(spannable);
+        }else {
+            int start = title.indexOf("according");
+            int end = title.lastIndexOf(" to");
+            if (end != -1) {
+                end = end;
+            } else {
+                end = title.length();
+            }
+            spannable.setSpan(
+                    new ForegroundColorSpan(Color.RED),
+                    start,
+                    end,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+            binding.hd.setText(spannable);
         }
-        spannable.setSpan(
-                new ForegroundColorSpan(Color.RED),
-                start,
-                end,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        );
-
-        binding.hd.setText(spannable);
         startGif();
         binding.lnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(Scanner.this, RegisterActivity.class);

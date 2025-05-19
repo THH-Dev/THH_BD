@@ -76,4 +76,5 @@
     <string name="all_customer">Tất cả</string>
     <string name="registed">Đã đăng ký</string>
     <string name="unregisted">Chưa đăng ký</string>
+    <string name="shutdown">Tắt</string>
 </resources>
