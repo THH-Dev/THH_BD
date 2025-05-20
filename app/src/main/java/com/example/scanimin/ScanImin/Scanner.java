@@ -468,14 +468,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 popupMenu.show();
             }
         });
-//        binding.searchView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                binding.searchView.setIconified(false);
-//                isShowPopup = false;
-//                return false;
-//            }
-//        });
         binding.searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 isShowPopup = false;
@@ -891,6 +883,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                binding.searchView.setQuery("", false);
             }
         });
     }
@@ -953,6 +946,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             isShowPopup = false;
             isLayoutScan = false;
             isViewpage = "scan";
+            binding.searchView.setQuery("", false);
         }
         if (isViewpage == "register"){
             binding.overlayView.setVisibility(VISIBLE);
