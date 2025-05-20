@@ -19,11 +19,7 @@ import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
-import com.example.scanimin.data.Newdata.NewCustomer;
-import com.example.scanimin.function.JsonUtils;
-
-import java.io.File;
-import java.util.List;
+import com.example.scanimin.function.FunctionUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private UsbPermission usbPermission;
 
     private MinioHelper minIOHelper;
-    private JsonUtils jsonUtils;
+    private FunctionUtils jsonUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

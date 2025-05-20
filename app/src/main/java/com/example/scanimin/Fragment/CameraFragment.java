@@ -1,48 +1,32 @@
-package com.example.scanimin.Qrcode;
+package com.example.scanimin.Fragment;
 
 
 import static android.os.Looper.getMainLooper;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.scanimin.File.ConverFile;
 import com.example.scanimin.R;
-import com.example.scanimin.function.JsonUtils;
-import com.example.scanimin.function.MyApplication;
-import com.google.android.material.button.MaterialButton;
+import com.example.scanimin.function.FunctionUtils;
 import com.jiangdg.usbcamera.UVCCameraHelper;
 import com.jiangdg.usbcamera.utils.FileUtils;
 import com.serenegiant.usb.CameraDialog;
-import com.serenegiant.usb.Size;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.common.AbstractUVCCameraHandler;
 import com.serenegiant.usb.widget.CameraViewInterface;
@@ -50,9 +34,6 @@ import com.serenegiant.usb.widget.UVCCameraTextureView;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
 
 
 public class CameraFragment extends Fragment implements CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
@@ -81,7 +62,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
     private View mView;
     private Activity mActivity;
 
-    private JsonUtils jsonUtils;
+    private FunctionUtils jsonUtils;
     private boolean isCameraInitialized = false;
 
 
@@ -192,7 +173,7 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
     }
 
     public void CaptureImageAndSendUri() {
-        File imageFile = JsonUtils.createTempFile(requireContext());
+        File imageFile = FunctionUtils.createTempFile(requireContext());
         String picPath = imageFile.getAbsolutePath();
 
         mCameraHelper.capturePicture(picPath, new AbstractUVCCameraHandler.OnCaptureListener() {

@@ -1,4 +1,4 @@
-package com.example.scanimin.Fragment;
+package com.example.scanimin.Fragment.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,6 +21,7 @@ import com.example.scanimin.R;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.Customer;
+import com.example.scanimin.function.FunctionUtils;
 import com.example.scanimin.popup.PopupCompare;
 
 import java.util.ArrayList;
@@ -100,9 +101,13 @@ public class CustomerChecked extends Fragment implements Searchable {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void run() {
+                if (FunctionUtils.isInternetAvailable(requireActivity())) {
+                    Toast.makeText(requireActivity(), R.string.data_download_success, Toast.LENGTH_SHORT).show();
+                    customerAdapter.notifyDataSetChanged();
+                }else {
+                    Toast.makeText(requireActivity(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+                }
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Dữ liệu đã được tải lại", Toast.LENGTH_SHORT).show();
-                customerAdapter.notifyDataSetChanged();
             }
         }, 1000);
     }

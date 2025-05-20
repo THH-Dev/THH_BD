@@ -1,4 +1,4 @@
-package com.example.scanimin.Fragment;
+package com.example.scanimin.Fragment.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,25 +11,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.scanimin.ListCustomer.CustomerAdapter;
-import com.example.scanimin.ListCustomer.ListCustomerActivity;
 import com.example.scanimin.R;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.Customer;
+import com.example.scanimin.function.FunctionUtils;
 import com.example.scanimin.popup.PopupCompare;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllCustomer extends Fragment implements Searchable{
+public class CustomerNotChecked extends Fragment implements Searchable{
     private RecyclerView recyclerView;
     private CustomerAdapter customerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -39,11 +37,11 @@ public class AllCustomer extends Fragment implements Searchable{
     private PopupCompare popupCompare;
     private OnItemClickListener listener;
     public interface OnItemClickListener {
-        void onItemClickedAll(Customer customer);
+        void onItemClickedNotChecked(Customer customer);
     }
 
+    public CustomerNotChecked() {
 
-    public AllCustomer() {
     }
 
     @Override
@@ -82,45 +80,52 @@ public class AllCustomer extends Fragment implements Searchable{
                 @Override
                 public void onItemClick(Customer customer, View view) {
                     if (listener != null) {
-                        listener.onItemClickedAll(customer);
+                        listener.onItemClickedNotChecked(customer);
                         getData();
-                        reloadData();
+                        customerAdapter.notifyDataSetChanged();
                     }
                 }
             });
             recyclerView.setAdapter(customerAdapter);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    getData();
+                    reloadData();
+                }
+            });
         }
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            getData();
-            reloadData();
-        });
     }
     private void reloadData() {
         new Handler().postDelayed(new Runnable() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void run() {
+                if (FunctionUtils.isInternetAvailable(requireActivity())) {
+                    Toast.makeText(requireActivity(), R.string.data_download_success, Toast.LENGTH_SHORT).show();
+                    customerAdapter.notifyDataSetChanged();
+                }else {
+                    Toast.makeText(requireActivity(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+                }
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Dữ liệu đã được tải lại", Toast.LENGTH_SHORT).show();
-                customerAdapter.notifyDataSetChanged();
             }
         }, 1000);
     }
 
     private void getData(){
+        customerList.clear();
         callApi = new CallApi();
         callApi.getCustomer(requireActivity());
         dbHelper = new SQLLite(requireActivity());
-        List<Customer> updatedList = dbHelper.getAllPersons();
-        customerList.clear();
-        customerList.addAll(updatedList);
-
+        for (Customer customer : dbHelper.getAllPersons()) {
+            if (customer.getImage() == null){
+                customerList.add(customer);
+            }
+        }
         if (customerAdapter != null) {
-            customerAdapter.updateData(updatedList);
+            customerAdapter.updateData(customerList);
         }
     }
-
-    @Override
     public void onSearchQuery(String query) {
         if (customerAdapter != null) {
             customerAdapter.filter(query);
@@ -130,8 +135,8 @@ public class AllCustomer extends Fragment implements Searchable{
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnItemClickListener) {
-            listener = (OnItemClickListener) context;
+        if (context instanceof CustomerNotChecked.OnItemClickListener) {
+            listener = (CustomerNotChecked.OnItemClickListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnItemClickListener");
         }
@@ -142,4 +147,3 @@ public class AllCustomer extends Fragment implements Searchable{
     }
 
 }
-

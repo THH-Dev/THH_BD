@@ -1,12 +1,10 @@
-package com.example.scanimin.Fragment;
+package com.example.scanimin.Fragment.ViewPager2;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.scanimin.data.DBRemote.CallApi;
-import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.Customer;
 
 import java.util.ArrayList;

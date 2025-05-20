@@ -5,7 +5,6 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +14,9 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,16 +25,21 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -43,15 +50,14 @@ import com.bumptech.glide.Glide;
 import com.example.scanimin.File.ConverFile;
 import com.example.scanimin.File.MinioHelper;
 import com.example.scanimin.File.MinioUploader;
-import com.example.scanimin.Fragment.AllCustomer;
-import com.example.scanimin.Fragment.CustomerChecked;
-import com.example.scanimin.Fragment.CustomerNotChecked;
-import com.example.scanimin.Fragment.Searchable;
-import com.example.scanimin.Fragment.ViewPagerAdapter;
+import com.example.scanimin.Fragment.SettingFragment;
+import com.example.scanimin.Fragment.ViewPager2.AllCustomer;
+import com.example.scanimin.Fragment.ViewPager2.CustomerChecked;
+import com.example.scanimin.Fragment.ViewPager2.CustomerNotChecked;
+import com.example.scanimin.Fragment.ViewPager2.Searchable;
+import com.example.scanimin.Fragment.ViewPager2.ViewPagerAdapter;
 import com.example.scanimin.ListCustomer.CustomerAdapter;
-import com.example.scanimin.ListCustomer.ListCustomerActivity;
-import com.example.scanimin.Qrcode.CameraFragment;
-import com.example.scanimin.Qrcode.TakeAPhotoActivity;
+import com.example.scanimin.Fragment.CameraFragment;
 import com.example.scanimin.Qrcode.UsbCameraManger;
 import com.example.scanimin.R;
 import com.example.scanimin.Register.RegisterActivity;
@@ -62,9 +68,8 @@ import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.Data;
 import com.example.scanimin.data.Object.PostCustomer;
 import com.example.scanimin.data.Object.UpdateCustomer;
-import com.example.scanimin.databinding.ListCustomerLayoutBinding;
 import com.example.scanimin.databinding.ScanLayoutBinding;
-import com.example.scanimin.function.JsonUtils;
+import com.example.scanimin.function.FunctionUtils;
 import com.example.scanimin.function.LanguageManager;
 import com.example.scanimin.popup.OverlayDialogFragment;
 import com.example.scanimin.popup.PopupCompare;
@@ -72,7 +77,6 @@ import com.example.scanimin.popup.PopupEnounce;
 import com.example.scanimin.popup.PopupThankYou;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.imin.scan.Result;
-import com.serenegiant.usb.widget.UVCCameraTextureView;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +95,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         AllCustomer.OnItemClickListener,
         CustomerNotChecked.OnItemClickListener,
         CustomerChecked.OnItemClickListener{
+    private ConnectivityManager.NetworkCallback networkCallback;
     public static final String DEVICE_CONNECTION = "com.imin.scanner.api.DEVICE_CONNECTION";
     public static final String DEVICE_DISCONNECTION = "com.imin.scanner.api.DEVICE_DISCONNECTION";
     public static final String RESULT_ACTION = "com.imin.scanner.api.RESULT_ACTION";
@@ -143,7 +148,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     private UsbCameraManger cameraManager;
     private static int time = 3000, time1;
     private File imageFiles;
-    private JsonUtils jsonUtils;
+    private FunctionUtils jsonUtils;
     private CameraFragment cameraFragment;
     private Handler idleHandler = new Handler();
     private Runnable idleRunnable;
@@ -171,6 +176,8 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     private static final String specials = "~=+%^*/()[]{}/!@#$?|";
     private static final String ALPHA_NUMERIC = alpha + alphaUpperCase + digits;
     private static final String ALL = alpha + alphaUpperCase + digits + specials;
+    // navigation
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +203,81 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             Log.d("USB Info", "Vendor ID (VID): " + vid);
             Log.d("USB Info", "Product ID (PID): " + pid);
         }
+        checkinternet();
+        navigation(savedInstanceState);
     }
+    private void checkinternet(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onLost(@NonNull Network network) {
+                runOnUiThread(() ->
+                        Toast.makeText(Scanner.this, "Mất kết nối Internet", Toast.LENGTH_LONG).show()
+                );
+            }
+
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                runOnUiThread(() ->
+                        Toast.makeText(Scanner.this, "Đã kết nối Internet", Toast.LENGTH_SHORT).show()
+                );
+            }
+        };
+
+        NetworkRequest request = new NetworkRequest.Builder().build();
+        cm.registerNetworkCallback(request, networkCallback);
+    }
+
+    private void navigation(Bundle savedInstanceState){
+
+        // Bắt sự kiện click trong NavigationView
+        binding.navigationView.setNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START);
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.view_camera);
+                    if (fragment != null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .remove(fragment)
+                                .commit();
+                        isViewpage = "scan";
+                    }
+                }
+            }
+            if (item.getItemId() == R.id.nav_settings){
+                isViewpage = "setting";
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.view_camera, new SettingFragment())
+                        .commit();
+            }
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
+        // Tạo gesture detector để hỗ trợ vuốt mở Drawer
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            private static final int SWIPE_THRESHOLD = 100;
+            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                float diffX = e2.getX() - e1.getX();
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0 && !binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                        binding.drawerLayout.openDrawer(GravityCompat.START);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        // Đăng ký listener vuốt màn hình
+        binding.drawerLayout.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+    }
+
+
 
     private void getdata(){
         callApi = new CallApi();
@@ -491,6 +572,10 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         super.onDestroy();
         if (scannerReceiver != null) {
             unregisterReceiver(scannerReceiver);
+        }
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null && networkCallback != null) {
+            cm.unregisterNetworkCallback(networkCallback);
         }
     }
 
@@ -831,6 +916,23 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             isViewpage = "scan";
             reset();
         }
+        if (isViewpage == "setting"){
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+            }
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.view_camera);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .remove(fragment)
+                        .commit();
+                isViewpage = "scan";
+            }
+        }
+        if (isViewpage == "scan"){
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }
     }
 
     // register
@@ -926,4 +1028,16 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     }
 
     private static Random generator = new Random();
+
+    //setting
+
+    public void backToCameraFromSetting() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.view_camera);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+            isViewpage = "scan";
+        }
+    }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ip_config">Set Ip</string>
+    <string name="port_config">Set Port</string>
+    <string name="export_list_data">Export List Data</string>
+    <string name="import_list_data">Import List Data</string>
+    <string name="setting">Setting</string>
+    <string name="save">Save</string>
+    <string name="no_internet">Không có kết nối internet</string>
+    <string name="data_download_success">Dữ liệu đã được tải lại</string>
+</resources>

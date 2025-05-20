@@ -3,8 +3,9 @@ package com.example.scanimin.function;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.VideoView;
 
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class JsonUtils {
+public class FunctionUtils {
     public static String getFileExtension(Context context, Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
@@ -89,6 +90,16 @@ public class JsonUtils {
                 videoView.start();
             }
         });
+    }
+    public static boolean isInternetAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+
+        NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+        return capabilities != null &&
+                (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                        || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 
 }

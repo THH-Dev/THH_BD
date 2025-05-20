@@ -1,4 +1,4 @@
-package com.example.scanimin.Fragment;
+package com.example.scanimin.Fragment.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,12 +21,13 @@ import com.example.scanimin.R;
 import com.example.scanimin.data.DBRemote.CallApi;
 import com.example.scanimin.data.Local.SQLLite;
 import com.example.scanimin.data.Object.Customer;
+import com.example.scanimin.function.FunctionUtils;
 import com.example.scanimin.popup.PopupCompare;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerNotChecked extends Fragment implements Searchable{
+public class AllCustomer extends Fragment implements Searchable{
     private RecyclerView recyclerView;
     private CustomerAdapter customerAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -36,11 +37,11 @@ public class CustomerNotChecked extends Fragment implements Searchable{
     private PopupCompare popupCompare;
     private OnItemClickListener listener;
     public interface OnItemClickListener {
-        void onItemClickedNotChecked(Customer customer);
+        void onItemClickedAll(Customer customer);
     }
 
-    public CustomerNotChecked() {
 
+    public AllCustomer() {
     }
 
     @Override
@@ -79,48 +80,49 @@ public class CustomerNotChecked extends Fragment implements Searchable{
                 @Override
                 public void onItemClick(Customer customer, View view) {
                     if (listener != null) {
-                        listener.onItemClickedNotChecked(customer);
+                        listener.onItemClickedAll(customer);
                         getData();
-                        customerAdapter.notifyDataSetChanged();
+                        reloadData();
                     }
                 }
             });
             recyclerView.setAdapter(customerAdapter);
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    getData();
-                    reloadData();
-                }
-            });
         }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            getData();
+            reloadData();
+        });
     }
     private void reloadData() {
         new Handler().postDelayed(new Runnable() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void run() {
+                if (FunctionUtils.isInternetAvailable(requireActivity())) {
+                    Toast.makeText(requireActivity(), R.string.data_download_success, Toast.LENGTH_SHORT).show();
+                    customerAdapter.notifyDataSetChanged();
+                }else {
+                    Toast.makeText(requireActivity(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+                }
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Dữ liệu đã được tải lại", Toast.LENGTH_SHORT).show();
-                customerAdapter.notifyDataSetChanged();
             }
         }, 1000);
     }
 
     private void getData(){
-        customerList.clear();
         callApi = new CallApi();
         callApi.getCustomer(requireActivity());
         dbHelper = new SQLLite(requireActivity());
-        for (Customer customer : dbHelper.getAllPersons()) {
-            if (customer.getImage() == null){
-                customerList.add(customer);
-            }
-        }
+        List<Customer> updatedList = dbHelper.getAllPersons();
+        customerList.clear();
+        customerList.addAll(updatedList);
+
         if (customerAdapter != null) {
-            customerAdapter.updateData(customerList);
+            customerAdapter.updateData(updatedList);
         }
     }
+
+    @Override
     public void onSearchQuery(String query) {
         if (customerAdapter != null) {
             customerAdapter.filter(query);
@@ -130,8 +132,8 @@ public class CustomerNotChecked extends Fragment implements Searchable{
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof CustomerNotChecked.OnItemClickListener) {
-            listener = (CustomerNotChecked.OnItemClickListener) context;
+        if (context instanceof OnItemClickListener) {
+            listener = (OnItemClickListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnItemClickListener");
         }
@@ -142,3 +144,4 @@ public class CustomerNotChecked extends Fragment implements Searchable{
     }
 
 }
+
