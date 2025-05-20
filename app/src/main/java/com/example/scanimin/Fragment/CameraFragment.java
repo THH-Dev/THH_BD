@@ -6,6 +6,7 @@ import static android.os.Looper.getMainLooper;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import com.example.scanimin.function.FunctionUtils;
 import com.jiangdg.usbcamera.UVCCameraHelper;
 import com.jiangdg.usbcamera.utils.FileUtils;
 import com.serenegiant.usb.CameraDialog;
+import com.serenegiant.usb.Size;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.common.AbstractUVCCameraHandler;
 import com.serenegiant.usb.widget.CameraViewInterface;
@@ -34,6 +36,7 @@ import com.serenegiant.usb.widget.UVCCameraTextureView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 public class CameraFragment extends Fragment implements CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
@@ -172,6 +175,13 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
         }
     }
 
+    public void getSetting(int a, int b){
+        boolean support = mCameraHelper.checkSupportFlag(UVCCameraHelper.MODE_BRIGHTNESS);
+        Log.d("check", "getSetting: "+support);
+        mCameraHelper.setModelValue(UVCCameraHelper.MODE_BRIGHTNESS, a);
+        mCameraHelper.setModelValue(UVCCameraHelper.MODE_CONTRAST, b);
+    }
+
     public void CaptureImageAndSendUri() {
         File imageFile = FunctionUtils.createTempFile(requireContext());
         String picPath = imageFile.getAbsolutePath();
@@ -290,6 +300,8 @@ public class CameraFragment extends Fragment implements CameraDialog.CameraDialo
             if (!isPreview && mCameraHelper.isCameraOpened()) {
                 mCameraHelper.startPreview(mUVCCameraView);
                 isPreview = true;
+                boolean support = mCameraHelper.checkSupportFlag(UVCCameraHelper.MODE_BRIGHTNESS);
+                Log.i("camera", String.valueOf(support));
                 Log.i(TAG, "onSurfaceCreated start preview ==========");
             }
             else

@@ -144,6 +144,8 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     private ImageView videoView;
     private int count = 3;
     private Uri contentUri;
+    private String brightness;
+    private String contrast;
 
     private UsbCameraManger cameraManager;
     private static int time = 3000, time1;
@@ -178,6 +180,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     private static final String ALL = alpha + alphaUpperCase + digits + specials;
     // navigation
     private GestureDetector gestureDetector;
+    private boolean isSearch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,11 +326,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             binding.hd.setText(spannable);
         }
         startGif();
-        binding.lnRegister.setOnClickListener(v -> {
-            Intent intent = new Intent(Scanner.this, RegisterActivity.class);
-            startActivity(intent);
-            finish();
-        });
         binding.lnLanguage.setOnClickListener(v -> {
             if (getLanguage().equals("vi")) {
                 languageManager.changeLanguage("en");
@@ -363,6 +361,26 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         transaction.replace(R.id.ln_camera, new CameraFragment());
         transaction.addToBackStack(null);
         transaction.commit();
+        CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.ln_camera);
+        brightness = binding.textBRIGHTNESS.getText().toString();
+        contrast = binding.textCONTRAST.getText().toString();
+        if (brightness == null) {
+            brightness = "200";
+        }
+        if (contrast == null) {
+            contrast = "200";
+        }
+        binding.setBRIGHTNESS.setOnClickListener(v -> {
+            if (fragment != null) {
+                fragment.getSetting(Integer.parseInt(brightness), Integer.parseInt(contrast));
+            }
+        });
+        binding.setCONTRAST.setOnClickListener(v -> {
+            if (fragment != null) {
+                fragment.getSetting(Integer.parseInt(brightness), Integer.parseInt(contrast));
+            }
+        });
         binding.chup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,6 +467,35 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 popupMenu.show();
             }
         });
+        binding.searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.searchView.setIconified(false);
+                isShowPopup = false;
+                isSearch = true;
+            }
+        });
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                currentQuery = query;
+                sendQueryToCurrentFragment(query);
+                isShowPopup = false;
+                isSearch = true;
+                Log.d("check", "onQueryTextSubmit: ");
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                currentQuery = newText;
+                sendQueryToCurrentFragment(newText);
+                isShowPopup = false;
+                isSearch = true;
+                Log.d("check", "onQueryTextChange: ");
+                return true;
+            }
+        });
 
     }
 
@@ -495,18 +542,27 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 String strData = intent.getStringExtra(EXTRA_DECODE_DATA_STR);
                 // xử lý khi nhận được dữ liệu
                 Boolean checkIn = false;
-                if (!isShowPopup){
+                if (!isShowPopup) {
                     for (Customer customerSave : dbHelper.getAllPersons()) {
                         if (Objects.equals(customerSave.getQrcode(), strData)) {
-                            if (customerSave.getImage() == null){
-                                onScanSuccess();
-                                getDataScan(customerSave);
-                                checkIn = true;
+                            if (isSearch){
+                                isSearch = false;
+//                                binding.searchView.setIconified(false);
+                                binding.searchView.setQuery(customerSave.getData().getName(), true);
                                 isShowPopup = true;
+                                Log.d("dataCustomer", customerSave.getData().getName());
                                 break;
-                            }else{
-                                isShowPopup = true;
-                                showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you, customerSave);
+                            }else {
+                                if (customerSave.getImage() == null) {
+                                    onScanSuccess();
+                                    getDataScan(customerSave);
+                                    checkIn = true;
+                                    isShowPopup = true;
+                                    break;
+                                } else {
+                                    isShowPopup = true;
+                                    showPopupCheckin(getResources().getString(R.string.you_are_checked), R.drawable.thank_you, customerSave);
+                                }
                             }
                         }
                     }
@@ -593,6 +649,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     @Override
     protected void onResume() {
         super.onResume();
+        isShowPopup = false;
         getdata();
     }
 
@@ -818,21 +875,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                     break;
             }
         }).attach();
-        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                currentQuery = query;
-                sendQueryToCurrentFragment(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                currentQuery = newText;
-                sendQueryToCurrentFragment(newText);
-                return true;
-            }
-        });
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -938,6 +980,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     // register
     private void initRegister() {
         isViewpage = "register";
+        isShowPopup = true;
         postCustomer = new PostCustomer();
         binding.layoutRegister.setVisibility(VISIBLE);
         binding.layoutScan.setVisibility(GONE);
@@ -1040,4 +1083,12 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             isViewpage = "scan";
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isShowPopup = true;
+    }
+
+
 }
