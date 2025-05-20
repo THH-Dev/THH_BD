@@ -287,6 +287,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         callApi.getCustomer(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init(){
         dbHelper = new SQLLite(this);
         customer = new Customer();
@@ -467,10 +468,16 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 popupMenu.show();
             }
         });
-        binding.searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.searchView.setIconified(false);
+//        binding.searchView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                binding.searchView.setIconified(false);
+//                isShowPopup = false;
+//                return false;
+//            }
+//        });
+        binding.searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 isShowPopup = false;
                 isSearch = true;
             }
@@ -485,7 +492,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 Log.d("check", "onQueryTextSubmit: ");
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 currentQuery = newText;
@@ -496,7 +502,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 return true;
             }
         });
-
     }
 
     private String getLanguage(){
