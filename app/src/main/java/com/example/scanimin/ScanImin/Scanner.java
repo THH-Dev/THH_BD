@@ -182,7 +182,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     // navigation
     private GestureDetector gestureDetector;
     private boolean isSearch = false;
-    private boolean allowSwipeToOpenDrawer = true;
+    private boolean allowSwipeToOpenDrawer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,9 +211,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         checkinternet();
         initList();
         getDataList();
-        if (isViewpage == "scan"){
-            navigation();
-        }
+        navigation();
     }
     private void checkinternet(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -264,7 +262,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             if (item.getItemId() == R.id.nav_lock){
                 allowSwipeToOpenDrawer = false;
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-                binding.drawerLayout.closeDrawer(GravityCompat.START);
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
             binding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
@@ -345,6 +343,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         }
         startGif();
         binding.lnLanguage.setOnClickListener(v -> {
+            allowSwipeToOpenDrawer = false;
             if (getLanguage().equals("vi")) {
                 languageManager.changeLanguage("en");
             } else {
