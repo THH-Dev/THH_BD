@@ -54,7 +54,6 @@ public class MinioUploader {
         SECRET_KEY = share.getSecretKey();
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("image/jpeg");
-
         RequestBody body = RequestBody.create(mediaType, imageFile);
 
         // PUT URL format: http://endpoint/bucket-name/object-name
@@ -75,7 +74,6 @@ public class MinioUploader {
             public void onFailure(Call call, java.io.IOException e) {
                 Log.e("MinioUploader", "Upload failed: " + e.getMessage());
             }
-
             @Override
             public void onResponse(Call call, Response response) throws java.io.IOException {
                 if (response.isSuccessful()) {
