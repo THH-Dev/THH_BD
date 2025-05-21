@@ -1,7 +1,10 @@
 package com.example.scanimin.File;
 
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
+
+import com.example.scanimin.data.Local.SharedPreference;
 
 import java.io.File;
 
@@ -24,6 +27,8 @@ public class MinioUploader {
     private static String SECRET_KEY;
     private static String BUCKET_NAME;
 
+    private static SharedPreference share;
+
     public static void getEndpoint(String endpoint) {
         ENDPOINT = endpoint;
     }
@@ -37,11 +42,16 @@ public class MinioUploader {
         BUCKET_NAME = bucketName;
     }
 
-    public static void uploadImage(File imageFile, String objectName) {
+    public static void uploadImage(File imageFile, String objectName, Context context) {
         if (!imageFile.exists()) {
             Log.e("MinioUploader", "File does not exist: " + imageFile.getAbsolutePath());
             return;
         }
+        share = new SharedPreference(context);
+        ENDPOINT = "http://" + share.getMinioIp() +":" + share.getMinioPort();
+        BUCKET_NAME = share.getBucketName();
+        ACCESS_KEY = share.getAccessKey();
+        SECRET_KEY = share.getSecretKey();
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("image/jpeg");
 

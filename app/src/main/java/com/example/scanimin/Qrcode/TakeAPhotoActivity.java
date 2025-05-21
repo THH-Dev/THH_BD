@@ -470,7 +470,7 @@ public class TakeAPhotoActivity extends AppCompatActivity implements CameraFragm
         uri = Uri.fromFile(file);
 //        imageFileCustomer = file;
         imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
-        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName());
+        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName(), this);
         Log.d("Screenshot", "Uri: " + uri.toString());
         if (uri != null) {
             Glide.with(this)

@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -378,24 +379,24 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         transaction.commit();
         CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.ln_camera);
-        brightness = binding.textBRIGHTNESS.getText().toString();
-        contrast = binding.textCONTRAST.getText().toString();
-        if (brightness == null) {
-            brightness = "200";
-        }
-        if (contrast == null) {
-            contrast = "200";
-        }
-        binding.setBRIGHTNESS.setOnClickListener(v -> {
-            if (fragment != null) {
-                fragment.getSetting(Integer.parseInt(brightness), Integer.parseInt(contrast));
-            }
-        });
-        binding.setCONTRAST.setOnClickListener(v -> {
-            if (fragment != null) {
-                fragment.getSetting(Integer.parseInt(brightness), Integer.parseInt(contrast));
-            }
-        });
+//        brightness = binding.textBRIGHTNESS.getText().toString();
+//        contrast = binding.textCONTRAST.getText().toString();
+//        if (brightness == null) {
+//            brightness = "200";
+//        }
+//        if (contrast == null) {
+//            contrast = "200";
+//        }
+//        binding.setBRIGHTNESS.setOnClickListener(v -> {
+//            if (fragment != null) {
+//                fragment.getSetting(Integer.parseInt(brightness), Integer.parseInt(contrast));
+//            }
+//        });
+//        binding.setCONTRAST.setOnClickListener(v -> {
+//            if (fragment != null) {
+//                fragment.getSetting(Integer.parseInt(brightness), Integer.parseInt(contrast));
+//            }
+//        });
         binding.chup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -863,7 +864,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     public void onUriCaptured(File file) throws IOException {
         uri = Uri.fromFile(file);
         imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
-        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName());
+        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName(), this);
         Log.d("Screenshot", "Uri: " + uri.toString());
         if (uri != null) {
             Glide.with(this)
@@ -971,6 +972,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             isSearch = false;
             isLayoutScan = false;
             isViewpage = "scan";
+            binding.iconCamera.setVisibility(GONE);
         }
         if (isViewpage == "list"){
             binding.overlayView.setVisibility(VISIBLE);
@@ -1054,6 +1056,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                     data.setPosition("");
                     throw new RuntimeException(e);
                 }
+                hideKeyboard(binding.editPosition);
                 data.setRole("uninvited");
                 customer.setData(data);
                 customer.setStatus(false);
@@ -1117,6 +1120,13 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     protected void onPause() {
         super.onPause();
         isShowPopup = true;
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 

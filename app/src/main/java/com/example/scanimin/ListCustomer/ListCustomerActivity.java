@@ -232,7 +232,7 @@ public class ListCustomerActivity extends AppCompatActivity implements CameraFra
         binding.lnCameraList.setVisibility(GONE);
         binding.lnShowImage.setVisibility(VISIBLE);
         imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
-        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName());
+        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName(), this);
         Log.d("Screenshot", "Uri: " + uri.toString());
         if (uri != null) {
             Glide.with(this)
