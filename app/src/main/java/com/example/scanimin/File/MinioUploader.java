@@ -15,10 +15,27 @@ import okhttp3.Response;
 
 public class MinioUploader {
 
-    private static final String ENDPOINT = "http://192.168.3.69:9000";
-    private static final String ACCESS_KEY = "CLR1bkuA5m9VT5DQtBms";
-    private static final String SECRET_KEY = "yM1yfUIbTxeFcdXzx8gCf6xFHNhWbWpJ1lPVax8w";
-    private static final String BUCKET_NAME = "image";
+    //"http://192.168.3.69:9000";
+    //"CLR1bkuA5m9VT5DQtBms";
+    //"yM1yfUIbTxeFcdXzx8gCf6xFHNhWbWpJ1lPVax8w";
+    //"image";
+    private static String ENDPOINT;
+    private static String ACCESS_KEY;
+    private static String SECRET_KEY;
+    private static String BUCKET_NAME;
+
+    public static void getEndpoint(String endpoint) {
+        ENDPOINT = endpoint;
+    }
+    public static void getAccessKey(String accessKey) {
+        ACCESS_KEY = accessKey;
+    }
+    public static void getSecretKey(String secretKey) {
+        SECRET_KEY = secretKey;
+    }
+    public static void getBucketName(String bucketName) {
+        BUCKET_NAME = bucketName;
+    }
 
     public static void uploadImage(File imageFile, String objectName) {
         if (!imageFile.exists()) {

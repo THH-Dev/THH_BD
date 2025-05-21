@@ -207,7 +207,8 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             Log.d("USB Info", "Product ID (PID): " + pid);
         }
         checkinternet();
-        navigation(savedInstanceState);
+        initList();
+        getDataList();
     }
     private void checkinternet(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -232,7 +233,8 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         cm.registerNetworkCallback(request, networkCallback);
     }
 
-    private void navigation(Bundle savedInstanceState){
+    @SuppressLint("ClickableViewAccessibility")
+    private void navigation(){
 
         // Bắt sự kiện click trong NavigationView
         binding.navigationView.setNavigationItemSelectedListener(item -> {
@@ -277,7 +279,10 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         });
 
         // Đăng ký listener vuốt màn hình
-        binding.drawerLayout.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+        binding.drawerLayout.setOnTouchListener((v, event) ->{
+            gestureDetector.onTouchEvent(event);
+            return false;
+        });
     }
 
 
@@ -340,8 +345,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 isShowPopup = true;
                 binding.listViewCustomer.setVisibility(VISIBLE);
                 binding.layoutScan.setVisibility(GONE);
-                initList();
-                getDataList();
             }
         });
         binding.lnRegister.setOnClickListener(v -> {
@@ -614,6 +617,14 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 checkScan = true;
                 //bat lại scan
             }
+        }, new PopupCompare.EditListener() {
+            @Override
+            public void onEdit(Customer customer) {
+                isViewpage = "take a photo";
+                onScanSuccess();
+                getDataScan(customer);
+                isShowPopup = true;
+            }
         });
         popupCompare.setCanceledOnTouchOutside(false);
         popupCompare.setCancelable(false);
@@ -648,6 +659,12 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         super.onResume();
         isShowPopup = false;
         getdata();
+        if (isViewpage == "scan"){
+            navigation();
+        }
+        if (isViewpage != "scan") {
+            getSupportActionBar().hide();
+        }
     }
 
     //take a photo
@@ -667,15 +684,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         }
 
         binding.cdPreviewCardView.setLayoutParams(layoutParams);
-    }
-    private void setView(int widthInPd, int heightInPd, float radius, View v){
-        float density = v.getResources().getDisplayMetrics().density;
-        int widthIn = (int) (widthInPd * density + 0.5f);
-        int heightIn = (int) (heightInPd * density + 0.5f);
-        ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
-        layoutParams.width = widthIn;
-        layoutParams.height = heightIn;
-        v.setLayoutParams(layoutParams);
     }
     private void settingUiCamera(int time) throws IOException {
         binding.description.setVisibility(VISIBLE);
@@ -835,7 +843,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     @Override
     public void onUriCaptured(File file) throws IOException {
         uri = Uri.fromFile(file);
-//        imageFileCustomer = file;
         imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
         MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName());
         Log.d("Screenshot", "Uri: " + uri.toString());
@@ -884,6 +891,9 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             public void onClick(View view) {
                 onBackPressed();
                 binding.searchView.setQuery("", false);
+                isSearch = false;
+                isShowPopup = false;
+                isViewpage = "scan";
             }
         });
     }
@@ -926,6 +936,9 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
 
     public void onBackPressed() {
         if (isViewpage == "scan") {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+            }
             if (backPressedTime > System.currentTimeMillis()) {
                 super.onBackPressed();
             }
@@ -936,6 +949,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             binding.layoutScan.setVisibility(VISIBLE);
             binding.listViewCustomer.setVisibility(GONE);
             isShowPopup = false;
+            isSearch = false;
             isLayoutScan = false;
             isViewpage = "scan";
         }
@@ -945,6 +959,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             binding.listViewCustomer.setVisibility(GONE);
             isShowPopup = false;
             isLayoutScan = false;
+            isSearch = false;
             isViewpage = "scan";
             binding.searchView.setQuery("", false);
         }
@@ -954,6 +969,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             binding.layoutRegister.setVisibility(GONE);
             isShowPopup = false;
             isLayoutScan = false;
+            isSearch = false;
             isViewpage = "scan";
             reset();
         }
@@ -967,11 +983,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                         .remove(fragment)
                         .commit();
                 isViewpage = "scan";
-            }
-        }
-        if (isViewpage == "scan"){
-            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                binding.drawerLayout.closeDrawer(GravityCompat.START);
             }
         }
     }

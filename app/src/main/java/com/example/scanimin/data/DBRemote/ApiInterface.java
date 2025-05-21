@@ -11,15 +11,16 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiInterface {
     @GET("/api/get_guests")
-    Call<List<CustomerApi>> getCustomer();
+    Call<List<CustomerApi>> getCustomer(@Header("Authorization")String authorization);
     @POST("/api/update_guest")
-    Call<StatusUpdate> updateCustomerByQrcode(@Body UpdateCustomer updateCustomer);
+    Call<StatusUpdate> updateCustomerByQrcode(@Header("Authorization")String authorization, @Body UpdateCustomer updateCustomer);
     @POST("/api/insert_guest")
-    Call<PostCustomer> insertCustomerByQrcode(@Body PostCustomer postCustomer);
+    Call<PostCustomer> insertCustomerByQrcode(@Header("Authorization")String authorization, @Body PostCustomer postCustomer);
 }

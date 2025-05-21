@@ -23,6 +23,7 @@ public class CallApi{
     private SQLLite sqlLite;
 
     private static List<Customer> Listcustomer;
+    private static String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0Nzc4OTkzMywianRpIjoiZTM5MjlhZjAtMjBlYS00M2VkLWIxMDQtODg5Zjk5NDBmZTU2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFwaV91c2VyIiwibmJmIjoxNzQ3Nzg5OTMzLCJjc3JmIjoiMjdiNzNkNTUtNDE2My00YzcwLTk4YzQtYWQyNzM3NDU3MTc3IiwiZXhwIjoyMDYzMTQ5OTMzfQ.Q9huNQbsDwaqaCkthnqwhquYspw-vq711szqkVLydk0";
     public interface UpdateCustomerListener{
         void onUpdateCustomerSuccess();
         void onUpdateCustomerFailure(String error);
@@ -32,7 +33,7 @@ public class CallApi{
         sqlLite = new SQLLite(context);
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
 
-        Call<List<CustomerApi>> call = apiInterface.getCustomer();
+        Call<List<CustomerApi>> call = apiInterface.getCustomer(token);
         call.enqueue(new Callback<List<CustomerApi>>() {
             @Override
             public void onResponse(Call<List<CustomerApi>> call, Response<List<CustomerApi>> response) {
@@ -74,7 +75,7 @@ public class CallApi{
 
     public void insertCustomer(PostCustomer postCustomer) {
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
-        Call<PostCustomer> call = apiInterface.insertCustomerByQrcode(postCustomer);
+        Call<PostCustomer> call = apiInterface.insertCustomerByQrcode(token,postCustomer);
         call.enqueue(new Callback<PostCustomer>() {
             @Override
             public void onResponse(Call<PostCustomer> call, Response<PostCustomer> response) {
@@ -96,7 +97,7 @@ public class CallApi{
 
     public void updateCustomer(UpdateCustomer updateCustomer, UpdateCustomerListener listener) {
         ApiInterface apiInterface = Retrofit2.getInstance().getApiInterface();
-        Call<StatusUpdate> call = apiInterface.updateCustomerByQrcode(updateCustomer);
+        Call<StatusUpdate> call = apiInterface.updateCustomerByQrcode(token,updateCustomer);
         call.enqueue(new Callback<StatusUpdate>() {
             @Override
             public void onResponse(Call<StatusUpdate> call, Response<StatusUpdate> response) {

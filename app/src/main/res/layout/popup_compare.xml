@@ -65,9 +65,8 @@
                 android:layout_weight="1">
             </View>
         </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cd_image_cardView"
+        <LinearLayout
+            android:id="@+id/ln_image_cardView"
             android:layout_width="250dp"
             android:layout_height="250dp"
             app:cardCornerRadius="200dp"
@@ -78,19 +77,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_gravity="center">
-            <ImageView
-                android:id="@+id/img_user"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintTop_toBottomOf="@id/title_popup"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_gravity="center"
-                android:visibility="visible"
-                android:src="@drawable/user">
-            </ImageView>
-        </androidx.cardview.widget.CardView>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cd_image_cardView"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    app:cardCornerRadius="200dp"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:layout_constraintTop_toBottomOf="@id/ln_header"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_gravity="center">
+                    <ImageView
+                        android:id="@+id/img_user"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintTop_toBottomOf="@id/title_popup"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_gravity="center"
+                        android:visibility="visible"
+                        android:src="@drawable/user">
+                    </ImageView>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/img_edit"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:cardCornerRadius="30dp"
+                    android:visibility="gone"
+                    android:layout_gravity="end">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:visibility="visible"
+                        android:src="@drawable/pen">
+                    </ImageView>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/cd_information"
             android:layout_width="match_parent"
@@ -100,7 +129,7 @@
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cd_image_cardView"
+            app:layout_constraintTop_toBottomOf="@id/ln_image_cardView"
             app:cardCornerRadius="25dp"
             android:orientation="vertical">
             <TextView

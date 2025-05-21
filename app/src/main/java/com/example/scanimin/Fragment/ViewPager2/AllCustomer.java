@@ -72,6 +72,11 @@ public class AllCustomer extends Fragment implements Searchable{
                         public void onCompareUpdated() {
                             //bat lại scan
                         }
+                    }, new PopupCompare.EditListener(){
+                        @Override
+                        public void onEdit(Customer customer) {
+
+                        }
                     });
                     popupCompare.show();
                 }

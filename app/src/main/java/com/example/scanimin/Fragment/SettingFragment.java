@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.scanimin.File.MinioUploader;
 import com.example.scanimin.R;
 import com.example.scanimin.ScanImin.Scanner;
 import com.example.scanimin.constance.Value;
@@ -59,6 +61,16 @@ public class SettingFragment extends Fragment {
             if (getActivity() != null) {
                 sharedPreference.saveIpServer(binding.ip.getText().toString());
                 sharedPreference.savePortServer(binding.port.getText().toString());
+                sharedPreference.saveMinioIp(binding.ipMinio.getText().toString());
+                sharedPreference.saveMinioPort(binding.portMinio.getText().toString());
+                sharedPreference.saveAccessKey(binding.accessMinio.getText().toString());
+                sharedPreference.saveSecretKey(binding.secretMinio.getText().toString());
+                sharedPreference.saveBucketName(binding.bucketMinio.getText().toString());
+                sharedPreference.saveDirFile(binding.nameFileExport.getText().toString());
+                MinioUploader.getEndpoint("http://" + sharedPreference.getMinioIp() + ":" + sharedPreference.getMinioPort());
+                MinioUploader.getAccessKey(sharedPreference.getAccessKey());
+                MinioUploader.getSecretKey(sharedPreference.getSecretKey());
+                MinioUploader.getBucketName(sharedPreference.getBucketName());
                 Retrofit2.getBaseUrl("http://" + sharedPreference.getIpServer() + ":" + sharedPreference.getPortServer() + "/");
                 ((Scanner) getActivity()).backToCameraFromSetting();
             }
@@ -74,6 +86,12 @@ public class SettingFragment extends Fragment {
         binding.nameFileExport.setText(sharedPreference.getDirFile());
         binding.ip.setText(sharedPreference.getIpServer());
         binding.port.setText(sharedPreference.getPortServer());
+        binding.ipMinio.setText(sharedPreference.getMinioIp());
+        binding.portMinio.setText(sharedPreference.getMinioPort());
+        binding.accessMinio.setText(sharedPreference.getAccessKey());
+        binding.secretMinio.setText(sharedPreference.getSecretKey());
+        binding.bucketMinio.setText(sharedPreference.getBucketName());
+
     }
     @SuppressLint("SetTextI18n")
     @Override

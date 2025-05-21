@@ -26,6 +26,7 @@ import com.example.scanimin.databinding.PopupCompareBinding;
 
 public class PopupCompare extends Dialog {
     private PopupCompareListener listener;
+    private EditListener editListener;
     private final Context context;
     private AlertDialog alertDialog;
     private TextView btnConfirm;
@@ -33,16 +34,21 @@ public class PopupCompare extends Dialog {
     private int url;
     private Customer customer;
     private PopupCompareBinding binding;
+    private boolean check = false;
+    public  interface EditListener{
+        void onEdit(Customer customer);
+    }
     public interface PopupCompareListener {
         void onCompareUpdated();
     }
-    public PopupCompare(String text, int url, Context context, Customer customer, PopupCompareListener listener) {
+    public PopupCompare(String text, int url, Context context, Customer customer, PopupCompareListener listener, EditListener editListener) {
         super(context);
         this.context = context;
         this.listener = listener;
         this.text = text;
         this.url = url;
         this.customer = customer;
+        this.editListener = editListener;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +122,25 @@ public class PopupCompare extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 listener.onCompareUpdated();
+            }
+        });
+        binding.cdImageCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!check) {
+                    check = true;
+                    binding.imgEdit.setVisibility(VISIBLE);
+                }else{
+                    check = false;
+                    binding.imgEdit.setVisibility(GONE);
+                }
+            }
+        });
+        binding.imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                editListener.onEdit(customer);
             }
         });
     }

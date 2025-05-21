@@ -77,4 +77,18 @@
     <string name="registed">Đã đăng ký</string>
     <string name="unregisted">Chưa đăng ký</string>
     <string name="shutdown">Tắt</string>
+    <string name="ip_config">Cài đặt địa chỉ mạng</string>
+    <string name="port_config">Cài đặt cổng</string>
+    <string name="export_list_data">Xuất danh sách</string>
+    <string name="import_list_data">Thêm danh sách</string>
+    <string name="setting">Cài đặt</string>
+    <string name="save">Lưu</string>
+    <string name="no_internet">Không có kết nối internet</string>
+    <string name="data_download_success">Dữ liệu đã được tải lại</string>
+    <string name="setup_server">Cài đặt Server</string>
+    <string name="setup_minio">Cài đặt MiniO</string>
+    <string name="set_file">Đường dẫn file</string>
+    <string name="access_config">Access</string>
+    <string name="secret_config">Set Secret</string>
+    <string name="budget_config">Tên thư mục</string>
 </resources>

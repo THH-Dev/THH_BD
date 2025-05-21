@@ -81,7 +81,13 @@
     <string name="export_list_data">Export List Data</string>
     <string name="import_list_data">Import List Data</string>
     <string name="setting">Setting</string>
-    <string name="save">Save</string>
-    <string name="no_internet">Không có kết nối internet</string>
-    <string name="data_download_success">Dữ liệu đã được tải lại</string>
+    <string name="save">Save File</string>
+    <string name="no_internet">No internet</string>
+    <string name="data_download_success">Data downloaded successfully</string>
+    <string name="setup_server">Setup Server</string>
+    <string name="setup_minio">Setup MiniO</string>
+    <string name="set_file">Setup File</string>
+    <string name="access_config">Access</string>
+    <string name="secret_config">Set Secret</string>
+    <string name="budget_config">Budget name</string>
 </resources>
