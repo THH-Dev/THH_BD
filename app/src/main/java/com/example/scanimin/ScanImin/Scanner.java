@@ -40,6 +40,7 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -181,6 +182,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     // navigation
     private GestureDetector gestureDetector;
     private boolean isSearch = false;
+    private boolean allowSwipeToOpenDrawer = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +211,9 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         checkinternet();
         initList();
         getDataList();
+        if (isViewpage == "scan"){
+            navigation();
+        }
     }
     private void checkinternet(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -256,6 +261,11 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                         .replace(R.id.view_camera, new SettingFragment())
                         .commit();
             }
+            if (item.getItemId() == R.id.nav_lock){
+                allowSwipeToOpenDrawer = false;
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+            }
             binding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -267,6 +277,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if (!allowSwipeToOpenDrawer) return false;
                 float diffX = e2.getX() - e1.getX();
                 if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffX > 0 && !binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -277,12 +288,13 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 return false;
             }
         });
-
-        // Đăng ký listener vuốt màn hình
-        binding.drawerLayout.setOnTouchListener((v, event) ->{
-            gestureDetector.onTouchEvent(event);
-            return false;
-        });
+        if (isViewpage == "scan") {
+            // Đăng ký listener vuốt màn hình
+            binding.drawerLayout.setOnTouchListener((v, event) -> {
+                gestureDetector.onTouchEvent(event);
+                return false;
+            });
+        }
     }
 
 
@@ -497,6 +509,20 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
                 return true;
             }
         });
+        binding.settingNavigation.setOnClickListener(new View.OnClickListener() {
+            private static final long DOUBLE_CLICK_TIME_DELTA = 300; // 300ms
+            long lastClickTime = 0;
+
+            @Override
+            public void onClick(View v) {
+                long clickTime = System.currentTimeMillis();
+                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                    allowSwipeToOpenDrawer = true;
+                    Toast.makeText(v.getContext(), "You are developer", Toast.LENGTH_SHORT).show();
+                }
+                lastClickTime = clickTime;
+            }
+        });
     }
 
     private String getLanguage(){
@@ -659,12 +685,6 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         super.onResume();
         isShowPopup = false;
         getdata();
-        if (isViewpage == "scan"){
-            navigation();
-        }
-        if (isViewpage != "scan") {
-            getSupportActionBar().hide();
-        }
     }
 
     //take a photo

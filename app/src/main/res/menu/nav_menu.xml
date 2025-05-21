@@ -6,6 +6,6 @@
         android:id="@+id/nav_settings"
         android:title="Setting" />
     <item
-        android:id="@+id/nav_about"
-        android:title="About" />
+        android:id="@+id/nav_lock"
+        android:title="Lock" />
 </menu>
