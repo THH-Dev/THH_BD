@@ -40,7 +40,7 @@
             android:layout_height="100dp"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="horizontal"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="10dp">
             <ImageView
                 android:id="@+id/back"
                 android:layout_width="0dp"
@@ -55,7 +55,7 @@
                 android:layout_weight="5"
                 android:text="@string/title_popup"
                 android:gravity="center"
-                android:textSize="38sp"
+                android:textSize="@dimen/text_sp_large"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent">
             </TextView>
@@ -67,12 +67,12 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ln_image_cardView"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:cardCornerRadius="200dp"
             android:layout_marginBottom="4dp"
             android:visibility="visible"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/ln_header"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,9 +82,9 @@
                 android:layout_height="match_parent">
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cd_image_cardView"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    app:cardCornerRadius="200dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:cardCornerRadius="100dp"
                     android:visibility="visible"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:layout_constraintTop_toBottomOf="@id/ln_header"
@@ -93,8 +93,8 @@
                     android:layout_gravity="center">
                     <ImageView
                         android:id="@+id/img_user"
-                        android:layout_width="250dp"
-                        android:layout_height="250dp"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:scaleType="centerCrop"
                         app:layout_constraintTop_toBottomOf="@id/title_popup"
                         app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,6 @@
             android:layout_height="300dp"
             android:layout_weight="3"
             android:layout_marginVertical="50dp"
-            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ln_image_cardView"
@@ -141,7 +140,7 @@
                 android:text="THH"
                 android:paddingStart="25dp"
                 android:textColor="@color/black"
-                android:textSize="34sp"
+                android:textSize="@dimen/text_sp_large"
                 android:textStyle="bold">
             </TextView>
             <TextView
@@ -149,7 +148,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="28sp"
+                android:textSize="@dimen/text_large"
                 android:paddingStart="25dp"
                 android:layout_gravity="center"
                 android:textColor="@color/camon"
@@ -175,7 +174,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="0.5"
                         android:gravity="center"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_sp_normal"
                         android:text="@string/position">
                     </TextView>
                     <TextView
@@ -184,7 +183,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:textSize="28sp"
+                        android:textSize="@dimen/text_sp_normal"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:paddingHorizontal="25dp"
@@ -203,7 +202,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="0.5"
                         android:gravity="center"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_sp_normal"
                         android:text="@string/code">
                     </TextView>
                     <TextView
@@ -215,7 +214,7 @@
                         android:gravity="center"
                         android:text="24"
                         android:textColor="@color/black"
-                        android:textSize="28sp"
+                        android:textSize="@dimen/text_sp_normal"
                         android:textStyle="bold">
                     </TextView>
                 </LinearLayout>
@@ -230,7 +229,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="0.5"
                         android:gravity="center"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_sp_normal"
                         android:text="@string/bantiecso">
                     </TextView>
                     <TextView
@@ -239,7 +238,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:textSize="28sp"
+                        android:textSize="@dimen/text_sp_normal"
                         android:gravity="center"
                         android:paddingHorizontal="25dp"
                         android:textColor="@color/black"
@@ -260,7 +259,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/you_are_checked"
             android:layout_marginHorizontal="15dp"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_normal"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="5dp"
             android:gravity="center">
@@ -272,7 +271,7 @@
             android:text="@string/confirm"
             android:gravity="center"
             android:textStyle="bold"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_normal"
             android:background="@drawable/corner_button"
             android:layout_margin="35dp"
             app:layout_constraintTop_toBottomOf="@id/description_thank_you"

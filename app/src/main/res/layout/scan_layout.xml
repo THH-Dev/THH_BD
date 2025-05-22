@@ -101,9 +101,9 @@
                                                 android:gravity="center">
                                                 <androidx.cardview.widget.CardView
                                                     android:id="@+id/cd_preview_cardView"
-                                                    android:layout_width="340dp"
-                                                    android:layout_height="340dp"
-                                                    app:cardCornerRadius="200dp"
+                                                    android:layout_width="200dp"
+                                                    android:layout_height="200dp"
+                                                    app:cardCornerRadius="150dp"
                                                     android:scaleType="centerCrop"
                                                     app:cardBackgroundColor="@android:color/transparent"
                                                     android:layout_marginBottom="4dp"
@@ -142,9 +142,9 @@
                                                 android:layout_weight="2">
                                                 <androidx.cardview.widget.CardView
                                                     android:id="@+id/cd_image_cardView"
-                                                    android:layout_width="340dp"
-                                                    android:layout_height="340dp"
-                                                    app:cardCornerRadius="200dp"
+                                                    android:layout_width="200dp"
+                                                    android:layout_height="200dp"
+                                                    app:cardCornerRadius="150dp"
                                                     app:cardBackgroundColor="@android:color/transparent"
                                                     android:visibility="visible"
                                                     app:layout_constraintTop_toBottomOf="@id/ctr_data"
@@ -154,8 +154,8 @@
                                                     android:layout_gravity="center">
                                                     <ImageView
                                                         android:id="@+id/img_user"
-                                                        android:layout_width="340dp"
-                                                        android:layout_height="340dp"
+                                                        android:layout_width="200dp"
+                                                        android:layout_height="200dp"
                                                         android:scaleType="centerCrop"
                                                         app:layout_constraintTop_toBottomOf="@id/ctr_data"
                                                         app:layout_constraintStart_toStartOf="parent"
@@ -185,18 +185,18 @@
                                                         android:id="@+id/setTime"
                                                         android:layout_width="0dp"
                                                         android:layout_height="match_parent"
-                                                        android:layout_weight="1.5"
+                                                        android:layout_weight="1"
                                                         android:text="@string/set_time"
                                                         android:gravity="center_vertical"
                                                         android:textColor="@color/blue"
                                                         android:paddingStart="10dp"
-                                                        android:textSize="14sp"
+                                                        android:textSize="@dimen/text_sp_small"
                                                         android:textStyle="bold">
                                                     </TextView>
                                                     <LinearLayout
                                                         android:layout_width="0dp"
                                                         android:layout_height="match_parent"
-                                                        android:layout_weight="0.5">
+                                                        android:layout_weight="0.1">
                                                         <View
                                                             android:layout_width="1dp"
                                                             android:layout_height="match_parent"
@@ -211,8 +211,7 @@
                                                         android:text="@string/shutdown"
                                                         android:textColor="@color/blue"
                                                         android:gravity="center_vertical"
-                                                        android:paddingStart="10dp"
-                                                        android:textSize="20sp"
+                                                        android:textSize="@dimen/text_sp_small"
                                                         android:textStyle="bold">
                                                     </TextView>
                                                 </LinearLayout>
@@ -316,8 +315,8 @@
                                                     android:gravity="center"
                                                     android:background="@drawable/corner_button_camera">
                                                     <ImageView
-                                                        android:layout_width="80dp"
-                                                        android:layout_height="80dp"
+                                                        android:layout_width="40dp"
+                                                        android:layout_height="40dp"
                                                         app:layout_constraintStart_toStartOf="parent"
                                                         app:layout_constraintEnd_toEndOf="parent"
                                                         app:layout_constraintTop_toBottomOf="@id/text_request_camera"
@@ -451,7 +450,7 @@
                                                 android:textColor="#19488e"
                                                 android:paddingStart="25dp"
                                                 android:background="@drawable/bg_text"
-                                                android:textSize="34sp"
+                                                android:textSize="@dimen/text_large"
                                                 android:textStyle="bold">
                                             </TextView>
                                         </LinearLayout>
@@ -492,7 +491,7 @@
                                                 android:layout_height="0dp"
                                                 android:layout_weight="3"
                                                 android:textStyle="bold"
-                                                android:textSize="34sp"
+                                                android:textSize="@dimen/text_large"
                                                 android:textColor="#19488e"
                                                 android:paddingStart="25dp"
                                                 android:background="@drawable/bg_text"
@@ -588,7 +587,7 @@
                                                 android:textColor="#19488e"
                                                 android:paddingStart="25dp"
                                                 android:background="@drawable/bg_text"
-                                                android:textSize="34sp"
+                                                android:textSize="@dimen/text_large"
                                                 android:textStyle="bold">
                                             </TextView>
                                         </LinearLayout>
@@ -660,6 +659,35 @@
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/icon_camera_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:padding="25dp"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/img_camera_mobile"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/corner_button_camera"
+                        android:src="@drawable/iconcameraauto"
+                        android:layout_marginHorizontal="20dp">
+                    </ImageView>
+                    <ImageView
+                        android:id="@+id/img_send_mobile"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/iconsend"
+                        android:background="@drawable/corner_button_camera"
+                        android:layout_marginHorizontal="20dp">
+                    </ImageView>
+
+                </LinearLayout>
+                <LinearLayout
                     android:id="@+id/overlayView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -686,7 +714,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:src="@drawable/arrow_left"
-                                android:layout_margin="25dp">
+                                android:layout_marginHorizontal="25dp"
+                                android:layout_marginVertical="20dp">
                             </ImageView>
                             <ImageView
                                 android:layout_width="0dp"
@@ -704,7 +733,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="2"
                                     android:text="@string/title_list"
-                                    android:textSize="50sp"
+                                    android:textSize="@dimen/text_sp_large"
                                     android:textStyle="bold"
                                     android:gravity="center_vertical">
                                 </TextView>
@@ -713,7 +742,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:text="@string/slogan_list"
-                                    android:textSize="30sp"
+                                    android:textSize="@dimen/text_sp_small"
                                     android:textColor="@color/camon">
 
                                 </TextView>
@@ -797,7 +826,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="1"
                                 android:text="@string/title_scan"
-                                android:textSize="38sp"
+                                android:textSize="30sp"
                                 android:textStyle="bold"
                                 android:textColor="#FFFFFF"
                                 android:gravity="center">
@@ -815,7 +844,7 @@
                                     android:layout_height="0dp"
                                     android:layout_weight="1"
                                     android:text="@string/description_scan"
-                                    android:textSize="24sp"
+                                    android:textSize="@dimen/text_sp_small"
                                     android:textStyle="bold"
                                     android:textColor="@color/blue"
                                     android:gravity="center">
@@ -858,7 +887,6 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:layout_margin="25dp"
-                                android:padding="20dp"
                                 android:background="@drawable/corner_button_scan"
                                 android:orientation="vertical">
                                 <LinearLayout
@@ -872,6 +900,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
+                                        android:padding="10dp"
                                         android:src="@drawable/vietnam">
 
                                     </ImageView>
@@ -885,7 +914,7 @@
                                     android:gravity="center"
                                     android:textStyle="bold"
                                     android:textColor="@color/blue"
-                                    android:textSize="18sp">
+                                    android:textSize="@dimen/text_small">
                                 </TextView>
                             </LinearLayout>
                             <LinearLayout
@@ -894,7 +923,6 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:layout_margin="25dp"
-                                android:padding="20dp"
                                 android:background="@drawable/corner_button_scan"
                                 android:orientation="vertical">
                                 <LinearLayout
@@ -908,6 +936,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
+                                        android:padding="10dp"
                                         android:src="@drawable/portfolio">
                                     </ImageView>
                                 </LinearLayout>
@@ -920,7 +949,7 @@
                                     android:textColor="@color/blue"
                                     android:textStyle="bold"
                                     android:gravity="center"
-                                    android:textSize="18sp">
+                                    android:textSize="@dimen/text_sp_small">
                                 </TextView>
                             </LinearLayout>
                         </LinearLayout>
@@ -977,13 +1006,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="8"
-                            android:layout_marginHorizontal="50dp"
+                            android:layout_marginHorizontal="@dimen/dp"
                             app:cardCornerRadius="10dp">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="8"
-                                android:layout_marginHorizontal="35dp"
                                 android:layout_marginBottom="80dp"
                                 android:layout_marginTop="35dp"
                                 android:orientation="vertical">
@@ -1013,7 +1041,7 @@
                                         android:padding="10dp"
                                         android:textColorHint="@color/blue"
                                         android:textColor="@color/blue"
-                                        android:textSize="28sp"
+                                        android:textSize="@dimen/text_normal"
                                         android:layout_margin="5dp"
                                         android:background="@drawable/custom_bg_edit"
                                         android:inputType="text">
@@ -1047,7 +1075,7 @@
                                         android:textColor="@color/blue"
                                         android:layout_margin="5dp"
                                         android:background="@drawable/custom_bg_edit"
-                                        android:textSize="28sp">
+                                        android:textSize="@dimen/text_normal">
                                     </EditText>
                                 </LinearLayout>
                                 <LinearLayout
@@ -1077,7 +1105,7 @@
                                         android:hint="@string/fill_position"
                                         android:textColorHint="@color/blue"
                                         android:textColor="@color/blue"
-                                        android:textSize="28sp"
+                                        android:textSize="@dimen/text_normal"
                                         android:layout_margin="5dp"
                                         android:background="@drawable/custom_bg_edit">
                                     </EditText>
@@ -1156,7 +1184,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
                                         android:layout_weight="2"
-                                        android:textSize="40sp"
+                                        android:textSize="@dimen/text_sp_large"
                                         android:layout_gravity="center"
                                         android:gravity="center"
                                         android:text="@string/register"

@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.ConnectivityManager;
@@ -52,6 +53,7 @@ import com.bumptech.glide.Glide;
 import com.example.scanimin.File.ConverFile;
 import com.example.scanimin.File.MinioHelper;
 import com.example.scanimin.File.MinioUploader;
+import com.example.scanimin.Fragment.CameraMobileFragment;
 import com.example.scanimin.Fragment.SettingFragment;
 import com.example.scanimin.Fragment.ViewPager2.AllCustomer;
 import com.example.scanimin.Fragment.ViewPager2.CustomerChecked;
@@ -93,7 +95,7 @@ import java.util.concurrent.Executors;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCapturedListener,
+public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCapturedListener, CameraMobileFragment.OnCaptureImageListener,
         AllCustomer.OnItemClickListener,
         CustomerNotChecked.OnItemClickListener,
         CustomerChecked.OnItemClickListener{
@@ -372,13 +374,27 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         isPhoto = true;
         isTakePhoto = false;
         time =0;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.ln_camera, new CameraFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
-        CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.ln_camera);
+        if (isUsbCameraConnected(this)) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.ln_camera, new CameraFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+            CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.ln_camera);
+        }else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.ln_camera, new CameraMobileFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+            CameraMobileFragment fragment = (CameraMobileFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.ln_camera);
+            if (fragment != null){
+                fragment.checkCameraPermissionAndStart();
+                fragment.startCamera();
+            }
+        }
 //        brightness = binding.textBRIGHTNESS.getText().toString();
 //        contrast = binding.textCONTRAST.getText().toString();
 //        if (brightness == null) {
@@ -555,6 +571,7 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         scannerReceiver = new ScannerReceiver();
         registerReceiver(scannerReceiver, intentFilter);
     }
+
 
     public class ScannerReceiver extends BroadcastReceiver {
         @Override
@@ -734,18 +751,33 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
     }
 
     private void chupanh(){
-        CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.ln_camera);
+        if (isUsbCameraConnected(this)) {
+            CameraFragment fragment = (CameraFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.ln_camera);
 
-        if (fragment != null) {
-            fragment.CaptureImageAndSendUri();
-            binding.lnShowImage.setVisibility(VISIBLE);
-            binding.iconCamera.setVisibility(VISIBLE);
-            binding.iconSetcamera.setVisibility(GONE);
-            binding.lnPreviewCamera.setVisibility(GONE);
-            binding.imgTakeAPhoto.setVisibility(VISIBLE);
-            binding.imgConfirm.setVisibility(VISIBLE);
-            binding.chup.setVisibility(VISIBLE);
+            if (fragment != null) {
+                fragment.CaptureImageAndSendUri();
+                binding.lnShowImage.setVisibility(VISIBLE);
+                binding.iconCamera.setVisibility(VISIBLE);
+                binding.iconSetcamera.setVisibility(GONE);
+                binding.lnPreviewCamera.setVisibility(GONE);
+                binding.imgTakeAPhoto.setVisibility(VISIBLE);
+                binding.imgConfirm.setVisibility(VISIBLE);
+                binding.chup.setVisibility(VISIBLE);
+            }
+        }else {
+            CameraMobileFragment fragment = (CameraMobileFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.layout_take_a_photo);
+            if (fragment != null){
+                fragment.captureImage();
+                binding.lnShowImage.setVisibility(VISIBLE);
+                binding.iconCamera.setVisibility(VISIBLE);
+                binding.iconSetcamera.setVisibility(GONE);
+                binding.lnPreviewCamera.setVisibility(GONE);
+                binding.imgTakeAPhoto.setVisibility(VISIBLE);
+                binding.imgConfirm.setVisibility(VISIBLE);
+                binding.chup.setVisibility(VISIBLE);
+            }
         }
     }
     private void countDown(int time) throws IOException {
@@ -768,12 +800,10 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             );
         }else {
             GifImageView gifImageView = findViewById(R.id.gifImageView);
-
             GifDrawable gifDrawable = new GifDrawable(getResources(), video);
             gifDrawable.setLoopCount(1);
             gifImageView.setImageDrawable(gifDrawable);
             gifDrawable.start();
-
             new Handler(Looper.getMainLooper()).postDelayed(
                     Scanner.this::takeAPhoto, time
             );
@@ -860,10 +890,27 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         isLayoutScan = false;
         isViewpage = "scan";
     }
+
+    //save image from camera usb
     @Override
     public void onUriCaptured(File file) throws IOException {
         uri = Uri.fromFile(file);
         imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
+        MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName(), this);
+        Log.d("Screenshot", "Uri: " + uri.toString());
+        if (uri != null) {
+            Glide.with(this)
+                    .load(uri)
+                    .error(R.drawable.teamwork)
+                    .into(binding.imgUser);
+        }
+    }
+    //save image camera mobile
+    @Override
+    public void onCaptureImage(File file) {
+        uri = Uri.fromFile(file);
+//        imageFileCustomer = ConverFile.cropImageFileToSquare720(file, this);
+        imageFileCustomer = file;
         MinioUploader.uploadImage(imageFileCustomer, imageFileCustomer.getName(), this);
         Log.d("Screenshot", "Uri: " + uri.toString());
         if (uri != null) {
@@ -932,6 +979,14 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
         binding.searchView.setQuery("", false);
         getDataScan(customer);
         reset();
+        if (!isUsbCameraConnected(this)){
+            CameraMobileFragment fragment = (CameraMobileFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.ln_camera);
+            if (fragment != null){
+                fragment.checkCameraPermissionAndStart();
+                fragment.startCamera();
+            }
+        }
     }
 
     @Override
@@ -1128,6 +1183,29 @@ public class Scanner extends AppCompatActivity implements CameraFragment.OnUriCa
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    //check usb camera
+    public boolean isUsbCameraConnected(Context context) {
+        UsbManager usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+        HashMap<String, UsbDevice> deviceList = usbManager.getDeviceList();
+
+        for (UsbDevice device : deviceList.values()) {
+            int deviceClass = device.getDeviceClass();
+
+            // Cách 1: Kiểm tra theo USB Class
+            if (deviceClass == UsbConstants.USB_CLASS_VIDEO) {
+                return true; // USB Camera đang kết nối
+            }
+
+            // Cách 2: Kiểm tra Vendor ID / Product ID (nếu bạn biết rõ camera của mình)
+            if (device.getVendorId() == 0x0596 && device.getProductId() == 0x1234) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 
 }
