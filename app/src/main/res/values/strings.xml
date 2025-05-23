@@ -90,4 +90,6 @@
     <string name="access_config">Access</string>
     <string name="secret_config">Set Secret</string>
     <string name="budget_config">Budget name</string>
+    <string name="Login">Login</string>
+    <string name="fill_password">Fill password</string>
 </resources>

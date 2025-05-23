@@ -72,7 +72,7 @@ public class FunctionUtils {
     public static void startCountdownVideo(Context context, VideoView videoView) {
 
         // Prepare the video URI
-        Uri videoUri = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.countdown3); // Replace with your video file name
+        Uri videoUri = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.countdown); // Replace with your video file name
 
         // Set up the VideoView
         videoView.setVideoURI(videoUri);

@@ -91,4 +91,6 @@
     <string name="access_config">Access</string>
     <string name="secret_config">Set Secret</string>
     <string name="budget_config">Tên thư mục</string>
+    <string name="Login">Đăng nhập</string>
+    <string name="fill_password">Điền mật khẩu</string>
 </resources>
